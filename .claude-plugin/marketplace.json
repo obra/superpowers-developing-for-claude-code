@@ -1,0 +1,20 @@
+{
+  "name": "superpowers-developing-for-claude-code-dev",
+  "description": "Development marketplace for Claude Code development skills and documentation",
+  "owner": {
+    "name": "Jesse Vincent",
+    "email": "jesse@fsck.com"
+  },
+  "plugins": [
+    {
+      "name": "superpowers-developing-for-claude-code",
+      "description": "Skills for developing Claude Code plugins, skills, and MCP servers. Includes complete official documentation with self-update.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "Jesse Vincent",
+        "email": "jesse@fsck.com"
+      }
+    }
+  ]
+}

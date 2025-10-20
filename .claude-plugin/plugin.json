@@ -1,0 +1,13 @@
+{
+  "name": "superpowers-developing-for-claude-code",
+  "version": "0.1.0",
+  "description": "Skills and resources for developing Claude Code plugins, skills, MCP servers, and extensions. Includes comprehensive official documentation and self-update mechanism.",
+  "author": {
+    "name": "Jesse Vincent",
+    "email": "jesse@fsck.com"
+  },
+  "homepage": "https://github.com/obra/superpowers-developing-for-claude-code",
+  "repository": "https://github.com/obra/superpowers-developing-for-claude-code",
+  "license": "MIT",
+  "keywords": ["claude-code", "plugin-development", "skills", "mcp", "documentation", "development"]
+}
