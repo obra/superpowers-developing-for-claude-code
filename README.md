@@ -24,6 +24,18 @@ Topics covered:
 - Configuration, security, networking
 - Troubleshooting
 
+#### developing-claude-code-plugins
+Streamlined workflows and patterns for creating Claude Code plugins.
+
+- **Step-by-step workflows** for plugin creation
+- **Component guides** for skills, commands, hooks, and MCP servers
+- **Common patterns** with working examples
+- **Debugging tips** and troubleshooting
+- **Best practices** for portability and testing
+- **References this plugin** as a working example
+
+Use this skill to make plugin development faster and easier - it synthesizes official docs into actionable steps.
+
 ## Installation
 
 ### Development Mode
@@ -68,20 +80,22 @@ superpowers-developing-for-claude-code/
 │   ├── plugin.json           # Plugin metadata
 │   └── marketplace.json      # Dev marketplace config
 ├── skills/
-│   └── working-with-claude-code/
-│       ├── SKILL.md          # Skill documentation
-│       ├── scripts/
-│       │   └── update_docs.js
-│       └── references/       # 42 documentation files
+│   ├── working-with-claude-code/
+│   │   ├── SKILL.md          # Documentation access skill
+│   │   ├── scripts/
+│   │   │   └── update_docs.js
+│   │   └── references/       # 42 documentation files
+│   └── developing-claude-code-plugins/
+│       └── SKILL.md          # Plugin development workflows
 └── README.md
 ```
 
-### Adding More Skills
+### Future Skills
 
-Future skills to consider:
-- `extending-claude-code` - Workflows for building extensions
-- `testing-claude-code-plugins` - Testing strategies
+Skills to consider adding:
+- `testing-claude-code-plugins` - Testing strategies and validation
 - `distributing-plugins` - Publishing and marketplace guidelines
+- `writing-mcp-servers` - MCP server development guide
 
 ## License
 
