@@ -1,0 +1,13 @@
+{
+  "name": "simple-greeter",
+  "version": "1.0.0",
+  "description": "A simple plugin that helps format professional greetings for various contexts",
+  "author": {
+    "name": "Jesse Vincent",
+    "email": "jesse@fsck.com"
+  },
+  "homepage": "https://github.com/obra/simple-greeter",
+  "repository": "https://github.com/obra/simple-greeter",
+  "license": "MIT",
+  "keywords": ["greeting", "professional", "communication"]
+}

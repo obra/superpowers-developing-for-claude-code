@@ -1,13 +1,13 @@
 ---
 name: developing-claude-code-plugins
-description: Use when creating or modifying Claude Code plugins - provides streamlined workflows, patterns, and examples for plugin development including directory structure, manifests, skills, commands, hooks, and MCP servers
+description: Use when creating or modifying Claude Code plugins - provides streamlined workflows, patterns, and examples for plugin development
 ---
 
 # Developing Claude Code Plugins
 
 ## Overview
 
-This skill provides efficient workflows for creating Claude Code plugins. It synthesizes official documentation into actionable steps, provides working examples, and covers common patterns. Use this skill to streamline plugin development - it makes the correct path the fast path.
+This skill provides efficient workflows for creating Claude Code plugins. Use it to make plugin development fast and correct - it synthesizes official docs into actionable steps and provides working examples.
 
 ## When to Use
 
@@ -16,535 +16,203 @@ Use this skill when:
 - Adding components to an existing plugin (skills, commands, hooks, MCP servers)
 - Setting up a development marketplace for testing
 - Troubleshooting plugin structure issues
-- Understanding where files should go in a plugin
+- Understanding plugin architecture and patterns
 
-**Note:** For deep dives into official documentation, use the `working-with-claude-code` skill to access comprehensive docs.
+**For comprehensive official documentation**, use the `working-with-claude-code` skill to access full docs.
 
 ## Quick Reference
 
-| Task | Section | Official Docs |
-|------|---------|---------------|
-| Create new plugin | Workflow → Create Plugin | `plugins.md` |
-| Add a skill | Component Guides → Skills | `skills.md` |
-| Add custom command | Component Guides → Commands | `slash-commands.md` |
-| Add MCP server | Component Guides → MCP Servers | `mcp.md` |
-| Add hooks | Component Guides → Hooks | `hooks.md`, `hooks-guide.md` |
-| Test locally | Development Workflow | `plugin-marketplaces.md` |
+| Need to... | Read This | Official Docs |
+|-----------|-----------|---------------|
+| Understand directory structure | `references/plugin-structure.md` | `plugins.md` |
+| Choose a plugin pattern | `references/common-patterns.md` | `plugins.md` |
+| Debug plugin issues | `references/troubleshooting.md` | Various |
+| See working examples | `examples/` directory | N/A |
 
 ## Plugin Development Workflow
 
-### Phase 1: Planning
+### Phase 1: Plan
 
-**Before writing code:**
+Before writing code:
 
 1. **Define your plugin's purpose**
    - What problem does it solve?
-   - What components will it need? (skills, commands, hooks, MCP servers)
+   - Who will use it?
+   - What components will it need?
 
-2. **Review examples**
-   - Look at `superpowers-developing-for-claude-code` (this plugin)
-   - Check `superpowers-chrome` for MCP server examples
-   - Browse installed plugins for patterns
+2. **Choose your pattern** (read `references/common-patterns.md`)
+   - Simple plugin with one skill?
+   - MCP integration with guidance?
+   - Command collection?
+   - Full-featured platform?
 
-3. **Read relevant docs** using `working-with-claude-code` skill:
-   - Always start with `plugins.md` for overview
-   - Read component-specific docs as needed
+3. **Review examples**
+   - `examples/simple-greeter-plugin/` - Minimal plugin
+   - `examples/full-featured-plugin/` - All components
+   - Installed plugins in `~/.claude/plugins/`
 
-### Phase 2: Create Plugin Structure
+### Phase 2: Create Structure
 
-**Directory layout** (all paths relative to plugin root):
-
-```
-my-plugin/
-├── .claude-plugin/
-│   ├── plugin.json          # REQUIRED - Plugin metadata
-│   └── marketplace.json     # Optional - For local dev/distribution
-├── skills/                  # Optional - Agent Skills
-│   └── skill-name/
-│       ├── SKILL.md         # Required for each skill
-│       ├── scripts/         # Optional - Executable helpers
-│       ├── references/      # Optional - Documentation
-│       └── assets/          # Optional - Templates/files
-├── commands/                # Optional - Custom slash commands
-│   └── command-name.md
-├── agents/                  # Optional - Specialized subagents
-│   └── agent-name.md
-├── hooks/                   # Optional - Event handlers
-│   └── hooks.json
-├── .mcp.json               # Optional - MCP server config
-├── LICENSE
-└── README.md
-```
-
-**CRITICAL RULES:**
-
-1. **`.claude-plugin/` contains ONLY `plugin.json` (and optionally `marketplace.json`)**
-   - ❌ Do NOT put skills, commands, or other components inside `.claude-plugin/`
-   - ✅ Put them at the plugin root
-
-2. **Use `${CLAUDE_PLUGIN_ROOT}` for all paths in config files**
-   - ❌ Do NOT use hardcoded paths: `/Users/name/plugins/my-plugin/script.js`
-   - ✅ Use variables: `${CLAUDE_PLUGIN_ROOT}/script.js`
-
-3. **Use relative paths in `plugin.json`**
-   - All paths must start with `./`
-   - Paths are relative to plugin root
-
-### Phase 3: Create Plugin Manifest
-
-**Minimal `plugin.json`:**
-
-```json
-{
-  "name": "my-plugin",
-  "version": "1.0.0",
-  "description": "Brief description of what the plugin does",
-  "author": {
-    "name": "Your Name"
-  }
-}
-```
-
-**Complete `plugin.json` with all options:**
-
-```json
-{
-  "name": "my-plugin",
-  "version": "1.0.0",
-  "description": "Comprehensive plugin description",
-  "author": {
-    "name": "Your Name",
-    "email": "you@example.com",
-    "url": "https://github.com/you"
-  },
-  "homepage": "https://github.com/you/my-plugin",
-  "repository": "https://github.com/you/my-plugin",
-  "license": "MIT",
-  "keywords": ["keyword1", "keyword2"],
-  "mcpServers": {
-    "server-name": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/path/to/server.js"],
-      "env": {
-        "ENV_VAR": "value"
-      }
-    }
-  }
-}
-```
-
-### Phase 4: Add Components
-
-**Use TodoWrite** to track component creation:
-
-```markdown
-- [ ] Create plugin structure
-- [ ] Write plugin.json
-- [ ] Add skill: skill-name
-- [ ] Add command: /command-name
-- [ ] Configure MCP server
-- [ ] Create README
-- [ ] Test installation
-```
-
-See "Component Guides" section below for each component type.
-
-### Phase 5: Create Development Marketplace
-
-**For local testing, create `marketplace.json` in `.claude-plugin/`:**
-
-```json
-{
-  "name": "my-plugin-dev",
-  "description": "Development marketplace for my plugin",
-  "owner": {
-    "name": "Your Name"
-  },
-  "plugins": [
-    {
-      "name": "my-plugin",
-      "description": "Plugin description",
-      "version": "1.0.0",
-      "source": "./",
-      "author": {
-        "name": "Your Name"
-      }
-    }
-  ]
-}
-```
-
-**Why?** This lets you test your plugin locally before distribution.
-
-### Phase 6: Test and Iterate
-
-1. **Install for testing:**
+1. **Create directories** (see `references/plugin-structure.md` for details):
    ```bash
-   /plugin marketplace add /path/to/my-plugin
-   /plugin install my-plugin@my-plugin-dev
+   mkdir -p my-plugin/.claude-plugin
+   mkdir -p my-plugin/skills
+   # Add other component directories as needed
    ```
 
-2. **Restart Claude Code** to load the plugin
+2. **Write plugin.json** (required):
+   ```json
+   {
+     "name": "my-plugin",
+     "version": "1.0.0",
+     "description": "What your plugin does",
+     "author": {"name": "Your Name"}
+   }
+   ```
+   See `references/plugin-structure.md` for complete format.
 
-3. **Test each component:**
-   - Skills: Try tasks that match skill descriptions
+3. **Create development marketplace** (for local testing):
+
+   Create `.claude-plugin/marketplace.json`:
+   ```json
+   {
+     "name": "my-dev",
+     "plugins": [{
+       "name": "my-plugin",
+       "source": "./"
+     }]
+   }
+   ```
+
+   See `references/plugin-structure.md` for complete format.
+
+### Phase 3: Add Components
+
+Use TodoWrite to track component creation:
+
+**Example:**
+```
+- Create skill: main-workflow
+- Add command: /hello
+- Configure hooks
+- Write README
+- Test installation
+```
+
+For each component type, see:
+- **Format/syntax**: `references/plugin-structure.md`
+- **When to use**: `references/common-patterns.md`
+- **Working code**: `examples/` directory
+
+### Phase 4: Test Locally
+
+1. **Install for testing**:
+   ```bash
+   /plugin marketplace add /path/to/my-plugin
+   /plugin install my-plugin@my-dev
+   ```
+   Then restart Claude Code.
+
+2. **Test each component**:
+   - Skills: Ask for tasks matching skill descriptions
    - Commands: Run `/your-command`
    - MCP servers: Check tools are available
    - Hooks: Trigger relevant events
 
-4. **Iterate:**
+3. **Iterate**:
    ```bash
-   /plugin uninstall my-plugin@my-plugin-dev
+   /plugin uninstall my-plugin@my-dev
    # Make changes
-   /plugin install my-plugin@my-plugin-dev
+   /plugin install my-plugin@my-dev
    # Restart Claude Code
    ```
 
-## Component Guides
-
-### Adding a Skill
-
-**Location:** `skills/skill-name/SKILL.md`
-
-**Minimal SKILL.md:**
-
-```markdown
----
-name: skill-name
-description: Use when [triggering conditions] - [what it does]
----
-
-# Skill Name
-
-## Overview
-
-What this skill does in 1-2 sentences.
-
-## When to Use
-
-- Specific scenario 1
-- Specific scenario 2
-
-## Workflow
-
-1. Step one
-2. Step two
-3. Step three
-```
-
-**With bundled resources:**
-
-```
-skills/skill-name/
-├── SKILL.md
-├── scripts/           # Executable helpers
-│   └── helper.js
-├── references/        # Documentation to load
-│   └── reference.md
-└── assets/           # Files for output
-    └── template.txt
-```
-
-**Reference official docs:** Read `skills.md` via `working-with-claude-code` skill for complete details.
-
-### Adding a Custom Command
-
-**Location:** `commands/command-name.md`
-
-**Format:**
-
-```markdown
----
-description: Brief description of what this command does
----
-
-# Command Instructions
-
-Tell Claude what to do when this command is invoked.
-Be specific and clear about the expected behavior.
-```
-
-**Example:**
-
-```markdown
----
-description: Greet the user and show available features
----
-
-# Hello Command
-
-Greet the user warmly and list the key features of this plugin:
-1. Feature one
-2. Feature two
-3. Feature three
-
-Ask how you can help them today.
-```
-
-**Usage:** Users run `/command-name` to invoke.
-
-**Reference official docs:** Read `slash-commands.md` via `working-with-claude-code` skill.
-
-### Adding an MCP Server
-
-**Option 1: In plugin.json**
-
-```json
-{
-  "name": "my-plugin",
-  "mcpServers": {
-    "server-name": {
-      "command": "node",
-      "args": ["${CLAUDE_PLUGIN_ROOT}/server/index.js"],
-      "env": {
-        "API_KEY": "${PLUGIN_ENV_API_KEY}"
-      }
-    }
-  }
-}
-```
-
-**Option 2: Separate .mcp.json file**
-
-```json
-{
-  "mcpServers": {
-    "server-name": {
-      "command": "${CLAUDE_PLUGIN_ROOT}/bin/server",
-      "args": ["--config", "${CLAUDE_PLUGIN_ROOT}/config.json"]
-    }
-  }
-}
-```
-
-**Critical:** Always use `${CLAUDE_PLUGIN_ROOT}` for paths.
-
-**Reference official docs:** Read `mcp.md` via `working-with-claude-code` skill.
-
-### Adding Hooks
-
-**Location:** `hooks/hooks.json`
-
-**Format:**
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/format.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/init.sh"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-**Available hook events:**
-- `PreToolUse`, `PostToolUse`
-- `UserPromptSubmit`
-- `SessionStart`, `SessionEnd`
-- `Stop`, `SubagentStop`
-- `PreCompact`
-- `Notification`
-
-**Reference official docs:** Read `hooks.md` and `hooks-guide.md` via `working-with-claude-code` skill.
-
-### Adding Agents
-
-**Location:** `agents/agent-name.md`
-
-**Format:**
-
-```markdown
----
-description: What this agent specializes in
-capabilities: ["capability1", "capability2"]
----
-
-# Agent Name
-
-Detailed description of when to invoke this specialized agent.
-
-## Expertise
-
-- Specific domain knowledge
-- Specialized techniques
-- When to use vs other agents
-```
-
-**Reference official docs:** Read `sub-agents.md` via `working-with-claude-code` skill.
-
-## Common Patterns
-
-### Pattern: Simple Plugin with One Skill
-
-**Use when:** Creating a focused plugin with documentation/reference material
-
-**Example:** superpowers-developing-for-claude-code
-
-```
-my-plugin/
-├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
-├── skills/
-│   └── working-with-claude-code/
-│       ├── SKILL.md
-│       ├── scripts/update_docs.js
-│       └── references/          # 42 doc files
-└── README.md
-```
-
-### Pattern: MCP Plugin with Skill
-
-**Use when:** Providing both a tool integration (MCP) and guidance on using it (skill)
-
-**Example:** superpowers-chrome
-
-```
-my-plugin/
-├── .claude-plugin/
-│   └── plugin.json              # Includes mcpServers config
-├── skills/
-│   └── browsing/
-│       └── SKILL.md
-├── mcp/
-│   └── dist/
-│       └── index.js             # MCP server implementation
-└── README.md
-```
-
-### Pattern: Command Collection
-
-**Use when:** Providing multiple custom slash commands
-
-```
-my-plugin/
-├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   ├── status.md
-│   ├── logs.md
-│   └── deploy.md
-└── README.md
-```
-
-## Common Pitfalls
-
-| Mistake | Problem | Solution |
-|---------|---------|----------|
-| Putting skills in `.claude-plugin/skills/` | Plugin won't find them | Move to `skills/` at root |
-| Hardcoding paths | Plugin breaks on other systems | Use `${CLAUDE_PLUGIN_ROOT}` |
-| Absolute paths in `plugin.json` | Plugin breaks on other systems | Use relative paths starting with `./` |
-| Missing YAML frontmatter in SKILL.md | Skill won't load | Add `name` and `description` in frontmatter |
-| Forgetting to restart Claude Code | Changes don't take effect | Always restart after install/uninstall |
-| Not making scripts executable | Scripts fail to run | `chmod +x script.sh` |
-| Skipping README | Users don't understand plugin | Document installation and usage |
-
-## Working Example: This Plugin
-
-**This plugin (superpowers-developing-for-claude-code) is a working example you can reference:**
-
-```bash
-# View the structure
-ls -la /path/to/superpowers-developing-for-claude-code
-
-# Key files to examine:
-.claude-plugin/plugin.json       # Minimal plugin manifest
-.claude-plugin/marketplace.json  # Development marketplace setup
-skills/working-with-claude-code/ # Complete skill with references and script
-README.md                        # Documentation example
-```
-
-**Read these files to see:**
-- Proper directory structure
-- Complete plugin and marketplace manifests
-- A skill with bundled resources (scripts/ and references/)
-- Professional README
-
-## Debugging Tips
-
-### Plugin Not Loading
-
-1. Check `plugin.json` syntax with a JSON validator
-2. Ensure `.claude-plugin/` exists with `plugin.json` inside
-3. Verify all paths use `${CLAUDE_PLUGIN_ROOT}` or relative `./` paths
-4. Restart Claude Code after changes
-
-### Skill Not Triggering
-
-1. Check YAML frontmatter format in SKILL.md
-2. Ensure `description` field clearly describes when to use it
-3. Make description match actual use cases (use "Use when..." format)
-4. Test by explicitly asking for tasks that match description
-
-### Command Not Appearing
-
-1. Ensure `commands/` is at plugin root, NOT in `.claude-plugin/`
-2. Check markdown format with YAML frontmatter
-3. Restart Claude Code
-4. Try `/command-name` explicitly
-
-### MCP Server Not Starting
-
-1. Verify `${CLAUDE_PLUGIN_ROOT}` in all paths
-2. Check command is executable: `chmod +x server-script`
-3. Test server independently outside Claude Code
-4. Check logs with `claude --debug`
-
-## Best Practices
-
-1. **Start simple:** Begin with just `plugin.json` and one component
-2. **Test frequently:** Install, test, uninstall, modify, repeat
-3. **Use examples:** Reference working plugins as templates
-4. **Read official docs:** Use `working-with-claude-code` skill for deep dives
-5. **Document everything:** Write clear README with installation instructions
-6. **Use TodoWrite:** Track progress systematically
-7. **Version properly:** Use semantic versioning (major.minor.patch)
-8. **Consider portability:** Always use `${CLAUDE_PLUGIN_ROOT}`
+### Phase 5: Debug and Refine
+
+If something doesn't work, read `references/troubleshooting.md` for:
+- Plugin not loading
+- Skill not triggering
+- Command not appearing
+- MCP server not starting
+- Hooks not firing
+
+Common issues are usually:
+- Wrong directory structure
+- Hardcoded paths (use `${CLAUDE_PLUGIN_ROOT}`)
+- Forgot to restart Claude Code
+- Missing executable permissions on scripts
+
+### Phase 6: Document and Distribute
+
+1. **Write README** with:
+   - What the plugin does
+   - Installation instructions
+   - Usage examples
+   - Component descriptions
+
+2. **Choose distribution method**:
+   - GitHub repository
+   - Plugin marketplace
+   - Private/team distribution
+
+## Critical Rules
+
+**Always follow these** (from `references/plugin-structure.md`):
+
+1. **`.claude-plugin/` contains ONLY manifests** (`plugin.json` and optionally `marketplace.json`)
+   - ❌ Don't put skills, commands, or other components inside
+   - ✅ Put them at plugin root
+
+2. **Use `${CLAUDE_PLUGIN_ROOT}` for all paths in config files**
+   - Makes plugin portable across systems
+   - Required for hooks, MCP servers, scripts
+
+3. **Use relative paths in `plugin.json`**
+   - Start with `./`
+   - Relative to plugin root
+
+4. **Make scripts executable**
+   - `chmod +x script.sh`
+   - Required for hooks and MCP servers
+
+## Resources in This Skill
+
+- **`references/plugin-structure.md`** - Directory layout, file formats, component syntax
+- **`references/common-patterns.md`** - When to use each plugin pattern, examples
+- **`references/troubleshooting.md`** - Debug guide for common issues
+- **`examples/simple-greeter-plugin/`** - Minimal working plugin (one skill)
+- **`examples/full-featured-plugin/`** - Complete plugin with all components
 
 ## Cross-References
 
-- **Official docs:** Use `working-with-claude-code` skill to access:
-  - `plugins.md` - Plugin development overview
-  - `plugins-reference.md` - Complete API reference
-  - `skills.md` - Skill authoring guide
-  - `slash-commands.md` - Command format details
-  - `hooks.md`, `hooks-guide.md` - Hook system
-  - `mcp.md` - MCP server integration
-  - `plugin-marketplaces.md` - Distribution
+For deep dives into official documentation, use the `working-with-claude-code` skill to access:
+- `plugins.md` - Plugin development overview
+- `plugins-reference.md` - Complete API reference
+- `skills.md` - Skill authoring guide
+- `slash-commands.md` - Command format
+- `hooks.md`, `hooks-guide.md` - Hook system
+- `mcp.md` - MCP server integration
+- `plugin-marketplaces.md` - Distribution
 
-- **Example plugins:**
-  - superpowers-developing-for-claude-code (this plugin)
-  - superpowers-chrome (MCP example)
-  - Check `~/.claude/plugins/` for installed plugins
+## Best Practices
+
+1. **Start simple** - Begin with minimal structure, add complexity when needed
+2. **Test frequently** - Install → test → uninstall → modify → repeat
+3. **Use examples** - Copy patterns from working plugins
+4. **Follow conventions** - Match style of existing plugins
+5. **Document everything** - Clear README helps users and future you
+6. **Version properly** - Use semantic versioning (major.minor.patch)
 
 ## Workflow Summary
 
 ```
-1. Plan → Define purpose, list components
-2. Create → Make directories, write plugin.json
-3. Add → Build each component (skills, commands, etc.)
-4. Test → Install via dev marketplace
-5. Iterate → Uninstall, modify, reinstall
-6. Document → Write README
-7. Distribute → Share via marketplace or repository
+Plan → Choose pattern, review examples
+Create → Make structure, write manifests
+Add → Build components (skills, commands, etc.)
+Test → Install via dev marketplace
+Debug → Use troubleshooting guide
+Document → Write README
+Distribute → Share with users
 ```
 
-**Remember:** The correct path is the fast path. Use official docs, follow patterns, test frequently.
+**The correct path is the fast path.** Use references, follow patterns, test frequently.

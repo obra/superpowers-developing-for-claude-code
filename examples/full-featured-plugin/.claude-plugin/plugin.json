@@ -1,0 +1,23 @@
+{
+  "name": "full-featured-example",
+  "version": "1.0.0",
+  "description": "Example plugin demonstrating all component types: skills, commands, hooks, and MCP servers",
+  "author": {
+    "name": "Plugin Developer",
+    "email": "dev@example.com",
+    "url": "https://github.com/developer"
+  },
+  "homepage": "https://github.com/developer/full-featured-example",
+  "repository": "https://github.com/developer/full-featured-example",
+  "license": "MIT",
+  "keywords": ["example", "demo", "full-featured"],
+  "mcpServers": {
+    "example-server": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp/server.js"],
+      "env": {
+        "EXAMPLE_CONFIG": "value"
+      }
+    }
+  }
+}
