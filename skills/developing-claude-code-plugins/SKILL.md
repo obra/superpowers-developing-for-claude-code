@@ -1,6 +1,6 @@
 ---
 name: developing-claude-code-plugins
-description: Use when creating or modifying Claude Code plugins - provides streamlined workflows, patterns, and examples for plugin development
+description: Use when working on Claude Code plugins (creating, modifying, testing, releasing, or maintaining) - provides streamlined workflows, patterns, and examples for the complete plugin lifecycle
 ---
 
 # Developing Claude Code Plugins
@@ -17,6 +17,8 @@ Use this skill when:
 - Setting up a development marketplace for testing
 - Troubleshooting plugin structure issues
 - Understanding plugin architecture and patterns
+- Releasing a plugin (versioning, tagging, marketplace distribution)
+- Publishing updates or maintaining existing plugins
 
 **For comprehensive official documentation**, use the `working-with-claude-code` skill to access full docs.
 
@@ -142,7 +144,7 @@ Common issues are usually:
 - Forgot to restart Claude Code
 - Missing executable permissions on scripts
 
-### Phase 6: Document and Distribute
+### Phase 6: Release and Distribute
 
 1. **Write README** with:
    - What the plugin does
@@ -150,10 +152,73 @@ Common issues are usually:
    - Usage examples
    - Component descriptions
 
-2. **Choose distribution method**:
-   - GitHub repository
-   - Plugin marketplace
-   - Private/team distribution
+2. **Version your release** using semantic versioning:
+   - Update `version` in `.claude-plugin/plugin.json`
+   - Document changes in CHANGELOG.md or RELEASE-NOTES.md
+   - Example: `"version": "1.2.1"` (major.minor.patch)
+
+3. **Commit and tag your release**:
+   ```bash
+   git add .
+   git commit -m "Release v1.2.1: [brief description]"
+   git tag v1.2.1
+   git push origin main
+   git push origin v1.2.1
+   ```
+
+4. **Choose distribution method**:
+
+   **Option A: Direct GitHub distribution**
+   - Users add: `/plugin marketplace add your-org/your-plugin-repo`
+   - Your plugin.json serves as the manifest
+
+   **Option B: Marketplace distribution** (recommended for multi-plugin collections)
+   - Create separate marketplace repository
+   - Add `.claude-plugin/marketplace.json` with plugin references:
+     ```json
+     {
+       "name": "my-marketplace",
+       "owner": {"name": "Your Name"},
+       "plugins": [{
+         "name": "your-plugin",
+         "source": {
+           "source": "url",
+           "url": "https://github.com/your-org/your-plugin.git"
+         },
+         "version": "1.2.1",
+         "description": "Plugin description"
+       }]
+     }
+     ```
+   - Users add: `/plugin marketplace add your-org/your-marketplace`
+   - Update marketplace manifest for each plugin release
+
+   **Option C: Private/team distribution**
+   - Configure in team's `.claude/settings.json`:
+     ```json
+     {
+       "extraKnownMarketplaces": {
+         "team-tools": {
+           "source": {"source": "github", "repo": "your-org/plugins"}
+         }
+       }
+     }
+     ```
+
+5. **Test the release**:
+   ```bash
+   # Test fresh installation
+   /plugin marketplace add your-marketplace-source
+   /plugin install your-plugin@marketplace-name
+   # Verify functionality, then clean up
+   /plugin uninstall your-plugin@marketplace-name
+   ```
+
+6. **Announce and maintain**:
+   - GitHub releases (optional)
+   - Team notifications
+   - Monitor for issues and user feedback
+   - Plan maintenance updates
 
 ## Critical Rules
 
@@ -211,8 +276,8 @@ Create → Make structure, write manifests
 Add → Build components (skills, commands, etc.)
 Test → Install via dev marketplace
 Debug → Use troubleshooting guide
-Document → Write README
-Distribute → Share with users
+Release → Version, tag, distribute via marketplace
+Maintain → Monitor, update, support users
 ```
 
 **The correct path is the fast path.** Use references, follow patterns, test frequently.
