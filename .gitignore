@@ -5,3 +5,4 @@ node_modules/
 .private-journal/
 .bak
 .worktrees/
+docs/.archive/
