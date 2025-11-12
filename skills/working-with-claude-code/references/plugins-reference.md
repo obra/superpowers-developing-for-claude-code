@@ -298,7 +298,7 @@ enterprise-plugin/
 │       ├── SKILL.md
 │       └── scripts/
 ├── hooks/                    # Hook configurations
-│   ├── hooks.json           # Main hook config
+��   ├── hooks.json           # Main hook config
 │   └── security-hooks.json  # Additional hooks
 ├── .mcp.json                # MCP server definitions
 ├── scripts/                 # Hook and utility scripts
