@@ -4,3 +4,4 @@ node_modules/
 .claude/settings.local.json
 .private-journal/
 .bak
+.worktrees/

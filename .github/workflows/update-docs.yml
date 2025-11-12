@@ -42,12 +42,18 @@ jobs:
             echo "No changes detected"
           fi
 
+      - name: Update SKILL.md file tree
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          cd skills/working-with-claude-code
+          node scripts/update_skill_tree.js
+
       - name: Commit and push changes
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add skills/working-with-claude-code/references/
+          git add skills/working-with-claude-code/references/ skills/working-with-claude-code/SKILL.md
 
           # Build commit message with list of changed files
           CHANGED_FILES=$(cat /tmp/changed_files.txt | sed 's|skills/working-with-claude-code/references/|- |' || echo "- None")
