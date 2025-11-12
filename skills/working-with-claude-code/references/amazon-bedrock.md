@@ -13,14 +13,14 @@ Before configuring Claude Code with Bedrock, ensure you have:
 
 ## Setup
 
-### 1. Enable model access
+### 1. Submit use case details
 
-First, ensure you have access to the required Claude models in your AWS account:
+First-time users of Anthropic models are required to submit use case details before invoking a model. This is done once per account.
 
-1. Navigate to the [Amazon Bedrock console](https://console.aws.amazon.com/bedrock/)
-2. Go to **Model access** in the left navigation
-3. Request access to desired Claude models (e.g., Claude Sonnet 4.5)
-4. Wait for approval (usually instant for most regions)
+1. Ensure you have the right IAM permissions (see more on that below)
+2. Navigate to the [Amazon Bedrock console](https://console.aws.amazon.com/bedrock/)
+3. Select **Chat/Text playground**
+4. Choose any Anthropic model and you will be prompted to fill out the use case form
 
 ### 2. Configure AWS credentials
 
@@ -58,7 +58,7 @@ Bedrock API keys provide a simpler authentication method without needing full AW
 
 #### Advanced credential configuration
 
-Claude Code supports automatic credential refresh for AWS SSO and corporate identity providers. Add these settings to your Claude Code settings file (see [Settings](/en/docs/claude-code/settings) for file locations).
+Claude Code supports automatic credential refresh for AWS SSO and corporate identity providers. Add these settings to your Claude Code settings file (see [Settings](/en/settings) for file locations).
 
 When Claude Code detects that your AWS credentials are expired (either locally based on their timestamp or when Bedrock returns a credential error), it will automatically run your configured `awsAuthRefresh` and/or `awsCredentialExport` commands to obtain new credentials before retrying the request.
 
@@ -102,11 +102,13 @@ export AWS_REGION=us-east-1  # or your preferred region
 export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=us-west-2
 ```
 
+**For VS Code Extension users**: Configure environment variables in the VS Code extension settings instead of exporting them in your shell. See [Using Third-Party Providers in VS Code](/en/vs-code#using-third-party-providers-vertex-and-bedrock) for detailed instructions. All environment variables shown in this guide should work when configured through the VS Code extension settings.
+
 When enabling Bedrock for Claude Code, keep the following in mind:
 
 * `AWS_REGION` is a required environment variable. Claude Code does not read from the `.aws` config file for this setting.
 * When using Bedrock, the `/login` and `/logout` commands are disabled since authentication is handled through AWS credentials.
-* You can use settings files for environment variables like `AWS_PROFILE` that you don't want to leak to other processes. See [Settings](/en/docs/claude-code/settings) for more information.
+* You can use settings files for environment variables like `AWS_PROFILE` that you don't want to leak to other processes. See [Settings](/en/settings) for more information.
 
 ### 4. Model configuration
 
@@ -136,7 +138,7 @@ export DISABLE_PROMPT_CACHING=1
 ```
 
 <Note>
-  [Prompt caching](/en/docs/build-with-claude/prompt-caching) may not be available in all regions
+  [Prompt caching](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) may not be available in all regions
 </Note>
 
 ### 5. Output token configuration
@@ -164,6 +166,7 @@ Create an IAM policy with the required permissions for Claude Code:
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "AllowModelAndInferenceProfileAccess",
       "Effect": "Allow",
       "Action": [
         "bedrock:InvokeModel",
@@ -172,8 +175,23 @@ Create an IAM policy with the required permissions for Claude Code:
       ],
       "Resource": [
         "arn:aws:bedrock:*:*:inference-profile/*",
-        "arn:aws:bedrock:*:*:application-inference-profile/*"
+        "arn:aws:bedrock:*:*:application-inference-profile/*",
+        "arn:aws:bedrock:*:*:foundation-model/*"
       ]
+    },
+    {
+      "Sid": "AllowMarketplaceSubscription",
+      "Effect": "Allow",
+      "Action": [
+        "aws-marketplace:ViewSubscriptions",
+        "aws-marketplace:Subscribe"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:CalledViaLast": "bedrock.amazonaws.com"
+        }
+      }
     }
   ]
 }

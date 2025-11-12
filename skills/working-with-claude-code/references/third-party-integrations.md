@@ -57,11 +57,11 @@ This page provides an overview of available deployment options and helps you cho
 ## Cloud providers
 
 <CardGroup cols={2}>
-  <Card title="Amazon Bedrock" icon="aws" href="/en/docs/claude-code/amazon-bedrock">
+  <Card title="Amazon Bedrock" icon="aws" href="/en/amazon-bedrock">
     Use Claude models through AWS infrastructure with IAM-based authentication and AWS-native monitoring
   </Card>
 
-  <Card title="Google Vertex AI" icon="google" href="/en/docs/claude-code/google-vertex-ai">
+  <Card title="Google Vertex AI" icon="google" href="/en/google-vertex-ai">
     Access Claude models via Google Cloud Platform with enterprise-grade security and compliance
   </Card>
 </CardGroup>
@@ -69,11 +69,11 @@ This page provides an overview of available deployment options and helps you cho
 ## Corporate infrastructure
 
 <CardGroup cols={2}>
-  <Card title="Enterprise Network" icon="shield" href="/en/docs/claude-code/network-config">
+  <Card title="Enterprise Network" icon="shield" href="/en/network-config">
     Configure Claude Code to work with your organization's proxy servers and SSL/TLS requirements
   </Card>
 
-  <Card title="LLM Gateway" icon="server" href="/en/docs/claude-code/llm-gateway">
+  <Card title="LLM Gateway" icon="server" href="/en/llm-gateway">
     Deploy centralized model access with usage tracking, budgeting, and audit logging
   </Card>
 </CardGroup>
@@ -181,7 +181,7 @@ Best for organizations that:
 
 When debugging your deployment:
 
-* Use the `claude /status` [slash command](/en/docs/claude-code/slash-commands). This command provides observability into any applied authentication, proxy, and URL settings.
+* Use the `claude /status` [slash command](/en/slash-commands). This command provides observability into any applied authentication, proxy, and URL settings.
 * Set environment variable `export ANTHROPIC_LOG=debug` to log requests.
 
 ## Best practices for organizations
@@ -193,7 +193,7 @@ We strongly recommend investing in documentation so that Claude Code understands
 * **Organization-wide**: Deploy to system directories like `/Library/Application Support/ClaudeCode/CLAUDE.md` (macOS) for company-wide standards
 * **Repository-level**: Create `CLAUDE.md` files in repository roots containing project architecture, build commands, and contribution guidelines. Check these into source control so all users benefit
 
-  [Learn more](/en/docs/claude-code/memory).
+  [Learn more](/en/memory).
 
 ### 2. Simplify deployment
 
@@ -205,18 +205,18 @@ Encourage new users to try Claude Code for codebase Q\&A, or on smaller bug fixe
 
 ### 4. Configure security policies
 
-Security teams can configure managed permissions for what Claude Code is and is not allowed to do, which cannot be overwritten by local configuration. [Learn more](/en/docs/claude-code/security).
+Security teams can configure managed permissions for what Claude Code is and is not allowed to do, which cannot be overwritten by local configuration. [Learn more](/en/security).
 
 ### 5. Leverage MCP for integrations
 
-MCP is a great way to give Claude Code more information, such as connecting to ticket management systems or error logs. We recommend that one central team configures MCP servers and checks a `.mcp.json` configuration into the codebase so that all users benefit. [Learn more](/en/docs/claude-code/mcp).
+MCP is a great way to give Claude Code more information, such as connecting to ticket management systems or error logs. We recommend that one central team configures MCP servers and checks a `.mcp.json` configuration into the codebase so that all users benefit. [Learn more](/en/mcp).
 
 At Anthropic, we trust Claude Code to power development across every Anthropic codebase. We hope you enjoy using Claude Code as much as we do!
 
 ## Next steps
 
-* [Set up Amazon Bedrock](/en/docs/claude-code/amazon-bedrock) for AWS-native deployment
-* [Configure Google Vertex AI](/en/docs/claude-code/google-vertex-ai) for GCP deployment
-* [Configure Enterprise Network](/en/docs/claude-code/network-config) for network requirements
-* [Deploy LLM Gateway](/en/docs/claude-code/llm-gateway) for enterprise management
-* [Settings](/en/docs/claude-code/settings) for configuration options and environment variables
+* [Set up Amazon Bedrock](/en/amazon-bedrock) for AWS-native deployment
+* [Configure Google Vertex AI](/en/google-vertex-ai) for GCP deployment
+* [Configure Enterprise Network](/en/network-config) for network requirements
+* [Deploy LLM Gateway](/en/llm-gateway) for enterprise management
+* [Settings](/en/settings) for configuration options and environment variables

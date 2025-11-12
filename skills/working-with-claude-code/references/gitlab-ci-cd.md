@@ -9,7 +9,7 @@
 </Info>
 
 <Note>
-  This integration is built on top of the [Claude Code CLI and SDK](/en/docs/claude-code/sdk), enabling programmatic use of Claude in your CI/CD jobs and custom automation workflows.
+  This integration is built on top of the [Claude Code CLI and SDK](https://docs.claude.com/en/docs/agent-sdk), enabling programmatic use of Claude in your CI/CD jobs and custom automation workflows.
 </Note>
 
 ## Why use Claude Code with GitLab?
@@ -315,7 +315,7 @@ claude-bedrock:
 ```
 
 <Note>
-  Model IDs for Bedrock include region-specific prefixes and version suffixes (for example, `us.anthropic.claude-3-7-sonnet-20250219-v1:0`). Pass the desired model via your job configuration or prompt if your workflow supports it.
+  Model IDs for Bedrock include region-specific prefixes and version suffixes (for example, `us.anthropic.claude-sonnet-4-5-20250929-v1:0`). Pass the desired model via your job configuration or prompt if your workflow supports it.
 </Note>
 
 ### Google Vertex AI job example (Workload Identity Federation)
@@ -404,7 +404,7 @@ When using Claude Code with GitLab CI/CD, be aware of associated costs:
 * **API costs**:
   * Each Claude interaction consumes tokens based on prompt and response size
   * Token usage varies by task complexity and codebase size
-  * See [Anthropic pricing](/en/docs/about-claude/pricing) for details
+  * See [Anthropic pricing](https://docs.claude.com/en/docs/about-claude/pricing) for details
 
 * **Cost optimization tips**:
   * Use specific `@claude` commands to reduce unnecessary turns
