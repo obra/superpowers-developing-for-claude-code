@@ -137,7 +137,7 @@ node ~/.claude/skills/working-with-claude-code/scripts/update_docs.js
 ```
 
 The script:
-1. Fetches llms.txt from docs.claude.com
+1. Fetches llms.txt from code.claude.com/docs/llms.txt
 2. Extracts all Claude Code documentation URLs
 3. Downloads each page to `references/`
 4. Reports success/failures
