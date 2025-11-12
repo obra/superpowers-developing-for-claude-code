@@ -1,0 +1,56 @@
+name: Update Claude Code Documentation
+
+on:
+  # Run every 24 hours at 2:00 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Use the default GITHUB_TOKEN for authentication
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run documentation updater
+        run: |
+          cd skills/working-with-claude-code
+          node scripts/update_docs.js
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status -s) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in documentation files"
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add skills/working-with-claude-code/references/
+          git commit -m "Update Claude Code documentation (automated)
+
+          Documentation updated by scheduled workflow on $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+
+          Updated files:
+          $(git diff --name-only HEAD~1 HEAD | grep 'references/' || echo 'None')
+          "
+          git push
