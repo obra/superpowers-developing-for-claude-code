@@ -35,6 +35,8 @@ jobs:
           if [[ -n $(git status -s) ]]; then
             echo "changes=true" >> $GITHUB_OUTPUT
             echo "Changes detected in documentation files"
+            # Capture changed files BEFORE commit
+            git diff --name-only skills/working-with-claude-code/references/ > /tmp/changed_files.txt
           else
             echo "changes=false" >> $GITHUB_OUTPUT
             echo "No changes detected"
@@ -46,11 +48,15 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add skills/working-with-claude-code/references/
+
+          # Build commit message with list of changed files
+          CHANGED_FILES=$(cat /tmp/changed_files.txt | sed 's|skills/working-with-claude-code/references/|- |' || echo "- None")
+
           git commit -m "Update Claude Code documentation (automated)
 
           Documentation updated by scheduled workflow on $(date -u +'%Y-%m-%d %H:%M:%S UTC')
 
           Updated files:
-          $(git diff --name-only HEAD~1 HEAD | grep 'references/' || echo 'None')
+          $CHANGED_FILES
           "
           git push

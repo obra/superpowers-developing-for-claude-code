@@ -23,6 +23,8 @@ const REFERENCES_DIR = path.join(__dirname, '..', 'references');
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
+      // Set encoding to utf8 to properly handle special characters
+      res.setEncoding('utf8');
       let data = '';
       res.on('data', (chunk) => data += chunk);
       res.on('end', () => {
