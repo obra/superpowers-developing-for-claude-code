@@ -92,11 +92,20 @@ This command displays:
 The universal image includes pre-configured environments for:
 
 * **Python**: Python 3.x with pip, poetry, and common scientific libraries
-* **Node.js**: Latest LTS versions with npm, yarn, and pnpm
+* **Node.js**: Latest LTS versions with npm, yarn, pnpm, and bun
+* **Ruby**: Versions 3.1.6, 3.2.6, 3.3.6 (default: 3.3.6) with gem, bundler, and rbenv for version management
+* **PHP**: Version 8.4.14
 * **Java**: OpenJDK with Maven and Gradle
 * **Go**: Latest stable version with module support
 * **Rust**: Rust toolchain with cargo
 * **C++**: GCC and Clang compilers
+
+#### Databases
+
+The universal image includes the following databases:
+
+* **PostgreSQL**: Version 16
+* **Redis**: Version 7.0
 
 ### Environment configuration
 
