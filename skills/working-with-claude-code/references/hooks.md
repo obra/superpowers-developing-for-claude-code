@@ -289,6 +289,15 @@ Runs after Claude creates tool parameters and before processing the tool call.
 * `Write` - File writing
 * `WebFetch`, `WebSearch` - Web operations
 
+Use [PreToolUse decision control](#pretooluse-decision-control) to allow, deny, or ask for permission to use the tool.
+
+### PermissionRequest
+
+Runs when the user is shown a permission dialog.
+Use [PermissionRequest decision control](#permissionrequest-decision-control) to allow or deny on behalf of the user.
+
+Recognizes the same matcher values as PreToolUse.
+
 ### PostToolUse
 
 Runs immediately after a tool completes successfully.
@@ -659,7 +668,7 @@ to Claude.
 
 Additionally, hooks can modify tool inputs before execution using `updatedInput`:
 
-* `updatedInput` allows you to modify the tool's input parameters before the tool executes. This is a `Record<string, unknown>` object containing the fields you want to change or add.
+* `updatedInput` allows you to modify the tool's input parameters before the tool executes.
 * This is most useful with `"permissionDecision": "allow"` to modify and approve tool calls.
 
 ```json  theme={null}
@@ -681,6 +690,27 @@ Additionally, hooks can modify tool inputs before execution using `updatedInput`
   `hookSpecificOutput.permissionDecisionReason` instead. The deprecated fields
   `"approve"` and `"block"` map to `"allow"` and `"deny"` respectively.
 </Note>
+
+#### `PermissionRequest` Decision Control
+
+`PermissionRequest` hooks can allow or deny permission requests shown to the user.
+
+* For `"behavior": "allow"` you can also optionally pass in an `"updatedInput"` that modifies the tool's input parameters before the tool executes.
+* For `"behavior": "deny"` you can also optionally pass in a `"message"` string that tells the model why the permission was denied, and a boolean `"interrupt"` which will stop Claude.
+
+```json  theme={null}
+{
+  "hookSpecificOutput": {
+    "hookEventName": "PermissionRequest",
+    "decision": {
+      "behavior": "allow",
+      "updatedInput": {
+        "command": "npm run lint"
+      }
+    }
+  }
+}
+```
 
 #### `PostToolUse` Decision Control
 
