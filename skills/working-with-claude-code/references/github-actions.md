@@ -6,7 +6,7 @@ Claude Code GitHub Actions brings AI-powered automation to your GitHub workflow.
 
 <Note>
   Claude Code GitHub Actions is built on top of the [Claude Code
-  SDK](/en/docs/claude-code/sdk), which enables programmatic integration of
+  SDK](https://docs.claude.com/en/docs/agent-sdk), which enables programmatic integration of
   Claude Code into your applications. You can use the SDK to build custom
   automation workflows beyond GitHub Actions.
 </Note>
@@ -110,7 +110,7 @@ All beta users must make these changes to their workflow files in order to upgra
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
     custom_instructions: "Follow our coding standards"
     max_turns: "10"
-    model: "claude-3-5-sonnet-20241022"
+    model: "claude-sonnet-4-5-20250929"
 ```
 
 **GA version (v1.0):**
@@ -663,7 +663,7 @@ See the [Claude Code Action documentation](https://github.com/anthropics/claude-
 
 You can configure Claude's behavior in two ways:
 
-1. **CLAUDE.md**: Define coding standards, review criteria, and project-specific rules in a `CLAUDE.md` file at the root of your repository. Claude will follow these guidelines when creating PRs and responding to requests. Check out our [Memory documentation](/en/docs/claude-code/memory) for more details.
+1. **CLAUDE.md**: Define coding standards, review criteria, and project-specific rules in a `CLAUDE.md` file at the root of your repository. Claude will follow these guidelines when creating PRs and responding to requests. Check out our [Memory documentation](/en/memory) for more details.
 2. **Custom prompts**: Use the `prompt` parameter in the workflow file to provide workflow-specific instructions. This allows you to customize Claude's behavior for different workflows or tasks.
 
 Claude will follow these guidelines when creating PRs and responding to requests.

@@ -39,51 +39,55 @@ Use this skill when:
 
 All documentation is stored as individual markdown files in `references/`. Use the Read tool to access specific documentation:
 
+<!-- tree-start -->
 ```
 references/
-├── overview.md              # Claude Code introduction
-├── quickstart.md           # Getting started guide
-├── setup.md                # Installation and setup
-├── plugins.md              # Plugin development
-├── plugins-reference.md    # Plugin API reference
-├── plugin-marketplaces.md  # Plugin marketplaces
-├── skills.md               # Skill creation
-├── mcp.md                  # MCP server integration
-├── hooks.md                # Hooks overview
-├── hooks-guide.md          # Hooks implementation guide
-├── slash-commands.md       # Slash command reference
-├── sub-agents.md           # Subagent usage
-├── settings.md             # Configuration reference
-├── cli-reference.md        # CLI command reference
-├── common-workflows.md     # Common usage patterns
-├── interactive-mode.md     # Interactive mode guide
-├── headless.md             # Headless mode guide
-├── output-styles.md        # Output customization
-├── statusline.md           # Status line configuration
-├── memory.md               # Memory and context management
-├── checkpointing.md        # Checkpointing feature
-├── analytics.md            # Usage analytics
-├── costs.md                # Cost tracking
-├── monitoring-usage.md     # Usage monitoring
-├── data-usage.md           # Data usage policies
-├── security.md             # Security features
-├── iam.md                  # IAM integration
-├── network-config.md       # Network configuration
-├── terminal-config.md      # Terminal configuration
-├── model-config.md         # Model configuration
-├── llm-gateway.md          # LLM gateway setup
-├── amazon-bedrock.md       # AWS Bedrock integration
-├── google-vertex-ai.md     # Google Vertex AI integration
-├── vs-code.md              # VS Code integration
-├── jetbrains.md            # JetBrains integration
-├── devcontainer.md         # Dev container support
-├── github-actions.md       # GitHub Actions integration
-├── gitlab-ci-cd.md         # GitLab CI/CD integration
-├── third-party-integrations.md  # Other integrations
-├── legal-and-compliance.md # Legal information
-├── troubleshooting.md      # Troubleshooting guide
-└── migration-guide.md      # Migration guide
+├── amazon-bedrock.md        # Learn about configuring Claude Code through Amazon Bedrock, including setup, IAM configuration, and troubleshooting.
+├── analytics.md             # View detailed usage insights and productivity metrics for your organization's Claude Code deployment.
+├── checkpointing.md         # Automatically track and rewind Claude's edits to quickly recover from unwanted changes.
+├── claude-code-on-the-web.md# Run Claude Code tasks asynchronously on secure cloud infrastructure
+├── cli-reference.md         # Complete reference for Claude Code command-line interface, including commands and flags.
+├── common-workflows.md      # Learn about common workflows with Claude Code.
+├── costs.md                 # Learn how to track and optimize token usage and costs when using Claude Code.
+├── data-usage.md            # Learn about Anthropic's data usage policies for Claude
+├── devcontainer.md          # Learn about the Claude Code development container for teams that need consistent, secure environments.
+├── github-actions.md        # Learn about integrating Claude Code into your development workflow with Claude Code GitHub Actions
+├── gitlab-ci-cd.md          # Learn about integrating Claude Code into your development workflow with GitLab CI/CD
+├── google-vertex-ai.md      # Learn about configuring Claude Code through Google Vertex AI, including setup, IAM configuration, and troubleshooting.
+├── headless.md              # Run Claude Code programmatically without interactive UI
+├── hooks-guide.md           # Learn how to customize and extend Claude Code's behavior by registering shell commands
+├── hooks.md                 # This page provides reference documentation for implementing hooks in Claude Code.
+├── iam.md                   # Learn how to configure user authentication, authorization, and access controls for Claude Code in your organization.
+├── interactive-mode.md      # Complete reference for keyboard shortcuts, input modes, and interactive features in Claude Code sessions.
+├── jetbrains.md             # Use Claude Code with JetBrains IDEs including IntelliJ, PyCharm, WebStorm, and more
+├── legal-and-compliance.md  # Legal agreements, compliance certifications, and security information for Claude Code.
+├── llm-gateway.md           # Learn how to configure Claude Code with LLM gateway solutions, including LiteLLM setup, authentication methods, and enterprise features like usage tracking and budget management.
+├── mcp.md                   # Learn how to connect Claude Code to your tools with the Model Context Protocol.
+├── memory.md                # Learn how to manage Claude Code's memory across sessions with different memory locations and best practices.
+├── migration-guide.md       # Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Agent SDK
+├── model-config.md          # Learn about the Claude Code model configuration, including model aliases like `opusplan`
+├── monitoring-usage.md      # Learn how to enable and configure OpenTelemetry for Claude Code.
+├── network-config.md        # Configure Claude Code for enterprise environments with proxy servers, custom Certificate Authorities (CA), and mutual Transport Layer Security (mTLS) authentication.
+├── output-styles.md         # Adapt Claude Code for uses beyond software engineering
+├── overview.md              # Learn about Claude Code, Anthropic's agentic coding tool that lives in your terminal and helps you turn ideas into code faster than ever before.
+├── plugin-marketplaces.md   # Create and manage plugin marketplaces to distribute Claude Code extensions across teams and communities.
+├── plugins-reference.md     # Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.
+├── plugins.md               # Extend Claude Code with custom commands, agents, hooks, Skills, and MCP servers through the plugin system.
+├── quickstart.md            # Welcome to Claude Code!
+├── sandboxing.md            # Learn how Claude Code's sandboxed bash tool provides filesystem and network isolation for safer, more autonomous agent execution.
+├── security.md              # Learn about Claude Code's security safeguards and best practices for safe usage.
+├── settings.md              # Configure Claude Code with global and project-level settings, and environment variables.
+├── setup.md                 # Install, authenticate, and start using Claude Code on your development machine.
+├── skills.md                # Create, manage, and share Skills to extend Claude's capabilities in Claude Code.
+├── slash-commands.md        # Control Claude's behavior during an interactive session with slash commands.
+├── statusline.md            # Create a custom status line for Claude Code to display contextual information
+├── sub-agents.md            # Create and use specialized AI subagents in Claude Code for task-specific workflows and improved context management.
+├── terminal-config.md       # Claude Code works best when your terminal is properly configured. Follow these guidelines to optimize your experience.
+├── third-party-integrations.md# Learn how Claude Code can integrate with various third-party services and infrastructure to meet enterprise deployment requirements.
+├── troubleshooting.md       # Discover solutions to common issues with Claude Code installation and usage.
+└── vs-code.md               # Use Claude Code with Visual Studio Code through our native extension or CLI integration
 ```
+<!-- tree-end -->
 
 ## Workflow
 
@@ -133,7 +137,7 @@ node ~/.claude/skills/working-with-claude-code/scripts/update_docs.js
 ```
 
 The script:
-1. Fetches llms.txt from docs.claude.com
+1. Fetches llms.txt from code.claude.com/docs/llms.txt
 2. Extracts all Claude Code documentation URLs
 3. Downloads each page to `references/`
 4. Reports success/failures
