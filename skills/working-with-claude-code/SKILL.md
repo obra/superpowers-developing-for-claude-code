@@ -61,7 +61,7 @@ references/
 ├── interactive-mode.md      # Complete reference for keyboard shortcuts, input modes, and interactive features in Claude Code sessions.
 ├── jetbrains.md             # Use Claude Code with JetBrains IDEs including IntelliJ, PyCharm, WebStorm, and more
 ├── legal-and-compliance.md  # Legal agreements, compliance certifications, and security information for Claude Code.
-├── llm-gateway.md           # Learn how to configure Claude Code with LLM gateway solutions, including LiteLLM setup, authentication methods, and enterprise features like usage tracking and budget management.
+├── llm-gateway.md           # Learn how to configure Claude Code to work with LLM gateway solutions. Covers gateway requirements, authentication configuration, model selection, and provider-specific endpoint setup.
 ├── mcp.md                   # Learn how to connect Claude Code to your tools with the Model Context Protocol.
 ├── memory.md                # Learn how to manage Claude Code's memory across sessions with different memory locations and best practices.
 ├── migration-guide.md       # Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Agent SDK
