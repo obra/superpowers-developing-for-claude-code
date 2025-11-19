@@ -44,6 +44,7 @@ All documentation is stored as individual markdown files in `references/`. Use t
 references/
 ├── amazon-bedrock.md        # Learn about configuring Claude Code through Amazon Bedrock, including setup, IAM configuration, and troubleshooting.
 ├── analytics.md             # View detailed usage insights and productivity metrics for your organization's Claude Code deployment.
+├── azure-ai-foundry.md      # Learn about configuring Claude Code through Azure AI Foundry, including setup, configuration, and troubleshooting.
 ├── checkpointing.md         # Automatically track and rewind Claude's edits to quickly recover from unwanted changes.
 ├── claude-code-on-the-web.md# Run Claude Code tasks asynchronously on secure cloud infrastructure
 ├── cli-reference.md         # Complete reference for Claude Code command-line interface, including commands and flags.
