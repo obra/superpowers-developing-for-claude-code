@@ -10,18 +10,18 @@
 
 ### General controls
 
-| Shortcut                                     | Description                                                              | Context                                                     |
-| :------------------------------------------- | :----------------------------------------------------------------------- | :---------------------------------------------------------- |
-| `Ctrl+C`                                     | Cancel current input or generation                                       | Standard interrupt                                          |
-| `Ctrl+D`                                     | Exit Claude Code session                                                 | EOF signal                                                  |
-| `Ctrl+L`                                     | Clear terminal screen                                                    | Keeps conversation history                                  |
-| `Ctrl+O`                                     | Toggle verbose output                                                    | Shows detailed tool usage and execution                     |
-| `Ctrl+R`                                     | Reverse search command history                                           | Search through previous commands interactively              |
-| `Ctrl+V` (macOS/Linux) or `Alt+V` (Windows)  | Paste image from clipboard                                               | Pastes an image or path to an image file                    |
-| `Up/Down arrows`                             | Navigate command history                                                 | Recall previous inputs                                      |
-| `Esc` + `Esc`                                | Rewind the code/conversation                                             | Restore the code and/or conversation to a previous point    |
-| `Tab`                                        | Toggle [extended thinking](/en/docs/build-with-claude/extended-thinking) | Switch between Thinking on and Thinking off                 |
-| `Shift+Tab` or `Alt+M` (some configurations) | Toggle permission modes                                                  | Switch between Auto-Accept Mode, Plan Mode, and normal mode |
+| Shortcut                                     | Description                                                                                     | Context                                                     |
+| :------------------------------------------- | :---------------------------------------------------------------------------------------------- | :---------------------------------------------------------- |
+| `Ctrl+C`                                     | Cancel current input or generation                                                              | Standard interrupt                                          |
+| `Ctrl+D`                                     | Exit Claude Code session                                                                        | EOF signal                                                  |
+| `Ctrl+L`                                     | Clear terminal screen                                                                           | Keeps conversation history                                  |
+| `Ctrl+O`                                     | Toggle verbose output                                                                           | Shows detailed tool usage and execution                     |
+| `Ctrl+R`                                     | Reverse search command history                                                                  | Search through previous commands interactively              |
+| `Ctrl+V` (macOS/Linux) or `Alt+V` (Windows)  | Paste image from clipboard                                                                      | Pastes an image or path to an image file                    |
+| `Up/Down arrows`                             | Navigate command history                                                                        | Recall previous inputs                                      |
+| `Esc` + `Esc`                                | Rewind the code/conversation                                                                    | Restore the code and/or conversation to a previous point    |
+| `Tab`                                        | Toggle [extended thinking](https://docs.claude.com/en/docs/build-with-claude/extended-thinking) | Switch between Thinking on and Thinking off                 |
+| `Shift+Tab` or `Alt+M` (some configurations) | Toggle permission modes                                                                         | Switch between Auto-Accept Mode, Plan Mode, and normal mode |
 
 ### Multiline input
 
@@ -42,7 +42,7 @@
 | Shortcut     | Description                        | Notes                                                         |
 | :----------- | :--------------------------------- | :------------------------------------------------------------ |
 | `#` at start | Memory shortcut - add to CLAUDE.md | Prompts for file selection                                    |
-| `/` at start | Slash command                      | See [slash commands](/en/docs/claude-code/slash-commands)     |
+| `/` at start | Slash command                      | See [slash commands](/en/slash-commands)                      |
 | `!` at start | Bash mode                          | Run commands directly and add execution output to the session |
 | `@`          | File path mention                  | Trigger file path autocomplete                                |
 
@@ -162,8 +162,8 @@ This is useful for quick shell operations while maintaining conversation context
 
 ## See also
 
-* [Slash commands](/en/docs/claude-code/slash-commands) - Interactive session commands
-* [Checkpointing](/en/docs/claude-code/checkpointing) - Rewind Claude's edits and restore previous states
-* [CLI reference](/en/docs/claude-code/cli-reference) - Command-line flags and options
-* [Settings](/en/docs/claude-code/settings) - Configuration options
-* [Memory management](/en/docs/claude-code/memory) - Managing CLAUDE.md files
+* [Slash commands](/en/slash-commands) - Interactive session commands
+* [Checkpointing](/en/checkpointing) - Rewind Claude's edits and restore previous states
+* [CLI reference](/en/cli-reference) - Command-line flags and options
+* [Settings](/en/settings) - Configuration options
+* [Memory management](/en/memory) - Managing CLAUDE.md files
