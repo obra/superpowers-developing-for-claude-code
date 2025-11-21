@@ -65,6 +65,7 @@ references/
 ├── llm-gateway.md           # Learn how to configure Claude Code to work with LLM gateway solutions. Covers gateway requirements, authentication configuration, model selection, and provider-specific endpoint setup.
 ├── mcp.md                   # Learn how to connect Claude Code to your tools with the Model Context Protocol.
 ├── memory.md                # Learn how to manage Claude Code's memory across sessions with different memory locations and best practices.
+├── microsoft-foundry.md     # Learn about configuring Claude Code through Microsoft Foundry, including setup, configuration, and troubleshooting.
 ├── migration-guide.md       # Guide for migrating the Claude Code TypeScript and Python SDKs to the Claude Agent SDK
 ├── model-config.md          # Learn about the Claude Code model configuration, including model aliases like `opusplan`
 ├── monitoring-usage.md      # Learn how to enable and configure OpenTelemetry for Claude Code.
