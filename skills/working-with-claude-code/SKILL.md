@@ -51,6 +51,7 @@ references/
 ├── common-workflows.md      # Learn about common workflows with Claude Code.
 ├── costs.md                 # Learn how to track and optimize token usage and costs when using Claude Code.
 ├── data-usage.md            # Learn about Anthropic's data usage policies for Claude
+├── desktop.md               # Run Claude Code tasks locally or on secure cloud infrastructure with the Claude desktop app
 ├── devcontainer.md          # Learn about the Claude Code development container for teams that need consistent, secure environments.
 ├── github-actions.md        # Learn about integrating Claude Code into your development workflow with Claude Code GitHub Actions
 ├── gitlab-ci-cd.md          # Learn about integrating Claude Code into your development workflow with GitLab CI/CD
