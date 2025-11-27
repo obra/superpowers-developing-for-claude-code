@@ -136,3 +136,8 @@ If Claude Code is not responding to your prompts:
   2. Search for "Shell Command: Install 'code' command in PATH" (or equivalent for your IDE)
 
 For additional help, see our [troubleshooting guide](/en/troubleshooting).
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt

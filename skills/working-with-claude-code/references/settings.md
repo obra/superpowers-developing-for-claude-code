@@ -412,3 +412,8 @@ files by blocking Write operations to certain paths.
 * [Identity and Access Management](/en/iam#configuring-permissions) - Learn about Claude Code's permission system
 * [IAM and access control](/en/iam#enterprise-managed-policy-settings) - Enterprise policy management
 * [Troubleshooting](/en/troubleshooting#auto-updater-issues) - Solutions for common configuration issues
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt

@@ -704,3 +704,8 @@ In addition to providing enterprise-managed servers, administrators can control 
 <Note>
   **Enterprise configuration precedence**: The enterprise MCP configuration has the highest precedence and cannot be overridden by user, local, or project configurations.
 </Note>
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt

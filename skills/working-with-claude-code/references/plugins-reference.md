@@ -375,3 +375,8 @@ Follow semantic versioning for plugin releases:
 - [MCP](/en/mcp) - External tool integration
 - [Settings](/en/settings) - Configuration options for plugins
 ```
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt

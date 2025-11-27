@@ -101,3 +101,8 @@ To set up organization-level memory management:
 * **Be specific**: "Use 2-space indentation" is better than "Format code properly".
 * **Use structure to organize**: Format each individual memory as a bullet point and group related memories under descriptive markdown headings.
 * **Review periodically**: Update memories as your project evolves to ensure Claude is always using the most up to date information and context.
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt

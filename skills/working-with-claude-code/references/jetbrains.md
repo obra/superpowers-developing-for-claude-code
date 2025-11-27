@@ -148,3 +148,8 @@ When running in JetBrains IDEs, consider:
 * Being aware of which files Claude Code has access to modify
 
 For additional help, see our [troubleshooting guide](/en/troubleshooting).
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt

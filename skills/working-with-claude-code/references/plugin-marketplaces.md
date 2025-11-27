@@ -449,3 +449,8 @@ For complete plugin testing workflows, see [Test your plugins locally](/en/plugi
 * [Plugins reference](/en/plugins-reference) - Complete technical specifications and schemas
 * [Plugin development](/en/plugins#develop-more-complex-plugins) - Creating your own plugins
 * [Settings](/en/settings#plugin-configuration) - Plugin configuration options
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt
