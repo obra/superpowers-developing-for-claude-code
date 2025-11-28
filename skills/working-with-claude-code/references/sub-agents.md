@@ -563,4 +563,4 @@ If you're using the Agent SDK or interacting with the AgentTool directly, you ca
 
 ---
 
-> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

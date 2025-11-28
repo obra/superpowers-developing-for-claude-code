@@ -393,4 +393,4 @@ Now that you understand Claude Code's plugin system, here are suggested paths fo
 
 ---
 
-> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

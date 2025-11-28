@@ -172,4 +172,4 @@ For more detailed information, refer to the [LiteLLM documentation](https://docs
 
 ---
 
-> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

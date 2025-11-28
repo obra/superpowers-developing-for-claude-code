@@ -124,4 +124,4 @@ You'll be prompted to log in on first use. That's it! [Continue with Quickstart 
 
 ---
 
-> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

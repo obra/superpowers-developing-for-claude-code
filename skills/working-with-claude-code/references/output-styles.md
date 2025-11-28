@@ -111,4 +111,4 @@ commands as "stored prompts".
 
 ---
 
-> To find navigation and other pages in this documentation, fetch the llms.txt file at: /docs/llms.txt
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt
