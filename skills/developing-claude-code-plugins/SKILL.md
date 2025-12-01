@@ -28,6 +28,7 @@ Use this skill when:
 |-----------|-----------|---------------|
 | Understand directory structure | `references/plugin-structure.md` | `plugins.md` |
 | Choose a plugin pattern | `references/common-patterns.md` | `plugins.md` |
+| Make hooks work cross-platform | `references/polyglot-hooks.md` | `hooks.md` |
 | Debug plugin issues | `references/troubleshooting.md` | Various |
 | See working examples | `examples/` directory | N/A |
 
@@ -244,9 +245,10 @@ Common issues are usually:
 
 - **`references/plugin-structure.md`** - Directory layout, file formats, component syntax
 - **`references/common-patterns.md`** - When to use each plugin pattern, examples
+- **`references/polyglot-hooks.md`** - Cross-platform hook wrapper for Windows/macOS/Linux
 - **`references/troubleshooting.md`** - Debug guide for common issues
 - **`examples/simple-greeter-plugin/`** - Minimal working plugin (one skill)
-- **`examples/full-featured-plugin/`** - Complete plugin with all components
+- **`examples/full-featured-plugin/`** - Complete plugin with all components (includes `run-hook.cmd`)
 
 ## Cross-References
 

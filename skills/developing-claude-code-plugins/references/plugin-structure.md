@@ -217,6 +217,10 @@ Be specific and clear about the expected behavior.
 
 ### Hooks (hooks/hooks.json)
 
+**⚠️ WARNING: Duplicate hooks file error**
+
+The `hooks/hooks.json` file is automatically loaded by Claude Code. Do NOT reference it in `plugin.json`'s `manifest.hooks` field or you'll get "Duplicate hooks file detected" errors.
+
 ```json
 {
   "hooks": {
@@ -226,7 +230,7 @@ Be specific and clear about the expected behavior.
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/format.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" format.sh"
           }
         ]
       }
@@ -236,7 +240,7 @@ Be specific and clear about the expected behavior.
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/init.sh"
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run-hook.cmd\" init.sh"
           }
         ]
       }
@@ -244,6 +248,8 @@ Be specific and clear about the expected behavior.
   }
 }
 ```
+
+**Cross-platform hooks:** Use the polyglot `run-hook.cmd` wrapper to run shell scripts on Windows, macOS, and Linux. See `references/polyglot-hooks.md` for details.
 
 **Available hook events:**
 - `PreToolUse`, `PostToolUse`

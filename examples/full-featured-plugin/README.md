@@ -43,8 +43,8 @@ full-featured-plugin/
 ├── commands/
 │   └── hello.md              # Custom /hello command
 ├── hooks/
-│   └── hooks.json            # Hook configurations
-├── scripts/
+│   ├── hooks.json            # Hook configurations
+│   ├── run-hook.cmd          # Cross-platform polyglot wrapper
 │   ├── session-init.sh       # SessionStart hook handler
 │   └── post-write.sh         # PostToolUse hook handler
 ├── mcp/
@@ -58,6 +58,7 @@ full-featured-plugin/
 - **marketplace.json** shows local development marketplace setup
 - **SKILL.md** demonstrates proper skill structure with frontmatter
 - **hooks.json** shows how to register hooks with matchers
+- **run-hook.cmd** is a polyglot wrapper that makes hooks work on Windows, macOS, and Linux
 - **Scripts** show how to use `${CLAUDE_PLUGIN_ROOT}` for portable paths
 - **All components** work together as a cohesive plugin
 
