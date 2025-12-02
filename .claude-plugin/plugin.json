@@ -1,6 +1,6 @@
 {
   "name": "superpowers-developing-for-claude-code",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Skills and resources for developing Claude Code plugins, skills, MCP servers, and extensions. Includes comprehensive official documentation and self-update mechanism.",
   "author": {
     "name": "Jesse Vincent",

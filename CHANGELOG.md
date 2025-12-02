@@ -5,6 +5,23 @@ All notable changes to the superpowers-developing-for-claude-code plugin will be
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-12-02
+
+### Added
+- Cross-platform polyglot hook wrapper for Windows support
+  - Added `run-hook.cmd` polyglot wrapper to full-featured-plugin example
+  - Created comprehensive polyglot-hooks.md documentation in developing-claude-code-plugins/references/
+  - Documents how to write hooks that work on Windows (CMD), macOS, and Linux
+  - Explains polyglot script technique using bash heredoc and CMD labels
+
+### Changed
+- Updated full-featured-plugin example to use polyglot wrapper pattern
+  - Moved hook scripts from scripts/ to hooks/ directory
+  - Updated hooks.json to use run-hook.cmd wrapper
+  - Updated README to reflect new structure and cross-platform support
+- Enhanced plugin-structure.md with cross-platform hooks guidance
+- Added polyglot-hooks.md to quick reference table in SKILL.md
+
 ## [0.2.1] - 2025-11-22
 
 ### Fixed
