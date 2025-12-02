@@ -221,6 +221,10 @@ mkdir -p ~/.claude/agents
 # ... create subagent file
 ```
 
+<Note>
+  Subagents created by manually adding files will be loaded the next time you start a Claude Code session. To create and use a subagent immediately without restarting, use the `/agents` command instead.
+</Note>
+
 ## Using subagents effectively
 
 ### Automatic delegation
