@@ -60,7 +60,7 @@ Code through hierarchical settings:
 | Key                          | Description                                                                                                                                                                                                                                                      | Example                                                                 |
 | :--------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------- |
 | `apiKeyHelper`               | Custom script, to be executed in `/bin/sh`, to generate an auth value. This value will be sent as `X-Api-Key` and `Authorization: Bearer` headers for model requests                                                                                             | `/bin/generate_temp_api_key.sh`                                         |
-| `cleanupPeriodDays`          | How long to locally retain chat transcripts based on last activity date (default: 30 days)                                                                                                                                                                       | `20`                                                                    |
+| `cleanupPeriodDays`          | Sessions inactive for longer than this period are deleted at startup. Setting to `0` immediately deletes all sessions. (default: 30 days)                                                                                                                        | `20`                                                                    |
 | `companyAnnouncements`       | Announcement to display to users at startup. If multiple announcements are provided, they will be cycled through at random.                                                                                                                                      | `["Welcome to Acme Corp! Review our code guidelines at docs.acme.com"]` |
 | `env`                        | Environment variables that will be applied to every session                                                                                                                                                                                                      | `{"FOO": "bar"}`                                                        |
 | `includeCoAuthoredBy`        | Whether to include the `co-authored-by Claude` byline in git commits and pull requests (default: `true`)                                                                                                                                                         | `false`                                                                 |
@@ -340,6 +340,7 @@ Claude Code supports the following environment variables to control its behavior
 | `CLAUDE_CODE_DISABLE_TERMINAL_TITLE`       | Set to `1` to disable automatic terminal title updates based on conversation context                                                                                                                                                                                                                                                                                                         |
 | `CLAUDE_CODE_IDE_SKIP_AUTO_INSTALL`        | Skip auto-installation of IDE extensions                                                                                                                                                                                                                                                                                                                                                     |
 | `CLAUDE_CODE_MAX_OUTPUT_TOKENS`            | Set the maximum number of output tokens for most requests                                                                                                                                                                                                                                                                                                                                    |
+| `CLAUDE_CODE_SHELL_PREFIX`                 | Command prefix to wrap all bash commands (e.g., for logging or auditing). Example: `/path/to/logger.sh` will execute `/path/to/logger.sh <command>`                                                                                                                                                                                                                                          |
 | `CLAUDE_CODE_SKIP_BEDROCK_AUTH`            | Skip AWS authentication for Bedrock (e.g. when using an LLM gateway)                                                                                                                                                                                                                                                                                                                         |
 | `CLAUDE_CODE_SKIP_FOUNDRY_AUTH`            | Skip Azure authentication for Microsoft Foundry (e.g. when using an LLM gateway)                                                                                                                                                                                                                                                                                                             |
 | `CLAUDE_CODE_SKIP_VERTEX_AUTH`             | Skip Google authentication for Vertex (e.g. when using an LLM gateway)                                                                                                                                                                                                                                                                                                                       |
@@ -377,27 +378,89 @@ Claude Code supports the following environment variables to control its behavior
 
 Claude Code has access to a set of powerful tools that help it understand and modify your codebase:
 
-| Tool                | Description                                                                        | Permission Required |
-| :------------------ | :--------------------------------------------------------------------------------- | :------------------ |
-| **AskUserQuestion** | Asks the user multiple choice questions to gather information or clarify ambiguity | No                  |
-| **Bash**            | Executes shell commands in your environment                                        | Yes                 |
-| **BashOutput**      | Retrieves output from a background bash shell                                      | No                  |
-| **Edit**            | Makes targeted edits to specific files                                             | Yes                 |
-| **ExitPlanMode**    | Prompts the user to exit plan mode and start coding                                | Yes                 |
-| **Glob**            | Finds files based on pattern matching                                              | No                  |
-| **Grep**            | Searches for patterns in file contents                                             | No                  |
-| **KillShell**       | Kills a running background bash shell by its ID                                    | No                  |
-| **NotebookEdit**    | Modifies Jupyter notebook cells                                                    | Yes                 |
-| **Read**            | Reads the contents of files                                                        | No                  |
-| **Skill**           | Executes a skill within the main conversation                                      | Yes                 |
-| **SlashCommand**    | Runs a [custom slash command](/en/slash-commands#slashcommand-tool)                | Yes                 |
-| **Task**            | Runs a sub-agent to handle complex, multi-step tasks                               | No                  |
-| **TodoWrite**       | Creates and manages structured task lists                                          | No                  |
-| **WebFetch**        | Fetches content from a specified URL                                               | Yes                 |
-| **WebSearch**       | Performs web searches with domain filtering                                        | Yes                 |
-| **Write**           | Creates or overwrites files                                                        | Yes                 |
+| Tool                | Description                                                                                       | Permission Required |
+| :------------------ | :------------------------------------------------------------------------------------------------ | :------------------ |
+| **AskUserQuestion** | Asks the user multiple choice questions to gather information or clarify ambiguity                | No                  |
+| **Bash**            | Executes shell commands in your environment (see [Bash tool behavior](#bash-tool-behavior) below) | Yes                 |
+| **BashOutput**      | Retrieves output from a background bash shell                                                     | No                  |
+| **Edit**            | Makes targeted edits to specific files                                                            | Yes                 |
+| **ExitPlanMode**    | Prompts the user to exit plan mode and start coding                                               | Yes                 |
+| **Glob**            | Finds files based on pattern matching                                                             | No                  |
+| **Grep**            | Searches for patterns in file contents                                                            | No                  |
+| **KillShell**       | Kills a running background bash shell by its ID                                                   | No                  |
+| **NotebookEdit**    | Modifies Jupyter notebook cells                                                                   | Yes                 |
+| **Read**            | Reads the contents of files                                                                       | No                  |
+| **Skill**           | Executes a skill within the main conversation                                                     | Yes                 |
+| **SlashCommand**    | Runs a [custom slash command](/en/slash-commands#slashcommand-tool)                               | Yes                 |
+| **Task**            | Runs a sub-agent to handle complex, multi-step tasks                                              | No                  |
+| **TodoWrite**       | Creates and manages structured task lists                                                         | No                  |
+| **WebFetch**        | Fetches content from a specified URL                                                              | Yes                 |
+| **WebSearch**       | Performs web searches with domain filtering                                                       | Yes                 |
+| **Write**           | Creates or overwrites files                                                                       | Yes                 |
 
 Permission rules can be configured using `/allowed-tools` or in [permission settings](/en/settings#available-settings). Also see [Tool-specific permission rules](/en/iam#tool-specific-permission-rules).
+
+### Bash tool behavior
+
+The Bash tool executes shell commands with the following persistence behavior:
+
+* **Working directory persists**: When Claude changes the working directory (e.g., `cd /path/to/dir`), subsequent Bash commands will execute in that directory. You can use `CLAUDE_BASH_MAINTAIN_PROJECT_WORKING_DIR=1` to reset to the project directory after each command.
+* **Environment variables do NOT persist**: Environment variables set in one Bash command (e.g., `export MY_VAR=value`) are **not** available in subsequent Bash commands. Each Bash command runs in a fresh shell environment.
+
+To make environment variables available in Bash commands, you have **three options**:
+
+**Option 1: Activate environment before starting Claude Code** (simplest approach)
+
+Activate your virtual environment in your terminal before launching Claude Code:
+
+```bash  theme={null}
+conda activate myenv
+# or: source /path/to/venv/bin/activate
+claude
+```
+
+This works for shell environments but environment variables set within Claude's Bash commands will not persist between commands.
+
+**Option 2: Set CLAUDE\_ENV\_FILE before starting Claude Code** (persistent environment setup)
+
+Export the path to a shell script containing your environment setup:
+
+```bash  theme={null}
+export CLAUDE_ENV_FILE=/path/to/env-setup.sh
+claude
+```
+
+Where `/path/to/env-setup.sh` contains:
+
+```bash  theme={null}
+conda activate myenv
+# or: source /path/to/venv/bin/activate
+# or: export MY_VAR=value
+```
+
+Claude Code will source this file before each Bash command, making the environment persistent across all commands.
+
+**Option 3: Use a SessionStart hook** (project-specific configuration)
+
+Configure in `.claude/settings.json`:
+
+```json  theme={null}
+{
+  "hooks": {
+    "SessionStart": [{
+      "matcher": "startup",
+      "hooks": [{
+        "type": "command",
+        "command": "echo 'conda activate myenv' >> \"$CLAUDE_ENV_FILE\""
+      }]
+    }]
+  }
+}
+```
+
+The hook writes to `$CLAUDE_ENV_FILE`, which is then sourced before each Bash command. This is ideal for team-shared project configurations.
+
+See [SessionStart hooks](/en/hooks#persisting-environment-variables) for more details on Option 3.
 
 ### Extending tools with hooks
 

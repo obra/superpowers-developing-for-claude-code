@@ -671,35 +671,126 @@ In addition to providing enterprise-managed servers, administrators can control 
 * **Windows**: `C:\ProgramData\ClaudeCode\managed-settings.json`
 * **Linux**: `/etc/claude-code/managed-settings.json`
 
+#### Restriction options
+
+Each entry in the allowlist or denylist can restrict servers in two ways:
+
+1. **By server name** (`serverName`): Matches the configured name of the server
+2. **By command** (`serverCommand`): Matches the exact command and arguments used to start stdio servers
+
+**Important**: Each entry must have **either** `serverName` **or** `serverCommand`, not both.
+
+#### Example configuration
+
 ```json  theme={null}
 {
   "allowedMcpServers": [
+    // Allow by server name
     { "serverName": "github" },
     { "serverName": "sentry" },
-    { "serverName": "company-internal" }
+
+    // Allow by exact command (for stdio servers)
+    { "serverCommand": ["npx", "-y", "@modelcontextprotocol/server-filesystem"] },
+    { "serverCommand": ["python", "/usr/local/bin/approved-server.py"] }
   ],
   "deniedMcpServers": [
-    { "serverName": "filesystem" }
+    // Block by server name
+    { "serverName": "dangerous-server" },
+
+    // Block by exact command (for stdio servers)
+    { "serverCommand": ["npx", "-y", "unapproved-package"] }
   ]
 }
 ```
 
-**Allowlist behavior (`allowedMcpServers`)**:
+#### How command-based restrictions work
+
+**Exact matching**:
+
+* Command arrays must match **exactly** - both the command and all arguments in the correct order
+* Example: `["npx", "-y", "server"]` will NOT match `["npx", "server"]` or `["npx", "-y", "server", "--flag"]`
+
+**Stdio server behavior**:
+
+* When the allowlist contains **any** `serverCommand` entries, stdio servers **must** match one of those commands
+* Stdio servers cannot pass by name alone when command restrictions are present
+* This ensures administrators can enforce which commands are allowed to run
+
+**Non-stdio server behavior**:
+
+* Remote servers (HTTP, SSE, WebSocket) always match by name only
+* Command restrictions do not apply to remote servers
+
+<Accordion title="Example: Command-only allowlist">
+  ```json  theme={null}
+  {
+    "allowedMcpServers": [
+      { "serverCommand": ["npx", "-y", "approved-package"] }
+    ]
+  }
+  ```
+
+  **Result**:
+
+  * Stdio server with `["npx", "-y", "approved-package"]`: ✅ Allowed (matches command)
+  * Stdio server with `["node", "server.js"]`: ❌ Blocked (doesn't match command)
+  * HTTP server named "my-api": ❌ Blocked (no name entries to match)
+</Accordion>
+
+<Accordion title="Example: Mixed name and command allowlist">
+  ```json  theme={null}
+  {
+    "allowedMcpServers": [
+      { "serverName": "github" },
+      { "serverCommand": ["npx", "-y", "approved-package"] }
+    ]
+  }
+  ```
+
+  **Result**:
+
+  * Stdio server named "local-tool" with `["npx", "-y", "approved-package"]`: ✅ Allowed (matches command)
+  * Stdio server named "local-tool" with `["node", "server.js"]`: ❌ Blocked (command entries exist but doesn't match)
+  * Stdio server named "github" with `["node", "server.js"]`: ❌ Blocked (stdio servers must match commands when command entries exist)
+  * HTTP server named "github": ✅ Allowed (matches name)
+  * HTTP server named "other-api": ❌ Blocked (name doesn't match)
+</Accordion>
+
+<Accordion title="Example: Name-only allowlist">
+  ```json  theme={null}
+  {
+    "allowedMcpServers": [
+      { "serverName": "github" },
+      { "serverName": "internal-tool" }
+    ]
+  }
+  ```
+
+  **Result**:
+
+  * Stdio server named "github" with any command: ✅ Allowed (no command restrictions)
+  * Stdio server named "internal-tool" with any command: ✅ Allowed (no command restrictions)
+  * HTTP server named "github": ✅ Allowed (matches name)
+  * Any server named "other": ❌ Blocked (name doesn't match)
+</Accordion>
+
+#### Allowlist behavior (`allowedMcpServers`)
 
 * `undefined` (default): No restrictions - users can configure any MCP server
 * Empty array `[]`: Complete lockdown - users cannot configure any MCP servers
-* List of server names: Users can only configure the specified servers
+* List of entries: Users can only configure servers that match by name or command
 
-**Denylist behavior (`deniedMcpServers`)**:
+#### Denylist behavior (`deniedMcpServers`)
 
 * `undefined` (default): No servers are blocked
 * Empty array `[]`: No servers are blocked
-* List of server names: Specified servers are explicitly blocked across all scopes
+* List of entries: Specified servers are explicitly blocked across all scopes
 
-**Important notes**:
+#### Important notes
 
 * These restrictions apply to all scopes: user, project, local, and even enterprise servers from `managed-mcp.json`
-* **Denylist takes absolute precedence**: If a server appears in both lists, it will be blocked
+* **Denylist takes absolute precedence**: If a server matches a denylist entry (by name or command), it will be blocked even if it's on the allowlist
+* Name-based and command-based restrictions work together: a server passes if it matches **either** a name entry **or** a command entry (unless blocked by denylist)
 
 <Note>
   **Enterprise configuration precedence**: The enterprise MCP configuration has the highest precedence and cannot be overridden by user, local, or project configurations.
