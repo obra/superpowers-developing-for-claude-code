@@ -98,11 +98,13 @@ exit /b
 CMDBLOCK
 
 # Unix shell runs from here
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT_NAME="$1"
 shift
 "${SCRIPT_DIR}/${SCRIPT_NAME}" "$@"
 ```
+
+**Note**: Line 101 uses `$0` instead of `${BASH_SOURCE[0]:-$0}` for POSIX compliance. The latter causes "Bad substitution" errors on Ubuntu/Debian systems where `/bin/sh` is dash (not bash). Using `$0` works correctly on all platforms.
 
 ### Using run-hook.cmd in hooks.json
 
