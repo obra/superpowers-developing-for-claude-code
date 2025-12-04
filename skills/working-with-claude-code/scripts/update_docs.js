@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const LLMS_TXT_URL = 'https://docs.claude.com/llms.txt';
-const CLAUDE_CODE_PATTERN = /https:\/\/docs\.claude\.com\/en\/docs\/claude-code\/[^\s)]+\.md/g;
+const CLAUDE_CODE_PATTERN = /https:\/\/docs\.claude\.com\/en\/docs\/[^\s)]+\.md/g;
 const REFERENCES_DIR = path.join(__dirname, '..', 'references');
 
 /**
