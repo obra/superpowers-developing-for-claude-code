@@ -101,30 +101,6 @@ This command installs the appropriate build of Claude Code for your operating sy
   Make sure that you have the installation directory in your system PATH.
 </Tip>
 
-#### Alternative solution: Migrate to local installation
-
-Alternatively, if Claude Code will run, you can migrate to a local installation:
-
-```bash  theme={null}
-claude migrate-installer
-```
-
-This moves Claude Code to `~/.claude/local/` and sets up an alias in your shell configuration. No `sudo` is required for future updates.
-
-After migration, restart your shell, and then verify your installation:
-
-On macOS/Linux/WSL:
-
-```bash  theme={null}
-which claude  # Should show an alias to ~/.claude/local/claude
-```
-
-On Windows:
-
-```powershell  theme={null}
-where claude  # Should show path to claude executable
-```
-
 Verify installation:
 
 ```bash  theme={null}
@@ -136,7 +112,7 @@ claude doctor # Check installation health
 ### Repeated permission prompts
 
 If you find yourself repeatedly approving the same commands, you can allow specific tools
-to run without approval using the `/permissions` command. See [Permissions docs](/en/docs/claude-code/iam#configuring-permissions).
+to run without approval using the `/permissions` command. See [Permissions docs](/en/iam#configuring-permissions).
 
 ### Authentication issues
 
@@ -154,6 +130,48 @@ claude
 ```
 
 This removes your stored authentication information and forces a clean login.
+
+## Configuration file locations
+
+Claude Code stores configuration in several locations:
+
+| File                          | Purpose                                                                |
+| :---------------------------- | :--------------------------------------------------------------------- |
+| `~/.claude/settings.json`     | User settings (permissions, hooks, model overrides)                    |
+| `.claude/settings.json`       | Project settings (checked into source control)                         |
+| `.claude/settings.local.json` | Local project settings (gitignored)                                    |
+| `~/.claude.json`              | Global state (theme, OAuth, MCP servers, allowed tools)                |
+| `.mcp.json`                   | Project MCP servers (checked into source control)                      |
+| `managed-settings.json`       | [Enterprise managed settings](/en/settings#settings-files)             |
+| `managed-mcp.json`            | [Enterprise managed MCP servers](/en/mcp#enterprise-mcp-configuration) |
+
+On Windows, `~` refers to your user home directory (e.g., `C:\Users\YourName`).
+
+**Enterprise managed file locations:**
+
+* macOS: `/Library/Application Support/ClaudeCode/`
+* Linux/WSL: `/etc/claude-code/`
+* Windows: `C:\ProgramData\ClaudeCode\`
+
+For details on configuring these files, see [Settings](/en/settings) and [MCP](/en/mcp).
+
+### Resetting configuration
+
+To reset Claude Code to default settings, you can remove the configuration files:
+
+```bash  theme={null}
+# Reset all user settings and state
+rm ~/.claude.json
+rm -rf ~/.claude/
+
+# Reset project-specific settings
+rm -rf .claude/
+rm .mcp.json
+```
+
+<Warning>
+  This will remove all your settings, allowed tools, MCP server configurations, and session history.
+</Warning>
 
 ## Performance and stability
 
@@ -193,7 +211,7 @@ apk add ripgrep
 pacman -S ripgrep
 ```
 
-Then set `USE_BUILTIN_RIPGREP=0` in your [environment](/en/docs/claude-code/settings#environment-variables).
+Then set `USE_BUILTIN_RIPGREP=0` in your [environment](/en/settings#environment-variables).
 
 ### Slow or incomplete search results on WSL
 
@@ -252,7 +270,7 @@ Then restart WSL with `wsl --shutdown` from PowerShell.
   These networking issues only affect WSL2. WSL1 uses the host's network directly and doesn't require these configurations.
 </Note>
 
-For additional JetBrains configuration tips, see our [IDE integration guide](/en/docs/claude-code/ide-integrations#jetbrains-plugin-settings).
+For additional JetBrains configuration tips, see our [JetBrains IDE guide](/en/jetbrains#plugin-settings).
 
 ### Reporting Windows IDE integration issues (both native and WSL)
 
@@ -302,7 +320,7 @@ function example() {
 
 1. **Ask Claude to add language tags**: Simply request "Please add appropriate language tags to all code blocks in this markdown file."
 
-2. **Use post-processing hooks**: Set up automatic formatting hooks to detect and add missing language tags. See the [markdown formatting hook example](/en/docs/claude-code/hooks-guide#markdown-formatting-hook) for implementation details.
+2. **Use post-processing hooks**: Set up automatic formatting hooks to detect and add missing language tags. See the [markdown formatting hook example](/en/hooks-guide#markdown-formatting-hook) for implementation details.
 
 3. **Manual verification**: After generating markdown files, review them for proper code block formatting and request corrections if needed.
 
@@ -316,14 +334,14 @@ If generated markdown has excessive blank lines or inconsistent spacing:
 
 2. **Use formatting tools**: Set up hooks to run markdown formatters like `prettier` or custom formatting scripts on generated markdown files.
 
-3. **Specify formatting preferences**: Include formatting requirements in your prompts or project [memory](/en/docs/claude-code/memory) files.
+3. **Specify formatting preferences**: Include formatting requirements in your prompts or project [memory](/en/memory) files.
 
 ### Best practices for markdown generation
 
 To minimize formatting issues:
 
 * **Be explicit in requests**: Ask for "properly formatted markdown with language-tagged code blocks"
-* **Use project conventions**: Document your preferred markdown style in [CLAUDE.md](/en/docs/claude-code/memory)
+* **Use project conventions**: Document your preferred markdown style in [CLAUDE.md](/en/memory)
 * **Set up validation hooks**: Use post-processing hooks to automatically verify and fix common formatting issues
 
 ## Getting more help
@@ -334,3 +352,8 @@ If you're experiencing issues not covered here:
 2. Check the [GitHub repository](https://github.com/anthropics/claude-code) for known issues
 3. Run `/doctor` to check the health of your Claude Code installation
 4. Ask Claude directly about its capabilities and features - Claude has built-in access to its documentation
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

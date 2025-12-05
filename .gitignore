@@ -3,3 +3,6 @@ node_modules/
 *.log
 .claude/settings.local.json
 .private-journal/
+.bak
+.worktrees/
+docs/.archive/

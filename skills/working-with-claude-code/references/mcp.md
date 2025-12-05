@@ -2,596 +2,6 @@
 
 > Learn how to connect Claude Code to your tools with the Model Context Protocol.
 
-export const MCPServersTable = ({platform = "all"}) => {
-  const generateClaudeCodeCommand = server => {
-    if (server.customCommands && server.customCommands.claudeCode) {
-      return server.customCommands.claudeCode;
-    }
-    if (server.urls.http) {
-      return `claude mcp add --transport http ${server.name.toLowerCase().replace(/[^a-z0-9]/g, '-')} ${server.urls.http}`;
-    }
-    if (server.urls.sse) {
-      return `claude mcp add --transport sse ${server.name.toLowerCase().replace(/[^a-z0-9]/g, '-')} ${server.urls.sse}`;
-    }
-    if (server.urls.stdio) {
-      const envFlags = server.authentication && server.authentication.envVars ? server.authentication.envVars.map(v => `--env ${v}=YOUR_${v.split('_').pop()}`).join(' ') : '';
-      const baseCommand = `claude mcp add --transport stdio ${server.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`;
-      return envFlags ? `${baseCommand} ${envFlags} -- ${server.urls.stdio}` : `${baseCommand} -- ${server.urls.stdio}`;
-    }
-    return null;
-  };
-  const servers = [{
-    name: "Airtable",
-    category: "Databases & Data Management",
-    description: "Read/write records, manage bases and tables",
-    documentation: "https://github.com/domdomegg/airtable-mcp-server",
-    urls: {
-      stdio: "npx -y airtable-mcp-server"
-    },
-    authentication: {
-      type: "api_key",
-      envVars: ["AIRTABLE_API_KEY"]
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: false,
-      claudeDesktop: true
-    }
-  }, {
-    name: "Figma",
-    category: "Design & Media",
-    description: "Generate better code by bringing in full Figma context",
-    documentation: "https://developers.figma.com",
-    urls: {
-      http: "https://mcp.figma.com/mcp"
-    },
-    customCommands: {
-      claudeCode: "claude mcp add --transport http figma-remote-mcp https://mcp.figma.com/mcp"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: false,
-      claudeDesktop: false
-    },
-    notes: "Visit developers.figma.com for local server setup."
-  }, {
-    name: "Asana",
-    category: "Project Management & Documentation",
-    description: "Interact with your Asana workspace to keep projects on track",
-    documentation: "https://developers.asana.com/docs/using-asanas-model-control-protocol-mcp-server",
-    urls: {
-      sse: "https://mcp.asana.com/sse"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Atlassian",
-    category: "Project Management & Documentation",
-    description: "Manage your Jira tickets and Confluence docs",
-    documentation: "https://www.atlassian.com/platform/remote-mcp-server",
-    urls: {
-      sse: "https://mcp.atlassian.com/v1/sse"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "ClickUp",
-    category: "Project Management & Documentation",
-    description: "Task management, project tracking",
-    documentation: "https://github.com/hauptsacheNet/clickup-mcp",
-    urls: {
-      stdio: "npx -y @hauptsache.net/clickup-mcp"
-    },
-    authentication: {
-      type: "api_key",
-      envVars: ["CLICKUP_API_KEY", "CLICKUP_TEAM_ID"]
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: false,
-      claudeDesktop: true
-    }
-  }, {
-    name: "Cloudflare",
-    category: "Infrastructure & DevOps",
-    description: "Build applications, analyze traffic, monitor performance, and manage security settings through Cloudflare",
-    documentation: "https://developers.cloudflare.com/agents/model-context-protocol/mcp-servers-for-cloudflare/",
-    urls: {},
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    },
-    notes: "Multiple services available. See documentation for specific server URLs. Claude Code can use the Cloudflare CLI if installed."
-  }, {
-    name: "Cloudinary",
-    category: "Design & Media",
-    description: "Upload, manage, transform, and analyze your media assets",
-    documentation: "https://cloudinary.com/documentation/cloudinary_llm_mcp#mcp_servers",
-    urls: {},
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    },
-    notes: "Multiple services available. See documentation for specific server URLs."
-  }, {
-    name: "Intercom",
-    category: "Project Management & Documentation",
-    description: "Access real-time customer conversations, tickets, and user data",
-    documentation: "https://developers.intercom.com/docs/guides/mcp",
-    urls: {
-      http: "https://mcp.intercom.com/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "invideo",
-    category: "Design & Media",
-    description: "Build video creation capabilities into your applications",
-    documentation: "https://invideo.io/ai/mcp",
-    urls: {
-      sse: "https://mcp.invideo.io/sse"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Linear",
-    category: "Project Management & Documentation",
-    description: "Integrate with Linear's issue tracking and project management",
-    documentation: "https://linear.app/docs/mcp",
-    urls: {
-      http: "https://mcp.linear.app/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Notion",
-    category: "Project Management & Documentation",
-    description: "Read docs, update pages, manage tasks",
-    documentation: "https://developers.notion.com/docs/mcp",
-    urls: {
-      http: "https://mcp.notion.com/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: false,
-      claudeDesktop: false
-    }
-  }, {
-    name: "PayPal",
-    category: "Payments & Commerce",
-    description: "Integrate PayPal commerce capabilities, payment processing, transaction management",
-    documentation: "https://www.paypal.ai/",
-    urls: {
-      http: "https://mcp.paypal.com/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Plaid",
-    category: "Payments & Commerce",
-    description: "Analyze, troubleshoot, and optimize Plaid integrations. Banking data, financial account linking",
-    documentation: "https://plaid.com/blog/plaid-mcp-ai-assistant-claude/",
-    urls: {
-      sse: "https://api.dashboard.plaid.com/mcp/sse"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Sentry",
-    category: "Development & Testing Tools",
-    description: "Monitor errors, debug production issues",
-    documentation: "https://docs.sentry.io/product/sentry-mcp/",
-    urls: {
-      http: "https://mcp.sentry.dev/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: false,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Square",
-    category: "Payments & Commerce",
-    description: "Use an agent to build on Square APIs. Payments, inventory, orders, and more",
-    documentation: "https://developer.squareup.com/docs/mcp",
-    urls: {
-      sse: "https://mcp.squareup.com/sse"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Socket",
-    category: "Development & Testing Tools",
-    description: "Security analysis for dependencies",
-    documentation: "https://github.com/SocketDev/socket-mcp",
-    urls: {
-      http: "https://mcp.socket.dev/"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: false,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Stripe",
-    category: "Payments & Commerce",
-    description: "Payment processing, subscription management, and financial transactions",
-    documentation: "https://docs.stripe.com/mcp",
-    urls: {
-      http: "https://mcp.stripe.com"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Workato",
-    category: "Automation & Integration",
-    description: "Access any application, workflows or data via Workato, made accessible for AI",
-    documentation: "https://docs.workato.com/mcp.html",
-    urls: {},
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    },
-    notes: "MCP servers are programmatically generated"
-  }, {
-    name: "Zapier",
-    category: "Automation & Integration",
-    description: "Connect to nearly 8,000 apps through Zapier's automation platform",
-    documentation: "https://help.zapier.com/hc/en-us/articles/36265392843917",
-    urls: {},
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    },
-    notes: "Generate a user-specific URL at mcp.zapier.com"
-  }, {
-    name: "Box",
-    category: "Project Management & Documentation",
-    description: "Ask questions about your enterprise content, get insights from unstructured data, automate content workflows",
-    documentation: "https://box.dev/guides/box-mcp/remote/",
-    urls: {
-      http: "https://mcp.box.com/"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Canva",
-    category: "Design & Media",
-    description: "Browse, summarize, autofill, and even generate new Canva designs directly from Claude",
-    documentation: "https://www.canva.dev/docs/connect/canva-mcp-server-setup/",
-    urls: {
-      http: "https://mcp.canva.com/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Daloopa",
-    category: "Databases & Data Management",
-    description: "Supplies high quality fundamental financial data sourced from SEC Filings, investor presentations",
-    documentation: "https://docs.daloopa.com/docs/daloopa-mcp",
-    urls: {
-      http: "https://mcp.daloopa.com/server/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Fireflies",
-    category: "Project Management & Documentation",
-    description: "Extract valuable insights from meeting transcripts and summaries",
-    documentation: "https://guide.fireflies.ai/articles/8272956938-learn-about-the-fireflies-mcp-server-model-context-protocol",
-    urls: {
-      http: "https://api.fireflies.ai/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "HubSpot",
-    category: "Databases & Data Management",
-    description: "Access and manage HubSpot CRM data by fetching contacts, companies, and deals, and creating and updating records",
-    documentation: "https://developers.hubspot.com/mcp",
-    urls: {
-      http: "https://mcp.hubspot.com/anthropic"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Hugging Face",
-    category: "Development & Testing Tools",
-    description: "Provides access to Hugging Face Hub information and Gradio AI Applications",
-    documentation: "https://huggingface.co/settings/mcp",
-    urls: {
-      http: "https://huggingface.co/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Jam",
-    category: "Development & Testing Tools",
-    description: "Debug faster with AI agents that can access Jam recordings like video, console logs, network requests, and errors",
-    documentation: "https://jam.dev/docs/debug-a-jam/mcp",
-    urls: {
-      http: "https://mcp.jam.dev/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Monday",
-    category: "Project Management & Documentation",
-    description: "Manage monday.com boards by creating items, updating columns, assigning owners, setting timelines, adding CRM activities, and writing summaries",
-    documentation: "https://developer.monday.com/apps/docs/mondaycom-mcp-integration",
-    urls: {
-      sse: "https://mcp.monday.com/sse"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Netlify",
-    category: "Infrastructure & DevOps",
-    description: "Create, deploy, and manage websites on Netlify. Control all aspects of your site from creating secrets to enforcing access controls to aggregating form submissions",
-    documentation: "https://docs.netlify.com/build/build-with-ai/netlify-mcp-server/",
-    urls: {
-      http: "https://netlify-mcp.netlify.app/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Stytch",
-    category: "Infrastructure & DevOps",
-    description: "Configure and manage Stytch authentication services, redirect URLs, email templates, and workspace settings",
-    documentation: "https://stytch.com/docs/workspace-management/stytch-mcp",
-    urls: {
-      http: "http://mcp.stytch.dev/mcp"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }, {
-    name: "Vercel",
-    category: "Infrastructure & DevOps",
-    description: "Vercel's official MCP server, allowing you to search and navigate documentation, manage projects and deployments, and analyze deployment logs—all in one place",
-    documentation: "https://vercel.com/docs/mcp/vercel-mcp",
-    urls: {
-      http: "https://mcp.vercel.com/"
-    },
-    authentication: {
-      type: "oauth"
-    },
-    availability: {
-      claudeCode: true,
-      mcpConnector: true,
-      claudeDesktop: false
-    }
-  }];
-  const filteredServers = servers.filter(server => {
-    if (platform === "claudeCode") {
-      return server.availability.claudeCode;
-    } else if (platform === "mcpConnector") {
-      return server.availability.mcpConnector;
-    } else if (platform === "claudeDesktop") {
-      return server.availability.claudeDesktop;
-    } else if (platform === "all") {
-      return true;
-    } else {
-      throw new Error(`Unknown platform: ${platform}`);
-    }
-  });
-  const serversByCategory = filteredServers.reduce((acc, server) => {
-    if (!acc[server.category]) {
-      acc[server.category] = [];
-    }
-    acc[server.category].push(server);
-    return acc;
-  }, {});
-  const categoryOrder = ["Development & Testing Tools", "Project Management & Documentation", "Databases & Data Management", "Payments & Commerce", "Design & Media", "Infrastructure & DevOps", "Automation & Integration"];
-  return <>
-      <style jsx>{`
-        .cards-container {
-          display: grid;
-          gap: 1rem;
-          margin-bottom: 2rem;
-        }
-        .server-card {
-          border: 1px solid var(--border-color, #e5e7eb);
-          border-radius: 6px;
-          padding: 1rem;
-        }
-        .command-row {
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-        }
-        .command-row code {
-          font-size: 0.75rem;
-          overflow-x: auto;
-        }
-      `}</style>
-      
-      {categoryOrder.map(category => {
-    if (!serversByCategory[category]) return null;
-    return <div key={category}>
-            <h3>{category}</h3>
-            <div className="cards-container">
-              {serversByCategory[category].map(server => {
-      const claudeCodeCommand = generateClaudeCodeCommand(server);
-      const mcpUrl = server.urls.http || server.urls.sse;
-      const commandToShow = platform === "claudeCode" ? claudeCodeCommand : mcpUrl;
-      return <div key={server.name} className="server-card">
-                    <div>
-                      {server.documentation ? <a href={server.documentation}>
-                          <strong>{server.name}</strong>
-                        </a> : <strong>{server.name}</strong>}
-                    </div>
-                    
-                    <p style={{
-        margin: '0.5rem 0',
-        fontSize: '0.9rem'
-      }}>
-                      {server.description}
-                      {server.notes && <span style={{
-        display: 'block',
-        marginTop: '0.25rem',
-        fontSize: '0.8rem',
-        fontStyle: 'italic',
-        opacity: 0.7
-      }}>
-                          {server.notes}
-                        </span>}
-                    </p>
-                    
-                    {commandToShow && <>
-                      <p style={{
-        display: 'block',
-        fontSize: '0.75rem',
-        fontWeight: 500,
-        minWidth: 'fit-content',
-        marginTop: '0.5rem',
-        marginBottom: 0
-      }}>
-                        {platform === "claudeCode" ? "Command" : "URL"}
-                      </p>
-                      <div className="command-row">
-                        <code>
-                          {commandToShow}
-                        </code>
-                      </div>
-                    </>}
-                  </div>;
-    })}
-            </div>
-          </div>;
-  })}
-    </>;
-};
-
 Claude Code can connect to hundreds of external tools and data sources through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction), an open-source standard for AI-tool integrations. MCP servers give Claude Code access to your tools, databases, and APIs.
 
 ## What you can do with MCP
@@ -729,7 +139,7 @@ claude mcp remove github
 
 ### Plugin-provided MCP servers
 
-[Plugins](/en/docs/claude-code/plugins) can bundle MCP servers, automatically providing tools and integrations when the plugin is enabled. Plugin MCP servers work identically to user-configured servers.
+[Plugins](/en/plugins) can bundle MCP servers, automatically providing tools and integrations when the plugin is enabled. Plugin MCP servers work identically to user-configured servers.
 
 **How plugin MCP servers work**:
 
@@ -790,7 +200,7 @@ Plugin servers appear in the list with indicators showing they come from plugins
 * **Automatic setup**: No manual MCP configuration needed
 * **Team consistency**: Everyone gets the same tools when plugin is installed
 
-See the [plugin components reference](/en/docs/claude-code/plugins-reference#mcp-servers) for details on bundling MCP servers with plugins.
+See the [plugin components reference](/en/plugins-reference#mcp-servers) for details on bundling MCP servers with plugins.
 
 ## MCP installation scopes
 
@@ -798,7 +208,7 @@ MCP servers can be configured at three different scope levels, each serving dist
 
 ### Local scope
 
-Local-scoped servers represent the default configuration level and are stored in your project-specific user settings. These servers remain private to you and are only accessible when working within the current project directory. This scope is ideal for personal development servers, experimental configurations, or servers containing sensitive credentials that shouldn't be shared.
+Local-scoped servers represent the default configuration level and are stored in `~/.claude.json` under your project's path. These servers remain private to you and are only accessible when working within the current project directory. This scope is ideal for personal development servers, experimental configurations, or servers containing sensitive credentials that shouldn't be shared.
 
 ```bash  theme={null}
 # Add a local-scoped server (default)
@@ -835,7 +245,7 @@ For security reasons, Claude Code prompts for approval before using project-scop
 
 ### User scope
 
-User-scoped servers provide cross-project accessibility, making them available across all projects on your machine while remaining private to your user account. This scope works well for personal utility servers, development tools, or services you frequently use across different projects.
+User-scoped servers are stored in `~/.claude.json` and provide cross-project accessibility, making them available across all projects on your machine while remaining private to your user account. This scope works well for personal utility servers, development tools, or services you frequently use across different projects.
 
 ```bash  theme={null}
 # Add a user server
@@ -849,6 +259,14 @@ Select your scope based on:
 * **Local scope**: Personal servers, experimental configurations, or sensitive credentials specific to one project
 * **Project scope**: Team-shared servers, project-specific tools, or services required for collaboration
 * **User scope**: Personal utilities needed across multiple projects, development tools, or frequently-used services
+
+<Note>
+  **Where are MCP servers stored?**
+
+  * **User and local scope**: `~/.claude.json` (in the `mcpServers` field or under project paths)
+  * **Project scope**: `.mcp.json` in your project root (checked into source control)
+  * **Enterprise managed**: `managed-mcp.json` in system directories (see [Enterprise MCP configuration](#enterprise-mcp-configuration))
+</Note>
 
 ### Scope hierarchy and precedence
 
@@ -1071,6 +489,33 @@ You can use this in Claude Desktop by adding this configuration to claude\_deskt
 }
 ```
 
+<Warning>
+  **Configuring the executable path**: The `command` field must reference the Claude Code executable. If the `claude` command is not in your system's PATH, you'll need to specify the full path to the executable.
+
+  To find the full path:
+
+  ```bash  theme={null}
+  which claude
+  ```
+
+  Then use the full path in your configuration:
+
+  ```json  theme={null}
+  {
+    "mcpServers": {
+      "claude-code": {
+        "type": "stdio",
+        "command": "/full/path/to/claude",
+        "args": ["mcp", "serve"],
+        "env": {}
+      }
+    }
+  }
+  ```
+
+  Without the correct executable path, you'll encounter errors like `spawn claude ENOENT`.
+</Warning>
+
 <Tip>
   Tips:
 
@@ -1195,11 +640,7 @@ For organizations that need centralized control over MCP servers, Claude Code su
 
 ### Setting up enterprise MCP configuration
 
-System administrators can deploy an enterprise MCP configuration file alongside the managed settings file:
-
-* **macOS**: `/Library/Application Support/ClaudeCode/managed-mcp.json`
-* **Windows**: `C:\ProgramData\ClaudeCode\managed-mcp.json`
-* **Linux**: `/etc/claude-code/managed-mcp.json`
+System administrators can deploy an enterprise MCP configuration file alongside the managed settings file. See [settings files](/en/settings#settings-files) for the `managed-mcp.json` file locations on each platform.
 
 The `managed-mcp.json` file uses the same format as a standard `.mcp.json` file:
 
@@ -1228,42 +669,134 @@ The `managed-mcp.json` file uses the same format as a standard `.mcp.json` file:
 
 ### Restricting MCP servers with allowlists and denylists
 
-In addition to providing enterprise-managed servers, administrators can control which MCP servers users are allowed to configure using `allowedMcpServers` and `deniedMcpServers` in the `managed-settings.json` file:
+In addition to providing enterprise-managed servers, administrators can control which MCP servers users are allowed to configure using `allowedMcpServers` and `deniedMcpServers` in the [managed settings file](/en/settings#settings-files):
 
-* **macOS**: `/Library/Application Support/ClaudeCode/managed-settings.json`
-* **Windows**: `C:\ProgramData\ClaudeCode\managed-settings.json`
-* **Linux**: `/etc/claude-code/managed-settings.json`
+#### Restriction options
+
+Each entry in the allowlist or denylist can restrict servers in two ways:
+
+1. **By server name** (`serverName`): Matches the configured name of the server
+2. **By command** (`serverCommand`): Matches the exact command and arguments used to start stdio servers
+
+**Important**: Each entry must have **either** `serverName` **or** `serverCommand`, not both.
+
+#### Example configuration
 
 ```json  theme={null}
 {
   "allowedMcpServers": [
+    // Allow by server name
     { "serverName": "github" },
     { "serverName": "sentry" },
-    { "serverName": "company-internal" }
+
+    // Allow by exact command (for stdio servers)
+    { "serverCommand": ["npx", "-y", "@modelcontextprotocol/server-filesystem"] },
+    { "serverCommand": ["python", "/usr/local/bin/approved-server.py"] }
   ],
   "deniedMcpServers": [
-    { "serverName": "filesystem" }
+    // Block by server name
+    { "serverName": "dangerous-server" },
+
+    // Block by exact command (for stdio servers)
+    { "serverCommand": ["npx", "-y", "unapproved-package"] }
   ]
 }
 ```
 
-**Allowlist behavior (`allowedMcpServers`)**:
+#### How command-based restrictions work
+
+**Exact matching**:
+
+* Command arrays must match **exactly** - both the command and all arguments in the correct order
+* Example: `["npx", "-y", "server"]` will NOT match `["npx", "server"]` or `["npx", "-y", "server", "--flag"]`
+
+**Stdio server behavior**:
+
+* When the allowlist contains **any** `serverCommand` entries, stdio servers **must** match one of those commands
+* Stdio servers cannot pass by name alone when command restrictions are present
+* This ensures administrators can enforce which commands are allowed to run
+
+**Non-stdio server behavior**:
+
+* Remote servers (HTTP, SSE, WebSocket) always match by name only
+* Command restrictions do not apply to remote servers
+
+<Accordion title="Example: Command-only allowlist">
+  ```json  theme={null}
+  {
+    "allowedMcpServers": [
+      { "serverCommand": ["npx", "-y", "approved-package"] }
+    ]
+  }
+  ```
+
+  **Result**:
+
+  * Stdio server with `["npx", "-y", "approved-package"]`: ✅ Allowed (matches command)
+  * Stdio server with `["node", "server.js"]`: ❌ Blocked (doesn't match command)
+  * HTTP server named "my-api": ❌ Blocked (no name entries to match)
+</Accordion>
+
+<Accordion title="Example: Mixed name and command allowlist">
+  ```json  theme={null}
+  {
+    "allowedMcpServers": [
+      { "serverName": "github" },
+      { "serverCommand": ["npx", "-y", "approved-package"] }
+    ]
+  }
+  ```
+
+  **Result**:
+
+  * Stdio server named "local-tool" with `["npx", "-y", "approved-package"]`: ✅ Allowed (matches command)
+  * Stdio server named "local-tool" with `["node", "server.js"]`: ❌ Blocked (command entries exist but doesn't match)
+  * Stdio server named "github" with `["node", "server.js"]`: ❌ Blocked (stdio servers must match commands when command entries exist)
+  * HTTP server named "github": ✅ Allowed (matches name)
+  * HTTP server named "other-api": ❌ Blocked (name doesn't match)
+</Accordion>
+
+<Accordion title="Example: Name-only allowlist">
+  ```json  theme={null}
+  {
+    "allowedMcpServers": [
+      { "serverName": "github" },
+      { "serverName": "internal-tool" }
+    ]
+  }
+  ```
+
+  **Result**:
+
+  * Stdio server named "github" with any command: ✅ Allowed (no command restrictions)
+  * Stdio server named "internal-tool" with any command: ✅ Allowed (no command restrictions)
+  * HTTP server named "github": ✅ Allowed (matches name)
+  * Any server named "other": ❌ Blocked (name doesn't match)
+</Accordion>
+
+#### Allowlist behavior (`allowedMcpServers`)
 
 * `undefined` (default): No restrictions - users can configure any MCP server
 * Empty array `[]`: Complete lockdown - users cannot configure any MCP servers
-* List of server names: Users can only configure the specified servers
+* List of entries: Users can only configure servers that match by name or command
 
-**Denylist behavior (`deniedMcpServers`)**:
+#### Denylist behavior (`deniedMcpServers`)
 
 * `undefined` (default): No servers are blocked
 * Empty array `[]`: No servers are blocked
-* List of server names: Specified servers are explicitly blocked across all scopes
+* List of entries: Specified servers are explicitly blocked across all scopes
 
-**Important notes**:
+#### Important notes
 
 * These restrictions apply to all scopes: user, project, local, and even enterprise servers from `managed-mcp.json`
-* **Denylist takes absolute precedence**: If a server appears in both lists, it will be blocked
+* **Denylist takes absolute precedence**: If a server matches a denylist entry (by name or command), it will be blocked even if it's on the allowlist
+* Name-based and command-based restrictions work together: a server passes if it matches **either** a name entry **or** a command entry (unless blocked by denylist)
 
 <Note>
-  **Enterprise configuration precedence**: The enterprise MCP configuration has the highest precedence and cannot be overridden by user, local, or project configurations when `useEnterpriseMcpConfigOnly` is enabled.
+  **Enterprise configuration precedence**: The enterprise MCP configuration has the highest precedence and cannot be overridden by user, local, or project configurations.
 </Note>
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

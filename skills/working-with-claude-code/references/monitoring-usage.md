@@ -6,10 +6,6 @@ Claude Code supports OpenTelemetry (OTel) metrics and events for monitoring and 
 
 All metrics are time series data exported via OpenTelemetry's standard metrics protocol, and events are exported via OpenTelemetry's logs/events protocol. It is the user's responsibility to ensure their metrics and logs backends are properly configured and that the aggregation granularity meets their monitoring requirements.
 
-<Note>
-  OpenTelemetry support is currently in beta and details are subject to change.
-</Note>
-
 ## Quick Start
 
 Configure OpenTelemetry using environment variables:
@@ -45,13 +41,7 @@ For full configuration options, see the [OpenTelemetry specification](https://gi
 
 ## Administrator Configuration
 
-Administrators can configure OpenTelemetry settings for all users through the managed settings file. This allows for centralized control of telemetry settings across an organization. See the [settings precedence](/en/docs/claude-code/settings#settings-precedence) for more information about how settings are applied.
-
-The managed settings file is located at:
-
-* macOS: `/Library/Application Support/ClaudeCode/managed-settings.json`
-* Linux and WSL: `/etc/claude-code/managed-settings.json`
-* Windows: `C:\ProgramData\ClaudeCode\managed-settings.json`
+Administrators can configure OpenTelemetry settings for all users through the [managed settings file](/en/settings#settings-files). This allows for centralized control of telemetry settings across an organization. See the [settings precedence](/en/settings#settings-precedence) for more information about how settings are applied.
 
 Example managed settings configuration:
 
@@ -295,7 +285,7 @@ Incremented after each API request.
 **Attributes**:
 
 * All [standard attributes](#standard-attributes)
-* `model`: Model identifier (e.g., "claude-3-5-sonnet-20241022")
+* `model`: Model identifier (e.g., "claude-sonnet-4-5-20250929")
 
 #### Token Counter
 
@@ -305,7 +295,7 @@ Incremented after each API request.
 
 * All [standard attributes](#standard-attributes)
 * `type`: (`"input"`, `"output"`, `"cacheRead"`, `"cacheCreation"`)
-* `model`: Model identifier (e.g., "claude-3-5-sonnet-20241022")
+* `model`: Model identifier (e.g., "claude-sonnet-4-5-20250929")
 
 #### Code Edit Tool Decision Counter
 
@@ -375,7 +365,7 @@ Logged for each API request to Claude.
 * All [standard attributes](#standard-attributes)
 * `event.name`: `"api_request"`
 * `event.timestamp`: ISO 8601 timestamp
-* `model`: Model used (e.g., "claude-3-5-sonnet-20241022")
+* `model`: Model used (e.g., "claude-sonnet-4-5-20250929")
 * `cost_usd`: Estimated cost in USD
 * `duration_ms`: Request duration in milliseconds
 * `input_tokens`: Number of input tokens
@@ -394,7 +384,7 @@ Logged when an API request to Claude fails.
 * All [standard attributes](#standard-attributes)
 * `event.name`: `"api_error"`
 * `event.timestamp`: ISO 8601 timestamp
-* `model`: Model used (e.g., "claude-3-5-sonnet-20241022")
+* `model`: Model used (e.g., "claude-sonnet-4-5-20250929")
 * `error`: Error message
 * `status_code`: HTTP status code (if applicable)
 * `duration_ms`: Request duration in milliseconds
@@ -505,3 +495,8 @@ For a comprehensive guide on measuring return on investment for Claude Code, inc
 ## Monitoring Claude Code on Amazon Bedrock
 
 For detailed Claude Code usage monitoring guidance for Amazon Bedrock, see [Claude Code Monitoring Implementation (Bedrock)](https://github.com/aws-solutions-library-samples/guidance-for-claude-code-with-amazon-bedrock/blob/main/assets/docs/MONITORING.md).
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

@@ -3,7 +3,7 @@
 > Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.
 
 <Tip>
-  For hands-on tutorials and practical usage, see [Plugins](/en/docs/claude-code/plugins). For plugin management across teams and communities, see [Plugin marketplaces](/en/docs/claude-code/plugin-marketplaces).
+  For hands-on tutorials and practical usage, see [Plugins](/en/plugins). For plugin management across teams and communities, see [Plugin marketplaces](/en/plugin-marketplaces).
 </Tip>
 
 This reference provides complete technical specifications for the Claude Code plugin system, including component schemas, CLI commands, and development tools.
@@ -20,7 +20,7 @@ Plugins add custom slash commands that integrate seamlessly with Claude Code's c
 
 **File format**: Markdown files with frontmatter
 
-For complete details on plugin command structure, invocation patterns, and features, see [Plugin commands](/en/docs/claude-code/slash-commands#plugin-commands).
+For complete details on plugin command structure, invocation patterns, and features, see [Plugin commands](/en/slash-commands#plugin-commands).
 
 ### Agents
 
@@ -86,8 +86,8 @@ skills/
 
 For SKILL.md format and complete Skill authoring guidance, see:
 
-* [Use Skills in Claude Code](/en/docs/claude-code/skills)
-* [Agent Skills overview](/en/docs/agents-and-tools/agent-skills/overview#skill-structure)
+* [Use Skills in Claude Code](/en/skills)
+* [Agent Skills overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview#skill-structure)
 
 ### Hooks
 
@@ -120,6 +120,7 @@ Plugins can provide event handlers that respond to Claude Code events automatica
 **Available events**:
 
 * `PreToolUse`: Before Claude uses any tool
+* `PermissionRequest`: When a permission dialog is shown
 * `PostToolUse`: After Claude uses any tool
 * `UserPromptSubmit`: When user submits a prompt
 * `Notification`: When Claude Code sends notifications
@@ -225,7 +226,7 @@ The `plugin.json` file defines your plugin's metadata and configuration. This se
 | `commands`   | string\|array  | Additional command files/directories | `"./custom/cmd.md"` or `["./cmd1.md"]` |
 | `agents`     | string\|array  | Additional agent files               | `"./custom/agents/"`                   |
 | `hooks`      | string\|object | Hook config path or inline config    | `"./hooks.json"`                       |
-| `mcpServers` | string\|object | MCP config path or inline config     | `"./mcp.json"`                         |
+| `mcpServers` | string\|object | MCP config path or inline config     | `"./custom-mcp-config.json"`           |
 
 ### Path behavior rules
 
@@ -365,12 +366,17 @@ Follow semantic versioning for plugin releases:
 
 ## See also
 
-- [Plugins](/en/docs/claude-code/plugins) - Tutorials and practical usage
-- [Plugin marketplaces](/en/docs/claude-code/plugin-marketplaces) - Creating and managing marketplaces
-- [Slash commands](/en/docs/claude-code/slash-commands) - Command development details
-- [Subagents](/en/docs/claude-code/sub-agents) - Agent configuration and capabilities
-- [Agent Skills](/en/docs/claude-code/skills) - Extend Claude's capabilities
-- [Hooks](/en/docs/claude-code/hooks) - Event handling and automation
-- [MCP](/en/docs/claude-code/mcp) - External tool integration
-- [Settings](/en/docs/claude-code/settings) - Configuration options for plugins
+- [Plugins](/en/plugins) - Tutorials and practical usage
+- [Plugin marketplaces](/en/plugin-marketplaces) - Creating and managing marketplaces
+- [Slash commands](/en/slash-commands) - Command development details
+- [Subagents](/en/sub-agents) - Agent configuration and capabilities
+- [Agent Skills](/en/skills) - Extend Claude's capabilities
+- [Hooks](/en/hooks) - Event handling and automation
+- [MCP](/en/mcp) - External tool integration
+- [Settings](/en/settings) - Configuration options for plugins
 ```
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt
