@@ -226,7 +226,7 @@ The `plugin.json` file defines your plugin's metadata and configuration. This se
 | `commands`   | string\|array  | Additional command files/directories | `"./custom/cmd.md"` or `["./cmd1.md"]` |
 | `agents`     | string\|array  | Additional agent files               | `"./custom/agents/"`                   |
 | `hooks`      | string\|object | Hook config path or inline config    | `"./hooks.json"`                       |
-| `mcpServers` | string\|object | MCP config path or inline config     | `"./mcp.json"`                         |
+| `mcpServers` | string\|object | MCP config path or inline config     | `"./custom-mcp-config.json"`           |
 
 ### Path behavior rules
 

@@ -208,7 +208,7 @@ MCP servers can be configured at three different scope levels, each serving dist
 
 ### Local scope
 
-Local-scoped servers represent the default configuration level and are stored in your project-specific user settings. These servers remain private to you and are only accessible when working within the current project directory. This scope is ideal for personal development servers, experimental configurations, or servers containing sensitive credentials that shouldn't be shared.
+Local-scoped servers represent the default configuration level and are stored in `~/.claude.json` under your project's path. These servers remain private to you and are only accessible when working within the current project directory. This scope is ideal for personal development servers, experimental configurations, or servers containing sensitive credentials that shouldn't be shared.
 
 ```bash  theme={null}
 # Add a local-scoped server (default)
@@ -245,7 +245,7 @@ For security reasons, Claude Code prompts for approval before using project-scop
 
 ### User scope
 
-User-scoped servers provide cross-project accessibility, making them available across all projects on your machine while remaining private to your user account. This scope works well for personal utility servers, development tools, or services you frequently use across different projects.
+User-scoped servers are stored in `~/.claude.json` and provide cross-project accessibility, making them available across all projects on your machine while remaining private to your user account. This scope works well for personal utility servers, development tools, or services you frequently use across different projects.
 
 ```bash  theme={null}
 # Add a user server
@@ -259,6 +259,14 @@ Select your scope based on:
 * **Local scope**: Personal servers, experimental configurations, or sensitive credentials specific to one project
 * **Project scope**: Team-shared servers, project-specific tools, or services required for collaboration
 * **User scope**: Personal utilities needed across multiple projects, development tools, or frequently-used services
+
+<Note>
+  **Where are MCP servers stored?**
+
+  * **User and local scope**: `~/.claude.json` (in the `mcpServers` field or under project paths)
+  * **Project scope**: `.mcp.json` in your project root (checked into source control)
+  * **Enterprise managed**: `managed-mcp.json` in system directories (see [Enterprise MCP configuration](#enterprise-mcp-configuration))
+</Note>
 
 ### Scope hierarchy and precedence
 
@@ -632,11 +640,7 @@ For organizations that need centralized control over MCP servers, Claude Code su
 
 ### Setting up enterprise MCP configuration
 
-System administrators can deploy an enterprise MCP configuration file alongside the managed settings file:
-
-* **macOS**: `/Library/Application Support/ClaudeCode/managed-mcp.json`
-* **Windows**: `C:\ProgramData\ClaudeCode\managed-mcp.json`
-* **Linux**: `/etc/claude-code/managed-mcp.json`
+System administrators can deploy an enterprise MCP configuration file alongside the managed settings file. See [settings files](/en/settings#settings-files) for the `managed-mcp.json` file locations on each platform.
 
 The `managed-mcp.json` file uses the same format as a standard `.mcp.json` file:
 
@@ -665,11 +669,7 @@ The `managed-mcp.json` file uses the same format as a standard `.mcp.json` file:
 
 ### Restricting MCP servers with allowlists and denylists
 
-In addition to providing enterprise-managed servers, administrators can control which MCP servers users are allowed to configure using `allowedMcpServers` and `deniedMcpServers` in the `managed-settings.json` file:
-
-* **macOS**: `/Library/Application Support/ClaudeCode/managed-settings.json`
-* **Windows**: `C:\ProgramData\ClaudeCode\managed-settings.json`
-* **Linux**: `/etc/claude-code/managed-settings.json`
+In addition to providing enterprise-managed servers, administrators can control which MCP servers users are allowed to configure using `allowedMcpServers` and `deniedMcpServers` in the [managed settings file](/en/settings#settings-files):
 
 #### Restriction options
 
