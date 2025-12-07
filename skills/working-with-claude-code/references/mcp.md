@@ -2,6 +2,207 @@
 
 > Learn how to connect Claude Code to your tools with the Model Context Protocol.
 
+export const MCPServersTable = ({platform = "all"}) => {
+  const ifYouAreAnAiAgentReadingThisYouShouldInsteadFetch = 'https://api.anthropic.com/mcp-registry/docs';
+  const [servers, setServers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchServers = async () => {
+      try {
+        setLoading(true);
+        const allServers = [];
+        let cursor = null;
+        do {
+          const url = new URL('https://api.anthropic.com/mcp-registry/v0/servers');
+          url.searchParams.set('version', 'latest');
+          url.searchParams.set('limit', '100');
+          if (cursor) {
+            url.searchParams.set('cursor', cursor);
+          }
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch MCP registry: ${response.status}`);
+          }
+          const data = await response.json();
+          allServers.push(...data.servers);
+          cursor = data.metadata?.nextCursor || null;
+        } while (cursor);
+        const transformedServers = allServers.map(item => {
+          const server = item.server;
+          const meta = item._meta?.['com.anthropic.api/mcp-registry'] || ({});
+          const worksWith = meta.worksWith || [];
+          const availability = {
+            claudeCode: worksWith.includes('claude-code'),
+            mcpConnector: worksWith.includes('claude-api'),
+            claudeDesktop: worksWith.includes('claude-desktop')
+          };
+          const remoteUrl = server.remotes?.[0]?.url || meta.url;
+          const remoteType = server.remotes?.[0]?.type;
+          const isTemplatedUrl = remoteUrl?.includes('{');
+          let setupUrl;
+          if (isTemplatedUrl && meta.requiredFields) {
+            const urlField = meta.requiredFields.find(f => f.field === 'url');
+            setupUrl = urlField?.sourceUrl || meta.documentation;
+          }
+          const urls = {};
+          if (!isTemplatedUrl) {
+            if (remoteType === 'streamable-http') {
+              urls.http = remoteUrl;
+            } else if (remoteType === 'sse') {
+              urls.sse = remoteUrl;
+            }
+          }
+          let envVars = [];
+          if (server.packages && server.packages.length > 0) {
+            const npmPackage = server.packages.find(p => p.registryType === 'npm');
+            if (npmPackage) {
+              urls.stdio = `npx -y ${npmPackage.identifier}`;
+              if (npmPackage.environmentVariables) {
+                envVars = npmPackage.environmentVariables;
+              }
+            }
+          }
+          return {
+            name: meta.displayName || server.title || server.name,
+            description: meta.oneLiner || server.description,
+            documentation: meta.documentation,
+            urls: urls,
+            envVars: envVars,
+            availability: availability,
+            customCommands: meta.claudeCodeCopyText ? {
+              claudeCode: meta.claudeCodeCopyText
+            } : undefined,
+            setupUrl: setupUrl
+          };
+        });
+        setServers(transformedServers);
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching MCP registry:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchServers();
+  }, []);
+  const generateClaudeCodeCommand = server => {
+    if (server.customCommands && server.customCommands.claudeCode) {
+      return server.customCommands.claudeCode;
+    }
+    const serverSlug = server.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    if (server.urls.http) {
+      return `claude mcp add ${serverSlug} --transport http ${server.urls.http}`;
+    }
+    if (server.urls.sse) {
+      return `claude mcp add ${serverSlug} --transport sse ${server.urls.sse}`;
+    }
+    if (server.urls.stdio) {
+      const envFlags = server.envVars && server.envVars.length > 0 ? server.envVars.map(v => `--env ${v.name}=YOUR_${v.name}`).join(' ') : '';
+      const baseCommand = `claude mcp add ${serverSlug} --transport stdio`;
+      return envFlags ? `${baseCommand} ${envFlags} -- ${server.urls.stdio}` : `${baseCommand} -- ${server.urls.stdio}`;
+    }
+    return null;
+  };
+  if (loading) {
+    return <div>Loading MCP servers...</div>;
+  }
+  if (error) {
+    return <div>Error loading MCP servers: {error}</div>;
+  }
+  const filteredServers = servers.filter(server => {
+    if (platform === "claudeCode") {
+      return server.availability.claudeCode;
+    } else if (platform === "mcpConnector") {
+      return server.availability.mcpConnector;
+    } else if (platform === "claudeDesktop") {
+      return server.availability.claudeDesktop;
+    } else if (platform === "all") {
+      return true;
+    } else {
+      throw new Error(`Unknown platform: ${platform}`);
+    }
+  });
+  return <>
+      <style jsx>{`
+        .cards-container {
+          display: grid;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+        .server-card {
+          border: 1px solid var(--border-color, #e5e7eb);
+          border-radius: 6px;
+          padding: 1rem;
+        }
+        .command-row {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+        .command-row code {
+          font-size: 0.75rem;
+          overflow-x: auto;
+        }
+      `}</style>
+
+      <div className="cards-container">
+        {filteredServers.map(server => {
+    const claudeCodeCommand = generateClaudeCodeCommand(server);
+    const mcpUrl = server.urls.http || server.urls.sse;
+    const commandToShow = platform === "claudeCode" ? claudeCodeCommand : mcpUrl;
+    return <div key={server.name} className="server-card">
+              <div>
+                {server.documentation ? <a href={server.documentation}>
+                    <strong>{server.name}</strong>
+                  </a> : <strong>{server.name}</strong>}
+              </div>
+
+              <p style={{
+      margin: '0.5rem 0',
+      fontSize: '0.9rem'
+    }}>
+                {server.description}
+              </p>
+
+              {server.setupUrl && <p style={{
+      margin: '0.25rem 0',
+      fontSize: '0.8rem',
+      fontStyle: 'italic',
+      opacity: 0.7
+    }}>
+                  Requires user-specific URL.{' '}
+                  <a href={server.setupUrl} style={{
+      textDecoration: 'underline'
+    }}>
+                    Get your URL here
+                  </a>.
+                </p>}
+
+              {commandToShow && !server.setupUrl && <>
+                <p style={{
+      display: 'block',
+      fontSize: '0.75rem',
+      fontWeight: 500,
+      minWidth: 'fit-content',
+      marginTop: '0.5rem',
+      marginBottom: 0
+    }}>
+                  {platform === "claudeCode" ? "Command" : "URL"}
+                </p>
+                <div className="command-row">
+                  <code>
+                    {commandToShow}
+                  </code>
+                </div>
+              </>}
+            </div>;
+  })}
+      </div>
+    </>;
+};
+
 Claude Code can connect to hundreds of external tools and data sources through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction), an open-source standard for AI-tool integrations. MCP servers give Claude Code access to your tools, databases, and APIs.
 
 ## What you can do with MCP
