@@ -173,7 +173,7 @@ Suppose you want to use specialized AI subagents to handle specific tasks more e
   </Step>
 
   <Step title="Use subagents automatically">
-    Claude Code will automatically delegate appropriate tasks to specialized subagents:
+    Claude Code automatically delegates appropriate tasks to specialized subagents:
 
     ```
     > review my recent code changes for security issues
@@ -201,10 +201,10 @@ Suppose you want to use specialized AI subagents to handle specific tasks more e
 
     Then select "Create New subagent" and follow the prompts to define:
 
-    * Subagent type (e.g., `api-designer`, `performance-optimizer`)
-    * When to use it
+    * A unique identifier that describes the subagent's purpose (for example, `code-reviewer`, `api-designer`).
+    * When Claude should use this agent
     * Which tools it can access
-    * Its specialized system prompt
+    * A system prompt describing the agent's role and behavior
   </Step>
 </Steps>
 
@@ -235,7 +235,7 @@ Plan Mode instructs Claude to create a plan by analyzing the codebase with read-
 
 You can switch into Plan Mode during a session using **Shift+Tab** to cycle through permission modes.
 
-If you are in Normal Mode, **Shift+Tab** will first switch into Auto-Accept Mode, indicated by `⏵⏵ accept edits on` at the bottom of the terminal. A subsequent **Shift+Tab** will switch into Plan Mode, indicated by `⏸ plan mode on`.
+If you are in Normal Mode, **Shift+Tab** first switches into Auto-Accept Mode, indicated by `⏵⏵ accept edits on` at the bottom of the terminal. A subsequent **Shift+Tab** will switch into Plan Mode, indicated by `⏸ plan mode on`.
 
 **Start a new session in Plan Mode**
 
@@ -247,7 +247,7 @@ claude --permission-mode plan
 
 **Run "headless" queries in Plan Mode**
 
-You can also run a query in Plan Mode directly with `-p` (i.e., in ["headless mode"](/en/headless)):
+You can also run a query in Plan Mode directly with `-p` (that is, in ["headless mode"](/en/headless)):
 
 ```bash  theme={null}
 claude --permission-mode plan -p "Analyze the authentication system and suggest improvements"
@@ -263,7 +263,7 @@ claude --permission-mode plan
 > I need to refactor our authentication system to use OAuth2. Create a detailed migration plan.
 ```
 
-Claude will analyze the current implementation and create a comprehensive plan. Refine with follow-ups:
+Claude analyzes the current implementation and create a comprehensive plan. Refine with follow-ups:
 
 ```
 > What about backward compatibility?
@@ -315,13 +315,9 @@ Suppose you need to add tests for uncovered code.
   </Step>
 </Steps>
 
-<Tip>
-  Tips:
+Claude can generate tests that follow your project's existing patterns and conventions. When asking for tests, be specific about what behavior you want to verify. Claude examines your existing test files to match the style, frameworks, and assertion patterns already in use.
 
-  * Ask for tests that cover edge cases and error conditions
-  * Request both unit and integration tests when appropriate
-  * Have Claude explain the testing strategy
-</Tip>
+For comprehensive coverage, ask Claude to identify edge cases you might have missed. Claude can analyze your code paths and suggest tests for error conditions, boundary values, and unexpected inputs that are easy to overlook.
 
 ***
 
@@ -336,7 +332,7 @@ Suppose you need to create a well-documented pull request for your changes.
     ```
   </Step>
 
-  <Step title="Generate a PR with Claude">
+  <Step title="Generate a pull request with Claude">
     ```
     > create a pr 
     ```
@@ -496,9 +492,9 @@ Use @ to quickly include files or directories without waiting for Claude to read
   Tips:
 
   * File paths can be relative or absolute
-  * @ file references add CLAUDE.md in the file's directory and parent directories to context
+  * @ file references add `CLAUDE.md` in the file's directory and parent directories to context
   * Directory references show file listings, not contents
-  * You can reference multiple files in a single message (e.g., "@file1.js and @file2.js")
+  * You can reference multiple files in a single message (for example, "@file1.js and @file2.js")
 </Tip>
 
 ***
@@ -517,8 +513,8 @@ Suppose you're working on complex architectural decisions, challenging bugs, or 
     > I need to implement a new authentication system using OAuth2 for our API. Think deeply about the best approach for implementing this in our codebase.
     ```
 
-    Claude will gather relevant information from your codebase and
-    use extended thinking, which will be visible in the interface.
+    Claude gathers relevant information from your codebase and
+    uses extended thinking, which is visible in the interface.
   </Step>
 
   <Step title="Refine the thinking with follow-up prompts">
@@ -554,7 +550,7 @@ Suppose you're working on complex architectural decisions, challenging bugs, or 
 </Tip>
 
 <Note>
-  Claude will display its thinking process as italic gray text above the
+  Claude displays its thinking process as italic gray text above the
   response.
 </Note>
 
@@ -822,8 +818,8 @@ Suppose you want to create reusable slash commands for your project that all tea
 <Tip>
   Tips:
 
-  * Command names are derived from the filename (e.g., `optimize.md` becomes `/optimize`)
-  * You can organize commands in subdirectories (e.g., `.claude/commands/frontend/component.md` creates `/component` with "(project:frontend)" shown in the description)
+  * Command names are derived from the filename (for example, `optimize.md` becomes `/optimize`)
+  * You can organize commands in subdirectories (for example, `.claude/commands/frontend/component.md` creates `/component` with "(project:frontend)" shown in the description)
   * Project commands are available to everyone who clones the repository
   * The Markdown file content becomes the prompt sent to Claude when the command is invoked
 </Tip>
@@ -850,7 +846,7 @@ Suppose you want to create flexible slash commands that can accept additional in
     > /fix-issue 123 
     ```
 
-    This will replace \$ARGUMENTS with "123" in the prompt.
+    This replaces \$ARGUMENTS with "123" in the prompt.
   </Step>
 </Steps>
 

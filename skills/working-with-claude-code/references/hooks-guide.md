@@ -92,7 +92,7 @@ For storage location, select `User settings` since you're logging to your home
 directory. This hook will then apply to all projects, not just your current
 project.
 
-Then press Esc until you return to the REPL. Your hook is now registered!
+Then press `Esc` until you return to the REPL. Your hook is now registered.
 
 ### Step 5: Verify your hook
 

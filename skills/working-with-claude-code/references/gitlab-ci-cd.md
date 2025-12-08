@@ -379,7 +379,7 @@ Create a `CLAUDE.md` file at the repository root to define coding standards, rev
 
 ### Security considerations
 
-Never commit API keys or cloud credentials to your repository! Always use GitLab CI/CD variables:
+**Never commit API keys or cloud credentials to your repository**. Always use GitLab CI/CD variables:
 
 * Add `ANTHROPIC_API_KEY` as a masked variable (and protect it if needed)
 * Use provider-specific OIDC where possible (no long-lived keys)

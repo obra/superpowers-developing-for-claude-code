@@ -6,7 +6,7 @@ Claude Code supports OpenTelemetry (OTel) metrics and events for monitoring and 
 
 All metrics are time series data exported via OpenTelemetry's standard metrics protocol, and events are exported via OpenTelemetry's logs/events protocol. It is the user's responsibility to ensure their metrics and logs backends are properly configured and that the aggregation granularity meets their monitoring requirements.
 
-## Quick Start
+## Quick start
 
 Configure OpenTelemetry using environment variables:
 
@@ -39,7 +39,7 @@ claude
 
 For full configuration options, see the [OpenTelemetry specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/protocol/exporter.md#configuration-options).
 
-## Administrator Configuration
+## Administrator configuration
 
 Administrators can configure OpenTelemetry settings for all users through the [managed settings file](/en/settings#settings-files). This allows for centralized control of telemetry settings across an organization. See the [settings precedence](/en/settings#settings-precedence) for more information about how settings are applied.
 
@@ -62,9 +62,9 @@ Example managed settings configuration:
   Managed settings can be distributed via MDM (Mobile Device Management) or other device management solutions. Environment variables defined in the managed settings file have high precedence and cannot be overridden by users.
 </Note>
 
-## Configuration Details
+## Configuration details
 
-### Common Configuration Variables
+### Common configuration variables
 
 | Environment Variable                            | Description                                               | Example Values                       |
 | ----------------------------------------------- | --------------------------------------------------------- | ------------------------------------ |
@@ -84,7 +84,7 @@ Example managed settings configuration:
 | `OTEL_LOGS_EXPORT_INTERVAL`                     | Logs export interval in milliseconds (default: 5000)      | `1000`, `10000`                      |
 | `OTEL_LOG_USER_PROMPTS`                         | Enable logging of user prompt content (default: disabled) | `1` to enable                        |
 
-### Metrics Cardinality Control
+### Metrics cardinality control
 
 The following environment variables control which attributes are included in metrics to manage cardinality:
 
@@ -96,11 +96,11 @@ The following environment variables control which attributes are included in met
 
 These variables help control the cardinality of metrics, which affects storage requirements and query performance in your metrics backend. Lower cardinality generally means better performance and lower storage costs but less granular data for analysis.
 
-### Dynamic Headers
+### Dynamic headers
 
 For enterprise environments that require dynamic authentication, you can configure a script to generate headers dynamically:
 
-#### Settings Configuration
+#### Settings configuration
 
 Add to your `.claude/settings.json`:
 
@@ -110,7 +110,7 @@ Add to your `.claude/settings.json`:
 }
 ```
 
-#### Script Requirements
+#### Script requirements
 
 The script must output valid JSON with string key-value pairs representing HTTP headers:
 
@@ -120,13 +120,13 @@ The script must output valid JSON with string key-value pairs representing HTTP 
 echo "{\"Authorization\": \"Bearer $(get-token.sh)\", \"X-API-Key\": \"$(get-api-key.sh)\"}"
 ```
 
-#### Important Limitations
+#### Important limitations
 
 **Headers are fetched only at startup, not during runtime.** This is due to OpenTelemetry exporter architecture limitations.
 
 For scenarios requiring frequent token refresh, use an OpenTelemetry Collector as a proxy that can refresh its own headers.
 
-### Multi-Team Organization Support
+### Multi-team organization support
 
 Organizations with multiple teams or departments can add custom attributes to distinguish between different groups using the `OTEL_RESOURCE_ATTRIBUTES` environment variable:
 
@@ -166,10 +166,10 @@ These custom attributes will be included in all metrics and events, allowing you
   export OTEL_RESOURCE_ATTRIBUTES="org.name=John%27s%20Organization"
   ```
 
-  Note: Quoting the entire key=value pair (e.g., `"key=value with spaces"`) is not supported by the OpenTelemetry specification and will result in attributes being prefixed with quotes.
+  Note: wrapping values in quotes doesn't escape spaces. For example, `org.name="My Company"` results in the literal value `"My Company"` (with quotes included), not `My Company`.
 </Warning>
 
-### Example Configurations
+### Example configurations
 
 ```bash  theme={null}
 # Console debugging (1-second intervals)
@@ -214,19 +214,19 @@ export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
 export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
 ```
 
-## Available Metrics and Events
+## Available metrics and events
 
-### Standard Attributes
+### Standard attributes
 
 All metrics and events share these standard attributes:
 
-| Attribute           | Description                                                   | Controlled By                                       |
-| ------------------- | ------------------------------------------------------------- | --------------------------------------------------- |
-| `session.id`        | Unique session identifier                                     | `OTEL_METRICS_INCLUDE_SESSION_ID` (default: true)   |
-| `app.version`       | Current Claude Code version                                   | `OTEL_METRICS_INCLUDE_VERSION` (default: false)     |
-| `organization.id`   | Organization UUID (when authenticated)                        | Always included when available                      |
-| `user.account_uuid` | Account UUID (when authenticated)                             | `OTEL_METRICS_INCLUDE_ACCOUNT_UUID` (default: true) |
-| `terminal.type`     | Terminal type (e.g., `iTerm.app`, `vscode`, `cursor`, `tmux`) | Always included when detected                       |
+| Attribute           | Description                                                          | Controlled By                                       |
+| ------------------- | -------------------------------------------------------------------- | --------------------------------------------------- |
+| `session.id`        | Unique session identifier                                            | `OTEL_METRICS_INCLUDE_SESSION_ID` (default: true)   |
+| `app.version`       | Current Claude Code version                                          | `OTEL_METRICS_INCLUDE_VERSION` (default: false)     |
+| `organization.id`   | Organization UUID (when authenticated)                               | Always included when available                      |
+| `user.account_uuid` | Account UUID (when authenticated)                                    | `OTEL_METRICS_INCLUDE_ACCOUNT_UUID` (default: true) |
+| `terminal.type`     | Terminal type (for example, `iTerm.app`, `vscode`, `cursor`, `tmux`) | Always included when detected                       |
 
 ### Metrics
 
@@ -243,9 +243,9 @@ Claude Code exports the following metrics:
 | `claude_code.code_edit_tool.decision` | Count of code editing tool permission decisions | count  |
 | `claude_code.active_time.total`       | Total active time in seconds                    | s      |
 
-### Metric Details
+### Metric details
 
-#### Session Counter
+#### Session counter
 
 Incremented at the start of each session.
 
@@ -253,7 +253,7 @@ Incremented at the start of each session.
 
 * All [standard attributes](#standard-attributes)
 
-#### Lines of Code Counter
+#### Lines of code counter
 
 Incremented when code is added or removed.
 
@@ -262,7 +262,7 @@ Incremented when code is added or removed.
 * All [standard attributes](#standard-attributes)
 * `type`: (`"added"`, `"removed"`)
 
-#### Pull Request Counter
+#### Pull request counter
 
 Incremented when creating pull requests via Claude Code.
 
@@ -270,7 +270,7 @@ Incremented when creating pull requests via Claude Code.
 
 * All [standard attributes](#standard-attributes)
 
-#### Commit Counter
+#### Commit counter
 
 Incremented when creating git commits via Claude Code.
 
@@ -278,16 +278,16 @@ Incremented when creating git commits via Claude Code.
 
 * All [standard attributes](#standard-attributes)
 
-#### Cost Counter
+#### Cost counter
 
 Incremented after each API request.
 
 **Attributes**:
 
 * All [standard attributes](#standard-attributes)
-* `model`: Model identifier (e.g., "claude-sonnet-4-5-20250929")
+* `model`: Model identifier (for example, "claude-sonnet-4-5-20250929")
 
-#### Token Counter
+#### Token counter
 
 Incremented after each API request.
 
@@ -295,9 +295,9 @@ Incremented after each API request.
 
 * All [standard attributes](#standard-attributes)
 * `type`: (`"input"`, `"output"`, `"cacheRead"`, `"cacheCreation"`)
-* `model`: Model identifier (e.g., "claude-sonnet-4-5-20250929")
+* `model`: Model identifier (for example, "claude-sonnet-4-5-20250929")
 
-#### Code Edit Tool Decision Counter
+#### Code edit tool decision counter
 
 Incremented when user accepts or rejects Edit, Write, or NotebookEdit tool usage.
 
@@ -306,9 +306,9 @@ Incremented when user accepts or rejects Edit, Write, or NotebookEdit tool usage
 * All [standard attributes](#standard-attributes)
 * `tool`: Tool name (`"Edit"`, `"Write"`, `"NotebookEdit"`)
 * `decision`: User decision (`"accept"`, `"reject"`)
-* `language`: Programming language of the edited file (e.g., `"TypeScript"`, `"Python"`, `"JavaScript"`, `"Markdown"`). Returns `"unknown"` for unrecognized file extensions.
+* `language`: Programming language of the edited file (for example, `"TypeScript"`, `"Python"`, `"JavaScript"`, `"Markdown"`). Returns `"unknown"` for unrecognized file extensions.
 
-#### Active Time Counter
+#### Active time counter
 
 Tracks actual time spent actively using Claude Code (not idle time). This metric is incremented during user interactions such as typing prompts or receiving responses.
 
@@ -320,7 +320,7 @@ Tracks actual time spent actively using Claude Code (not idle time). This metric
 
 Claude Code exports the following events via OpenTelemetry logs/events (when `OTEL_LOGS_EXPORTER` is configured):
 
-#### User Prompt Event
+#### User prompt event
 
 Logged when a user submits a prompt.
 
@@ -334,7 +334,7 @@ Logged when a user submits a prompt.
 * `prompt_length`: Length of the prompt
 * `prompt`: Prompt content (redacted by default, enable with `OTEL_LOG_USER_PROMPTS=1`)
 
-#### Tool Result Event
+#### Tool result event
 
 Logged when a tool completes execution.
 
@@ -354,7 +354,7 @@ Logged when a tool completes execution.
 * `tool_parameters`: JSON string containing tool-specific parameters (when available)
   * For Bash tool: includes `bash_command`, `full_command`, `timeout`, `description`, `sandbox`
 
-#### API Request Event
+#### API request event
 
 Logged for each API request to Claude.
 
@@ -365,7 +365,7 @@ Logged for each API request to Claude.
 * All [standard attributes](#standard-attributes)
 * `event.name`: `"api_request"`
 * `event.timestamp`: ISO 8601 timestamp
-* `model`: Model used (e.g., "claude-sonnet-4-5-20250929")
+* `model`: Model used (for example, "claude-sonnet-4-5-20250929")
 * `cost_usd`: Estimated cost in USD
 * `duration_ms`: Request duration in milliseconds
 * `input_tokens`: Number of input tokens
@@ -373,7 +373,7 @@ Logged for each API request to Claude.
 * `cache_read_tokens`: Number of tokens read from cache
 * `cache_creation_tokens`: Number of tokens used for cache creation
 
-#### API Error Event
+#### API error event
 
 Logged when an API request to Claude fails.
 
@@ -384,13 +384,13 @@ Logged when an API request to Claude fails.
 * All [standard attributes](#standard-attributes)
 * `event.name`: `"api_error"`
 * `event.timestamp`: ISO 8601 timestamp
-* `model`: Model used (e.g., "claude-sonnet-4-5-20250929")
+* `model`: Model used (for example, "claude-sonnet-4-5-20250929")
 * `error`: Error message
 * `status_code`: HTTP status code (if applicable)
 * `duration_ms`: Request duration in milliseconds
 * `attempt`: Attempt number (for retried requests)
 
-#### Tool Decision Event
+#### Tool decision event
 
 Logged when a tool permission decision is made (accept/reject).
 
@@ -401,15 +401,15 @@ Logged when a tool permission decision is made (accept/reject).
 * All [standard attributes](#standard-attributes)
 * `event.name`: `"tool_decision"`
 * `event.timestamp`: ISO 8601 timestamp
-* `tool_name`: Name of the tool (e.g., "Read", "Edit", "Write", "NotebookEdit", etc.)
+* `tool_name`: Name of the tool (for example, "Read", "Edit", "Write", "NotebookEdit")
 * `decision`: Either `"accept"` or `"reject"`
 * `source`: Decision source - `"config"`, `"user_permanent"`, `"user_temporary"`, `"user_abort"`, or `"user_reject"`
 
-## Interpreting Metrics and Events Data
+## Interpreting metrics and events data
 
 The metrics exported by Claude Code provide valuable insights into usage patterns and productivity. Here are some common visualizations and analyses you can create:
 
-### Usage Monitoring
+### Usage monitoring
 
 | Metric                                                        | Analysis Opportunity                                      |
 | ------------------------------------------------------------- | --------------------------------------------------------- |
@@ -418,7 +418,7 @@ The metrics exported by Claude Code provide valuable insights into usage pattern
 | `claude_code.lines_of_code.count`                             | Measure productivity by tracking code additions/removals  |
 | `claude_code.commit.count` & `claude_code.pull_request.count` | Understand impact on development workflows                |
 
-### Cost Monitoring
+### Cost monitoring
 
 The `claude_code.cost.usage` metric helps with:
 
@@ -429,7 +429,7 @@ The `claude_code.cost.usage` metric helps with:
   Cost metrics are approximations. For official billing data, refer to your API provider (Claude Console, AWS Bedrock, or Google Cloud Vertex).
 </Note>
 
-### Alerting and Segmentation
+### Alerting and segmentation
 
 Common alerts to consider:
 
@@ -439,54 +439,54 @@ Common alerts to consider:
 
 All metrics can be segmented by `user.account_uuid`, `organization.id`, `session.id`, `model`, and `app.version`.
 
-### Event Analysis
+### Event analysis
 
 The event data provides detailed insights into Claude Code interactions:
 
-**Tool Usage Patterns**: Analyze tool result events to identify:
+**Tool Usage Patterns**: analyze tool result events to identify:
 
 * Most frequently used tools
 * Tool success rates
 * Average tool execution times
 * Error patterns by tool type
 
-**Performance Monitoring**: Track API request durations and tool execution times to identify performance bottlenecks.
+**Performance Monitoring**: track API request durations and tool execution times to identify performance bottlenecks.
 
-## Backend Considerations
+## Backend considerations
 
-Your choice of metrics and logs backends will determine the types of analyses you can perform:
+Your choice of metrics and logs backends determines the types of analyses you can perform:
 
-### For Metrics:
+### For metrics
 
-* **Time series databases (e.g., Prometheus)**: Rate calculations, aggregated metrics
-* **Columnar stores (e.g., ClickHouse)**: Complex queries, unique user analysis
-* **Full-featured observability platforms (e.g., Honeycomb, Datadog)**: Advanced querying, visualization, alerting
+* **Time series databases (for example, Prometheus)**: Rate calculations, aggregated metrics
+* **Columnar stores (for example, ClickHouse)**: Complex queries, unique user analysis
+* **Full-featured observability platforms (for example, Honeycomb, Datadog)**: Advanced querying, visualization, alerting
 
-### For Events/Logs:
+### For events/logs
 
-* **Log aggregation systems (e.g., Elasticsearch, Loki)**: Full-text search, log analysis
-* **Columnar stores (e.g., ClickHouse)**: Structured event analysis
-* **Full-featured observability platforms (e.g., Honeycomb, Datadog)**: Correlation between metrics and events
+* **Log aggregation systems (for example, Elasticsearch, Loki)**: Full-text search, log analysis
+* **Columnar stores (for example, ClickHouse)**: Structured event analysis
+* **Full-featured observability platforms (for example, Honeycomb, Datadog)**: Correlation between metrics and events
 
 For organizations requiring Daily/Weekly/Monthly Active User (DAU/WAU/MAU) metrics, consider backends that support efficient unique value queries.
 
-## Service Information
+## Service information
 
 All metrics and events are exported with the following resource attributes:
 
 * `service.name`: `claude-code`
 * `service.version`: Current Claude Code version
-* `os.type`: Operating system type (e.g., `linux`, `darwin`, `windows`)
+* `os.type`: Operating system type (for example, `linux`, `darwin`, `windows`)
 * `os.version`: Operating system version string
-* `host.arch`: Host architecture (e.g., `amd64`, `arm64`)
+* `host.arch`: Host architecture (for example, `amd64`, `arm64`)
 * `wsl.version`: WSL version number (only present when running on Windows Subsystem for Linux)
 * Meter Name: `com.anthropic.claude_code`
 
-## ROI Measurement Resources
+## ROI measurement resources
 
 For a comprehensive guide on measuring return on investment for Claude Code, including telemetry setup, cost analysis, productivity metrics, and automated reporting, see the [Claude Code ROI Measurement Guide](https://github.com/anthropics/claude-code-monitoring-guide). This repository provides ready-to-use Docker Compose configurations, Prometheus and OpenTelemetry setups, and templates for generating productivity reports integrated with tools like Linear.
 
-## Security/Privacy Considerations
+## Security/privacy considerations
 
 * Telemetry is opt-in and requires explicit configuration
 * Sensitive information like API keys or file contents are never included in metrics or events

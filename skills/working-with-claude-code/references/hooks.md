@@ -404,7 +404,7 @@ exit 0
 
 **Example: Persisting all environment changes from the hook**
 
-When your setup modifies the environment (e.g., `nvm use`), capture and persist all changes by diffing the environment:
+When your setup modifies the environment (for example, `nvm use`), capture and persist all changes by diffing the environment:
 
 ```bash  theme={null}
 #!/bin/bash

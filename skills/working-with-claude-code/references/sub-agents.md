@@ -61,7 +61,7 @@ To create your first subagent:
   </Step>
 
   <Step title="Save and use">
-    Your subagent is now available! Claude will use it automatically when appropriate, or you can invoke it explicitly:
+    Your subagent is now available. Claude will use it automatically when appropriate, or you can invoke it explicitly:
 
     ```
     > Use the code-reviewer subagent to check my recent changes

@@ -145,7 +145,7 @@ Claude Code stores configuration in several locations:
 | `managed-settings.json`       | [Enterprise managed settings](/en/settings#settings-files)             |
 | `managed-mcp.json`            | [Enterprise managed MCP servers](/en/mcp#enterprise-mcp-configuration) |
 
-On Windows, `~` refers to your user home directory (e.g., `C:\Users\YourName`).
+On Windows, `~` refers to your user home directory, such as `C:\Users\YourName`.
 
 **Enterprise managed file locations:**
 

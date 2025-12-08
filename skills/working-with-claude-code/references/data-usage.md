@@ -17,7 +17,7 @@ We will train new models using data from Free, Pro, and Max accounts when this s
   If you're a new user, you can pick your setting for model training during the signup process.
   You can change your selection at any time in your Privacy Settings.
 
-**Commercial users**: (Team and Enterprise plans, API, 3rd-party platforms, and Claude Gov) maintain existing policies: Anthropic does not train generative models using code or prompts sent to Claude Code under commercial terms, unless the customer has chosen to provide their data to us for model improvement (e.g. [Developer Partner Program](https://support.claude.com/en/articles/11174108-about-the-development-partner-program)).
+**Commercial users**: (Team and Enterprise plans, API, 3rd-party platforms, and Claude Gov) maintain existing policies: Anthropic does not train generative models using code or prompts sent to Claude Code under commercial terms, unless the customer has chosen to provide their data to us for model improvement (for example, the [Developer Partner Program](https://support.claude.com/en/articles/11174108-about-the-development-partner-program)).
 
 ### Development Partner Program
 

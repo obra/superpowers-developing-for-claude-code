@@ -321,9 +321,9 @@ claude mcp remove github
     * `local` (default): Available only to you in the current project (was called `project` in older versions)
     * `project`: Shared with everyone in the project via `.mcp.json` file
     * `user`: Available to you across all projects (was called `global` in older versions)
-  * Set environment variables with `--env` flags (e.g., `--env KEY=value`)
-  * Configure MCP server startup timeout using the MCP\_TIMEOUT environment variable (e.g., `MCP_TIMEOUT=10000 claude` sets a 10-second timeout)
-  * Claude Code will display a warning when MCP tool output exceeds 10,000 tokens. To increase this limit, set the `MAX_MCP_OUTPUT_TOKENS` environment variable (e.g., `MAX_MCP_OUTPUT_TOKENS=50000`)
+  * Set environment variables with `--env` flags (for example, `--env KEY=value`)
+  * Configure MCP server startup timeout using the MCP\_TIMEOUT environment variable (for example, `MCP_TIMEOUT=10000 claude` sets a 10-second timeout)
+  * Claude Code will display a warning when MCP tool output exceeds 10,000 tokens. To increase this limit, set the `MAX_MCP_OUTPUT_TOKENS` environment variable (for example, `MAX_MCP_OUTPUT_TOKENS=50000`)
   * Use `/mcp` to authenticate with remote servers that require OAuth 2.0 authentication
 </Tip>
 
@@ -663,7 +663,7 @@ If you've already configured MCP servers in Claude Desktop, you can import them:
   * It reads the Claude Desktop configuration file from its standard location on those platforms
   * Use the `--scope user` flag to add servers to your user configuration
   * Imported servers will have the same names as in Claude Desktop
-  * If servers with the same names already exist, they will get a numerical suffix (e.g., `server_1`)
+  * If servers with the same names already exist, they will get a numerical suffix (for example, `server_1`)
 </Tip>
 
 ## Use Claude Code as an MCP server

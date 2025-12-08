@@ -67,8 +67,7 @@ If the `/install-github-app` command fails or you prefer manual setup, please fo
 3. **Copy the workflow file** from [examples/claude.yml](https://github.com/anthropics/claude-code-action/blob/main/examples/claude.yml) into your repository's `.github/workflows/`
 
 <Tip>
-  After completing either the quickstart or manual setup, test the action by
-  tagging `@claude` in an issue or PR comment!
+  After completing either the quickstart or manual setup, test the action by tagging `@claude` in an issue or PR comment.
 </Tip>
 
 ## Upgrading from Beta
@@ -213,7 +212,7 @@ Create a `CLAUDE.md` file in your repository root to define code style guideline
 
 ### Security considerations
 
-<Warning>Never commit API keys directly to your repository!</Warning>
+<Warning>Never commit API keys directly to your repository.</Warning>
 
 For comprehensive security guidance including permissions, authentication, and best practices, see the [Claude Code Action security documentation](https://github.com/anthropics/claude-code-action/blob/main/docs/security.md).
 
@@ -224,7 +223,7 @@ Always use GitHub Secrets for API keys:
 * Limit action permissions to only what's necessary
 * Review Claude's suggestions before merging
 
-Always use GitHub Secrets (e.g., `${{ secrets.ANTHROPIC_API_KEY }}`) rather than hardcoding API keys directly in your workflow files.
+Always use GitHub Secrets (for example, `${{ secrets.ANTHROPIC_API_KEY }}`) rather than hardcoding API keys directly in your workflow files.
 
 ### Optimizing performance
 
@@ -648,7 +647,7 @@ claude_args: "--max-turns 5 --model claude-sonnet-4-5-20250929 --mcp-config /pat
 Common arguments:
 
 * `--max-turns`: Maximum conversation turns (default: 10)
-* `--model`: Model to use (e.g., `claude-sonnet-4-5-20250929`)
+* `--model`: Model to use (for example, `claude-sonnet-4-5-20250929`)
 * `--mcp-config`: Path to MCP configuration
 * `--allowed-tools`: Comma-separated list of allowed tools
 * `--debug`: Enable debug output

@@ -8,7 +8,7 @@ Before configuring Claude Code with Vertex AI, ensure you have:
 
 * A Google Cloud Platform (GCP) account with billing enabled
 * A GCP project with Vertex AI API enabled
-* Access to desired Claude models (e.g., Claude Sonnet 4.5)
+* Access to desired Claude models (for example, Claude Sonnet 4.5)
 * Google Cloud SDK (`gcloud`) installed and configured
 * Quota allocated in desired GCP region
 
@@ -44,7 +44,7 @@ Request access to Claude models in Vertex AI:
 
 1. Navigate to the [Vertex AI Model Garden](https://console.cloud.google.com/vertex-ai/model-garden)
 2. Search for "Claude" models
-3. Request access to desired Claude models (e.g., Claude Sonnet 4.5)
+3. Request access to desired Claude models (for example, Claude Sonnet 4.5)
 4. Wait for approval (may take 24-48 hours)
 
 ### 3. Configure GCP credentials
@@ -99,7 +99,7 @@ Claude Code uses these default models for Vertex AI:
 | Small/fast model | `claude-haiku-4-5@20251001`  |
 
 <Note>
-  For Vertex AI users, Claude Code will not automatically upgrade from Haiku 3.5 to Haiku 4.5. To manually switch to a newer Haiku model, set the `ANTHROPIC_DEFAULT_HAIKU_MODEL` environment variable to the full model name (e.g., `claude-haiku-4-5@20251001`).
+  For Vertex AI users, Claude Code will not automatically upgrade from Haiku 3.5 to Haiku 4.5. To manually switch to a newer Haiku model, set the `ANTHROPIC_DEFAULT_HAIKU_MODEL` environment variable to the full model name (for example, `claude-haiku-4-5@20251001`).
 </Note>
 
 To customize models:

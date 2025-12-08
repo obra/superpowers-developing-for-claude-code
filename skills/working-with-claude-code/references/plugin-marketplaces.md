@@ -191,7 +191,7 @@ Create `.claude-plugin/marketplace.json` in your repository root:
 | `author`      | object  | Plugin author information                                         |
 | `homepage`    | string  | Plugin homepage or documentation URL                              |
 | `repository`  | string  | Source code repository URL                                        |
-| `license`     | string  | SPDX license identifier (e.g., MIT, Apache-2.0)                   |
+| `license`     | string  | SPDX license identifier (for example, MIT, Apache-2.0)            |
 | `keywords`    | array   | Tags for plugin discovery and categorization                      |
 | `category`    | string  | Plugin category for organization                                  |
 | `tags`        | array   | Tags for searchability                                            |
