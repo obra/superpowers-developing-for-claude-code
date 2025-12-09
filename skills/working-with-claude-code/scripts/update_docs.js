@@ -3,7 +3,7 @@
 /**
  * update_docs.js
  *
- * Fetches the latest Claude Code documentation from docs.claude.com
+ * Fetches the latest Claude Code documentation from code.claude.com
  * and saves it to the references/ directory.
  *
  * Usage: node scripts/update_docs.js
@@ -13,8 +13,8 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const LLMS_TXT_URL = 'https://docs.claude.com/llms.txt';
-const CLAUDE_CODE_PATTERN = /https:\/\/docs\.claude\.com\/en\/docs\/claude-code\/[^\s)]+\.md/g;
+const LLMS_TXT_URL = 'https://code.claude.com/docs/llms.txt';
+const CLAUDE_CODE_PATTERN = /https:\/\/code\.claude\.com\/docs\/en\/[^\s)]+\.md/g;
 const REFERENCES_DIR = path.join(__dirname, '..', 'references');
 
 /**

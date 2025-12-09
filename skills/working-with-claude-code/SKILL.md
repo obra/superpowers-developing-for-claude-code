@@ -7,7 +7,7 @@ description: Use when working with Claude Code CLI, plugins, hooks, MCP servers,
 
 ## Overview
 
-This skill provides complete, authoritative documentation for Claude Code directly from docs.claude.com. Instead of guessing about configuration paths, API structures, or feature capabilities, read the official docs stored in this skill's references directory.
+This skill provides complete, authoritative documentation for Claude Code directly from code.claude.com. Instead of guessing about configuration paths, API structures, or feature capabilities, read the official docs stored in this skill's references directory.
 
 ## When to Use
 
@@ -121,7 +121,7 @@ path: ~/.claude/skills/working-with-claude-code/references/
 
 ## Updating Documentation
 
-The skill includes `scripts/update_docs.js` to fetch the latest documentation from docs.claude.com.
+The skill includes `scripts/update_docs.js` to fetch the latest documentation from code.claude.com.
 
 Run when:
 - Documentation seems outdated
@@ -133,7 +133,7 @@ node ~/.claude/skills/working-with-claude-code/scripts/update_docs.js
 ```
 
 The script:
-1. Fetches llms.txt from docs.claude.com
+1. Fetches llms.txt from code.claude.com
 2. Extracts all Claude Code documentation URLs
 3. Downloads each page to `references/`
 4. Reports success/failures
