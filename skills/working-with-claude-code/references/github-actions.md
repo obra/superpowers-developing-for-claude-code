@@ -636,7 +636,7 @@ The Claude Code Action v1 uses a simplified configuration:
 \*Prompt is optional - when omitted for issue/PR comments, Claude responds to trigger phrase\
 \*\*Required for direct Claude API, not for Bedrock/Vertex
 
-#### Using claude\_args
+#### Pass CLI arguments
 
 The `claude_args` parameter accepts any Claude Code CLI arguments:
 

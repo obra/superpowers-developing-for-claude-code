@@ -25,7 +25,7 @@ You can either:
 ## How it Works
 
 * The status line is updated when the conversation messages update
-* Updates run at most every 300ms
+* Updates run at most every 300 ms
 * The first line of stdout from your command becomes the status line text
 * ANSI color codes are supported for styling your status line
 * Claude Code passes contextual information about the current session (model, directories, etc.) as JSON to your script via stdin

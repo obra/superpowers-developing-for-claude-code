@@ -11,7 +11,7 @@
 Claude Code on the web lets developers kick off Claude Code from the Claude app. This is perfect for:
 
 * **Answering questions**: Ask about code architecture and how features are implemented
-* **Bugfixes and routine tasks**: Well-defined tasks that don't require frequent steering
+* **Bug fixes and routine tasks**: Well-defined tasks that don't require frequent steering
 * **Parallel work**: Tackle multiple bug fixes in parallel
 * **Repositories not on your local machine**: Work on code you don't have checked out locally
 * **Backend changes**: Where Claude Code can write tests and then write code to pass those tests
@@ -473,7 +473,7 @@ Claude Code on the web shares rate limits with all other Claude and Claude Code 
 
 ## Best practices
 
-1. **Use Claude Code hooks**: Configure [sessionStart hooks](/en/hooks#sessionstart) to automate environment setup and dependency installation.
+1. **Use Claude Code hooks**: Configure [SessionStart hooks](/en/hooks#sessionstart) to automate environment setup and dependency installation.
 2. **Document requirements**: Clearly specify dependencies and commands in your `CLAUDE.md` file. If you have an `AGENTS.md` file, you can source it in your `CLAUDE.md` using `@AGENTS.md` to maintain a single source of truth.
 
 ## Related resources

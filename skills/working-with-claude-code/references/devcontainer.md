@@ -8,7 +8,7 @@ The container's enhanced security measures (isolation and firewall rules) allow 
 
 <Warning>
   While the devcontainer provides substantial protections, no system is completely immune to all attacks.
-  When executed with `--dangerously-skip-permissions`, devcontainers do not prevent a malicious project from exfiltrating anything accessible in the devcontainer including Claude Code credentials.
+  When executed with `--dangerously-skip-permissions`, devcontainers don't prevent a malicious project from exfiltrating anything accessible in the devcontainer including Claude Code credentials.
   We recommend only using devcontainers when developing with trusted repositories.
   Always maintain good security practices and monitor Claude's activities.
 </Warning>

@@ -258,7 +258,7 @@ Prompt-based hooks work with any hook event, but are most useful for:
 | --------------------- | ----------------------- | ------------------------------ |
 | **Execution**         | Runs bash script        | Queries LLM                    |
 | **Decision logic**    | You implement in code   | LLM evaluates context          |
-| **Setup complexity**  | Requires script file    | Just configure prompt          |
+| **Setup complexity**  | Requires script file    | Configure prompt               |
 | **Context awareness** | Limited to script logic | Natural language understanding |
 | **Performance**       | Fast (local execution)  | Slower (API call)              |
 | **Use case**          | Deterministic rules     | Context-aware decisions        |
@@ -590,7 +590,7 @@ For `manual`, `custom_instructions` comes from what the user passes into
 
 ## Hook Output
 
-There are two mutually-exclusive ways for hooks to return output back to Claude Code. The output
+There are two mutually exclusive ways for hooks to return output back to Claude Code. The output
 communicates whether to block and any feedback that should be shown to Claude
 and the user.
 
@@ -779,8 +779,7 @@ the transcript; `additionalContext` is added more discretely.
 ```
 
 <Note>
-  The JSON format is not required for simple use cases. To add context, you can
-  just print plain text to stdout with exit code 0. Use JSON when you need to
+  The JSON format isn't required for simple use cases. To add context, you can print plain text to stdout with exit code 0. Use JSON when you need to
   block prompts or want more structured control.
 </Note>
 
@@ -877,7 +876,7 @@ if issues:
 <Note>
   For `UserPromptSubmit` hooks, you can inject context using either method:
 
-  * **Plain text stdout** with exit code 0: Simplest approach—just print text
+  * **Plain text stdout** with exit code 0: Simplest approach, prints text
   * **JSON output** with exit code 0: Use `"decision": "block"` to reject prompts,
     or `additionalContext` for structured context injection
 

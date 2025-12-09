@@ -10,7 +10,7 @@ For additional customization of the Claude Code interface itself, you can config
 
 ### Line breaks
 
-You have several options for entering linebreaks into Claude Code:
+You have several options for entering line breaks into Claude Code:
 
 * **Quick escape**: Type `\` followed by Enter to create a newline
 * **Keyboard shortcut**: Set up a keybinding to insert a newline

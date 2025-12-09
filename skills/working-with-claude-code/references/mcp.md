@@ -203,7 +203,7 @@ export const MCPServersTable = ({platform = "all"}) => {
     </>;
 };
 
-Claude Code can connect to hundreds of external tools and data sources through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction), an open-source standard for AI-tool integrations. MCP servers give Claude Code access to your tools, databases, and APIs.
+Claude Code can connect to hundreds of external tools and data sources through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction), an open source standard for AI-tool integrations. MCP servers give Claude Code access to your tools, databases, and APIs.
 
 ## What you can do with MCP
 
@@ -211,7 +211,7 @@ With MCP servers connected, you can ask Claude Code to:
 
 * **Implement features from issue trackers**: "Add the feature described in JIRA issue ENG-4521 and create a PR on GitHub."
 * **Analyze monitoring data**: "Check Sentry and Statsig to check the usage of the feature described in ENG-4521."
-* **Query databases**: "Find emails of 10 random users who used feature ENG-4521, based on our Postgres database."
+* **Query databases**: "Find emails of 10 random users who used feature ENG-4521, based on our PostgreSQL database."
 * **Integrate designs**: "Update our standard email template based on the new Figma designs that were posted in Slack"
 * **Automate workflows**: "Create Gmail drafts inviting these 10 users to a feedback session about the new feature."
 
@@ -459,7 +459,7 @@ Select your scope based on:
 
 * **Local scope**: Personal servers, experimental configurations, or sensitive credentials specific to one project
 * **Project scope**: Team-shared servers, project-specific tools, or services required for collaboration
-* **User scope**: Personal utilities needed across multiple projects, development tools, or frequently-used services
+* **User scope**: Personal utilities needed across multiple projects, development tools, or frequently used services
 
 <Note>
   **Where are MCP servers stored?**
@@ -722,7 +722,7 @@ You can use this in Claude Desktop by adding this configuration to claude\_deskt
 
   * The server provides access to Claude's tools like View, Edit, LS, etc.
   * In Claude Desktop, try asking Claude to read files in a directory, make edits, and more.
-  * Note that this MCP server is simply exposing Claude Code's tools to your MCP client, so your own client is responsible for implementing user confirmation for individual tool calls.
+  * Note that this MCP server is only exposing Claude Code's tools to your MCP client, so your own client is responsible for implementing user confirmation for individual tool calls.
 </Tip>
 
 ## MCP output limits and warnings

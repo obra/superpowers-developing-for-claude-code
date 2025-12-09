@@ -82,13 +82,14 @@ references/
 ├── settings.md              # Configure Claude Code with global and project-level settings, and environment variables.
 ├── setup.md                 # Install, authenticate, and start using Claude Code on your development machine.
 ├── skills.md                # Create, manage, and share Skills to extend Claude's capabilities in Claude Code.
+├── slack.md                 # Delegate coding tasks directly from your Slack workspace
 ├── slash-commands.md        # Control Claude's behavior during an interactive session with slash commands.
 ├── statusline.md            # Create a custom status line for Claude Code to display contextual information
 ├── sub-agents.md            # Create and use specialized AI subagents in Claude Code for task-specific workflows and improved context management.
 ├── terminal-config.md       # Claude Code works best when your terminal is properly configured. Follow these guidelines to optimize your experience.
 ├── third-party-integrations.md# Learn how Claude Code can integrate with various third-party services and infrastructure to meet enterprise deployment requirements.
 ├── troubleshooting.md       # Discover solutions to common issues with Claude Code installation and usage.
-└── vs-code.md               # Use Claude Code with Visual Studio Code through our native extension or CLI integration
+└── vs-code.md               # Use Claude Code with Visual Studio Code through the native extension or CLI integration
 ```
 <!-- tree-end -->
 

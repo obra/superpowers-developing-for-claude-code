@@ -105,7 +105,7 @@ You can see which model you're currently using in several ways:
 You can use the following environment variables, which must be full **model
 names** (or equivalent for your API provider), to control the model names that the aliases map to.
 
-| Env var                          | Description                                                                                   |
+| Environment variable             | Description                                                                                   |
 | -------------------------------- | --------------------------------------------------------------------------------------------- |
 | `ANTHROPIC_DEFAULT_OPUS_MODEL`   | The model to use for `opus`, or for `opusplan` when Plan Mode is active.                      |
 | `ANTHROPIC_DEFAULT_SONNET_MODEL` | The model to use for `sonnet`, or for `opusplan` when Plan Mode is not active.                |
@@ -119,7 +119,7 @@ Note: `ANTHROPIC_SMALL_FAST_MODEL` is deprecated in favor of
 
 Claude Code automatically uses [prompt caching](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) to optimize performance and reduce costs. You can disable prompt caching globally or for specific model tiers:
 
-| Env var                         | Description                                                                                    |
+| Environment variable            | Description                                                                                    |
 | ------------------------------- | ---------------------------------------------------------------------------------------------- |
 | `DISABLE_PROMPT_CACHING`        | Set to `1` to disable prompt caching for all models (takes precedence over per-model settings) |
 | `DISABLE_PROMPT_CACHING_HAIKU`  | Set to `1` to disable prompt caching for Haiku models only                                     |

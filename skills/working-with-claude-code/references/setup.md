@@ -5,15 +5,15 @@
 ## System requirements
 
 * **Operating Systems**: macOS 10.15+, Ubuntu 20.04+/Debian 10+, or Windows 10+ (with WSL 1, WSL 2, or Git for Windows)
-* **Hardware**: 4GB+ RAM
-* **Software**: [Node.js 18+](https://nodejs.org/en/download) (only required for NPM installation)
+* **Hardware**: 4 GB+ RAM
+* **Software**: [Node.js 18+](https://nodejs.org/en/download) (only required for npm installation)
 * **Network**: Internet connection required for authentication and AI processing
 * **Shell**: Works best in Bash, Zsh or Fish
 * **Location**: [Anthropic supported countries](https://www.anthropic.com/supported-countries)
 
 ### Additional dependencies
 
-* **ripgrep**: Usually included with Claude Code. If search functionality fails, see [search troubleshooting](/en/troubleshooting#search-and-discovery-issues).
+* **ripgrep**: Usually included with Claude Code. If search fails, see [search troubleshooting](/en/troubleshooting#search-and-discovery-issues).
 
 ## Standard installation
 
@@ -23,25 +23,25 @@ To install Claude Code, use one of the following methods:
   <Tab title="Native Install (Recommended)">
     **Homebrew (macOS, Linux):**
 
-    ```sh  theme={null}
+    ```sh theme={null} theme={null}
     brew install --cask claude-code
     ```
 
     **macOS, Linux, WSL:**
 
-    ```bash  theme={null}
+    ```bash theme={null} theme={null}
     curl -fsSL https://claude.ai/install.sh | bash
     ```
 
     **Windows PowerShell:**
 
-    ```powershell  theme={null}
+    ```powershell theme={null} theme={null}
     irm https://claude.ai/install.ps1 | iex
     ```
 
     **Windows CMD:**
 
-    ```batch  theme={null}
+    ```batch theme={null} theme={null}
     curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
     ```
   </Tab>
@@ -49,7 +49,7 @@ To install Claude Code, use one of the following methods:
   <Tab title="NPM">
     If you have [Node.js 18 or newer installed](https://nodejs.org/en/download/):
 
-    ```sh  theme={null}
+    ```sh theme={null} theme={null}
     npm install -g @anthropic-ai/claude-code
     ```
   </Tab>
@@ -68,7 +68,7 @@ claude
 
 Claude Code offers the following authentication options:
 
-1. **Claude Console**: The default option. Connect through the Claude Console and complete the OAuth process. Requires active billing at [console.anthropic.com](https://console.anthropic.com). A "Claude Code" workspace will be automatically created for usage tracking and cost management. Note that you cannot create API keys for the Claude Code workspace - it is dedicated exclusively for Claude Code usage.
+1. **Claude Console**: The default option. Connect through the Claude Console and complete the OAuth process. Requires active billing in the [Anthropic console](https://console.anthropic.com). A "Claude Code" workspace is automatically created for usage tracking and cost management. You can't create API keys for the Claude Code workspace; it's dedicated exclusively for Claude Code usage.
 2. **Claude App (with Pro or Max plan)**: Subscribe to Claude's [Pro or Max plan](https://claude.com/pricing) for a unified subscription that includes both Claude Code and the web interface. Get more value at the same price point while managing your account in one place. Log in with your Claude.ai account. During launch, choose the option that matches your subscription type.
 3. **Enterprise platforms**: Configure Claude Code to use [Amazon Bedrock, Google Vertex AI, or Microsoft Foundry](/en/third-party-integrations) for enterprise deployments with your existing cloud infrastructure.
 
@@ -126,7 +126,7 @@ curl -fsSL https://claude.ai/install.sh | bash -s 1.0.58
 ```
 
 <Note>
-  **Alpine Linux and other musl/uClibc-based distributions**: The native build requires you to install `libgcc`, `libstdc++`, and `ripgrep`. Install (Alpine: `apk add libgcc libstdc++ ripgrep`) and set `USE_BUILTIN_RIPGREP=0`.
+  **Alpine Linux and other musl/uClibc-based distributions**: The native build requires `libgcc`, `libstdc++`, and `ripgrep`. For Alpine: `apk add libgcc libstdc++ ripgrep`. Set `USE_BUILTIN_RIPGREP=0`.
 </Note>
 
 <Note>
@@ -212,6 +212,91 @@ export DISABLE_AUTOUPDATER=1
 
 ```bash  theme={null}
 claude update
+```
+
+## Uninstall Claude Code
+
+If you need to uninstall Claude Code, follow the instructions for your installation method.
+
+### Native installation
+
+Remove the Claude Code binary and symlink:
+
+**macOS, Linux, WSL:**
+
+```bash  theme={null}
+rm -f ~/.local/bin/claude
+rm -rf ~/.claude-code
+```
+
+**Windows PowerShell:**
+
+```powershell  theme={null}
+Remove-Item -Path "$env:LOCALAPPDATA\Programs\claude-code" -Recurse -Force
+Remove-Item -Path "$env:LOCALAPPDATA\Microsoft\WindowsApps\claude.exe" -Force
+```
+
+**Windows CMD:**
+
+```batch  theme={null}
+rmdir /s /q "%LOCALAPPDATA%\Programs\claude-code"
+del "%LOCALAPPDATA%\Microsoft\WindowsApps\claude.exe"
+```
+
+### Homebrew installation
+
+```bash  theme={null}
+brew uninstall --cask claude-code
+```
+
+### NPM installation
+
+```bash  theme={null}
+npm uninstall -g @anthropic-ai/claude-code
+```
+
+### Clean up configuration files (optional)
+
+<Warning>
+  Removing configuration files will delete all your settings, allowed tools, MCP server configurations, and session history.
+</Warning>
+
+To remove Claude Code settings and cached data:
+
+**macOS, Linux, WSL:**
+
+```bash  theme={null}
+# Remove user settings and state
+rm -rf ~/.claude
+rm ~/.claude.json
+
+# Remove project-specific settings (run from your project directory)
+rm -rf .claude
+rm -f .mcp.json
+```
+
+**Windows PowerShell:**
+
+```powershell  theme={null}
+# Remove user settings and state
+Remove-Item -Path "$env:USERPROFILE\.claude" -Recurse -Force
+Remove-Item -Path "$env:USERPROFILE\.claude.json" -Force
+
+# Remove project-specific settings (run from your project directory)
+Remove-Item -Path ".claude" -Recurse -Force
+Remove-Item -Path ".mcp.json" -Force
+```
+
+**Windows CMD:**
+
+```batch  theme={null}
+REM Remove user settings and state
+rmdir /s /q "%USERPROFILE%\.claude"
+del "%USERPROFILE%\.claude.json"
+
+REM Remove project-specific settings (run from your project directory)
+rmdir /s /q ".claude"
+del ".mcp.json"
 ```
 
 

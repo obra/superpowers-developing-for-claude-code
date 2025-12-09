@@ -14,19 +14,19 @@
 | `/compact [instructions]` | Compact conversation with optional focus instructions                                                                       |
 | `/config`                 | Open the Settings interface (Config tab)                                                                                    |
 | `/context`                | Visualize current context usage as a colored grid                                                                           |
-| `/cost`                   | Show token usage statistics (see [cost tracking guide](/en/costs#using-the-cost-command) for subscription-specific details) |
+| `/cost`                   | Show token usage statistics. See [cost tracking guide](/en/costs#using-the-cost-command) for subscription-specific details. |
 | `/doctor`                 | Checks the health of your Claude Code installation                                                                          |
 | `/exit`                   | Exit the REPL                                                                                                               |
 | `/export [filename]`      | Export the current conversation to a file or clipboard                                                                      |
 | `/help`                   | Get usage help                                                                                                              |
 | `/hooks`                  | Manage hook configurations for tool events                                                                                  |
 | `/ide`                    | Manage IDE integrations and show status                                                                                     |
-| `/init`                   | Initialize project with CLAUDE.md guide                                                                                     |
+| `/init`                   | Initialize project with `CLAUDE.md` guide                                                                                   |
 | `/install-github-app`     | Set up Claude GitHub Actions for a repository                                                                               |
 | `/login`                  | Switch Anthropic accounts                                                                                                   |
 | `/logout`                 | Sign out from your Anthropic account                                                                                        |
 | `/mcp`                    | Manage MCP server connections and OAuth authentication                                                                      |
-| `/memory`                 | Edit CLAUDE.md memory files                                                                                                 |
+| `/memory`                 | Edit `CLAUDE.md` memory files                                                                                               |
 | `/model`                  | Select or change the AI model                                                                                               |
 | `/output-style [style]`   | Set the output style directly or from a selection menu                                                                      |
 | `/permissions`            | View or update [permissions](/en/iam#configuring-permissions)                                                               |
@@ -42,13 +42,13 @@
 | `/status`                 | Open the Settings interface (Status tab) showing version, model, account, and connectivity                                  |
 | `/statusline`             | Set up Claude Code's status line UI                                                                                         |
 | `/terminal-setup`         | Install Shift+Enter key binding for newlines (iTerm2 and VSCode only)                                                       |
-| `/todos`                  | List current todo items                                                                                                     |
-| `/usage`                  | Show plan usage limits and rate limit status (subscription plans only)                                                      |
+| `/todos`                  | List current TODO items                                                                                                     |
+| `/usage`                  | For subscription plans only: show plan usage limits and rate limit status                                                   |
 | `/vim`                    | Enter vim mode for alternating insert and command modes                                                                     |
 
 ## Custom slash commands
 
-Custom slash commands allow you to define frequently-used prompts as Markdown files that Claude Code can execute. Commands are organized by scope (project-specific or personal) and support namespacing through directory structures.
+Custom slash commands allow you to define frequently used prompts as Markdown files that Claude Code can execute. Commands are organized by scope (project-specific or personal) and support namespacing through directory structures.
 
 ### Syntax
 
@@ -71,7 +71,7 @@ Commands stored in your repository and shared with your team. When listed in `/h
 
 **Location**: `.claude/commands/`
 
-In the following example, we create the `/optimize` command:
+The following example creates the `/optimize` command:
 
 ```bash  theme={null}
 # Create a project command
@@ -85,7 +85,7 @@ Commands available across all your projects. When listed in `/help`, these comma
 
 **Location**: `~/.claude/commands/`
 
-In the following example, we create the `/security-review` command:
+The following example creates the `/security-review` command:
 
 ```bash  theme={null}
 # Create a personal command
@@ -97,12 +97,16 @@ echo "Review this code for security vulnerabilities:" > ~/.claude/commands/secur
 
 #### Namespacing
 
-Organize commands in subdirectories. The subdirectories are used for organization and appear in the command description, but they do not affect the command name itself. The description will show whether the command comes from the project directory (`.claude/commands`) or the user-level directory (`~/.claude/commands`), along with the subdirectory name.
+Use subdirectories to group related commands. Subdirectories appear in the command description but don't affect the command name.
 
-Conflicts between user and project level commands are not supported. Otherwise, multiple commands with the same base file name can coexist.
+For example:
 
-For example, a file at `.claude/commands/frontend/component.md` creates the command `/component` with description showing "(project:frontend)".
-Meanwhile, a file at `~/.claude/commands/component.md` creates the command `/component` with description showing "(user)".
+* `.claude/commands/frontend/component.md` creates `/component` with description "(project:frontend)"
+* `~/.claude/commands/component.md` creates `/component` with description "(user)"
+
+If a project command and user command share the same name, the project command takes precedence and the user command is silently ignored. For example, if both `.claude/commands/deploy.md` and `~/.claude/commands/deploy.md` exist, `/deploy` runs the project version.
+
+Commands in different subdirectories can share names since the subdirectory appears in the description to distinguish them. For example, `.claude/commands/frontend/test.md` and `.claude/commands/backend/test.md` both create `/test`, but show as "(project:frontend)" and "(project:backend)" respectively.
 
 #### Arguments
 
@@ -310,9 +314,10 @@ MCP prompts can accept arguments defined by the server:
 
 #### Naming conventions
 
-* Server and prompt names are normalized
+Server and prompt names are normalized:
+
 * Spaces and special characters become underscores
-* Names are lowercased for consistency
+* Names are lowercase for consistency
 
 ### Managing MCP connections
 
@@ -326,13 +331,16 @@ Use the `/mcp` command to:
 
 ### MCP permissions and wildcards
 
-When configuring [permissions for MCP tools](/en/iam#tool-specific-permission-rules), note that **wildcards are not supported**:
+Wildcards aren't supported in [permissions for MCP tools](/en/iam#tool-specific-permission-rules).
 
-* ✅ **Correct**: `mcp__github` (approves ALL tools from the github server)
-* ✅ **Correct**: `mcp__github__get_issue` (approves specific tool)
-* ❌ **Incorrect**: `mcp__github__*` (wildcards not supported)
+To approve all tools from an MCP server, use the server name alone, without wildcards:
 
-To approve all tools from an MCP server, use just the server name: `mcp__servername`. To approve specific tools only, list each tool individually.
+* `mcp__github` (approves all GitHub tools)
+
+To approve specific tools, list each one explicitly:
+
+* `mcp__github__get_issue`
+* `mcp__github__list_issues`
 
 ## `SlashCommand` tool
 
@@ -340,25 +348,20 @@ The `SlashCommand` tool allows Claude to execute [custom slash commands](/en/sla
 during a conversation. This gives Claude the ability to invoke custom commands
 on your behalf when appropriate.
 
-To encourage Claude to trigger `SlashCommand` tool, your instructions (prompts,
-CLAUDE.md, etc.) generally need to reference the command by name with its slash.
-
-Example:
+To encourage Claude to use the `SlashCommand` tool, reference the command by name, including the slash, in your prompts or `CLAUDE.md` file. For example:
 
 ```
 > Run /write-unit-test when you are about to start writing tests.
 ```
 
-This tool puts each available custom slash command's metadata into context up to the
-character budget limit. You can use `/context` to monitor token usage and follow
-the operations below to manage context.
+This tool puts each available custom slash command's metadata into context up to the character budget limit. You can use `/context` to monitor token usage and follow the operations below to manage context.
 
 ### `SlashCommand` tool supported commands
 
 `SlashCommand` tool only supports custom slash commands that:
 
 * Are user-defined. Built-in commands like `/compact` and `/init` are *not* supported.
-* Have the `description` frontmatter field populated. We use the `description` in the context.
+* Have the `description` frontmatter field populated. The description is used in the context.
 
 For Claude Code versions >= 1.0.124, you can see which custom slash commands
 `SlashCommand` tool can invoke by running `claude --debug` and triggering a query.
@@ -372,14 +375,14 @@ To prevent Claude from executing any slash commands via the tool:
 # Add to deny rules: SlashCommand
 ```
 
-This will also remove SlashCommand tool (and the slash command descriptions) from context.
+This also removes the SlashCommand tool and command descriptions from context.
 
 ### Disable specific commands only
 
 To prevent a specific slash command from becoming available, add
 `disable-model-invocation: true` to the slash command's frontmatter.
 
-This will also remove the command's metadata from context.
+This also removes the command's metadata from context.
 
 ### `SlashCommand` permission rules
 
@@ -394,13 +397,12 @@ The `SlashCommand` tool includes a character budget to limit the size of command
 descriptions shown to Claude. This prevents token overflow when many commands
 are available.
 
-The budget includes each custom slash command's name, args, and description.
+The budget includes each custom slash command's name, arguments, and description.
 
 * **Default limit**: 15,000 characters
 * **Custom limit**: Set via `SLASH_COMMAND_TOOL_CHAR_BUDGET` environment variable
 
-When the character budget is exceeded, Claude will see only a subset of the
-available commands. In `/context`, a warning will show with "M of N commands".
+When the character budget is exceeded, Claude sees only a subset of the available commands. In `/context`, a warning shows "M of N commands".
 
 ## Skills vs slash commands
 
@@ -408,11 +410,11 @@ available commands. In `/context`, a warning will show with "M of N commands".
 
 ### Use slash commands for
 
-**Quick, frequently-used prompts**:
+**Quick, frequently used prompts**:
 
 * Simple prompt snippets you use often
 * Quick reminders or templates
-* Frequently-used instructions that fit in one file
+* Frequently used instructions that fit in one file
 
 **Examples**:
 
