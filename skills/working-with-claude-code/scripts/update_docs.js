@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const LLMS_TXT_URL = 'https://code.claude.com/docs/llms.txt';
+const DOCS_MAP_URL = 'https://code.claude.com/docs/en/claude_code_docs_map.md';
 const CLAUDE_CODE_PATTERN = /https:\/\/code\.claude\.com\/docs\/en\/[^\s)]+\.md/g;
 const REFERENCES_DIR = path.join(__dirname, '..', 'references');
 
@@ -86,9 +87,13 @@ async function main() {
   const urls = await getClaudeCodeUrls();
   console.log(`✅ Found ${urls.length} Claude Code documentation pages\n`);
 
+  // Fetch documentation map (overview of all docs)
+  console.log('📥 Downloading documentation map...');
+  const mapResult = await fetchAndSaveDoc(DOCS_MAP_URL);
+
   // Fetch all documentation pages
   console.log('📥 Downloading documentation...');
-  const results = [];
+  const results = [mapResult];
   for (const url of urls) {
     const result = await fetchAndSaveDoc(url);
     results.push(result);

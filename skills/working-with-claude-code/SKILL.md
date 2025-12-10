@@ -41,6 +41,7 @@ All documentation is stored as individual markdown files in `references/`. Use t
 
 ```
 references/
+├── claude_code_docs_map.md  # Complete hierarchical outline of all docs
 ├── overview.md              # Claude Code introduction
 ├── quickstart.md           # Getting started guide
 ├── setup.md                # Installation and setup
@@ -135,8 +136,9 @@ node ~/.claude/skills/working-with-claude-code/scripts/update_docs.js
 The script:
 1. Fetches llms.txt from code.claude.com
 2. Extracts all Claude Code documentation URLs
-3. Downloads each page to `references/`
-4. Reports success/failures
+3. Downloads the documentation map (complete hierarchical outline)
+4. Downloads each page to `references/`
+5. Reports success/failures
 
 ## Common Patterns
 
