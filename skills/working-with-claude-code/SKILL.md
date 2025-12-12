@@ -34,6 +34,10 @@ Use this skill when:
 | Troubleshoot issues | `troubleshooting.md` |
 | General setup | `setup.md` or `quickstart.md` |
 | Configuration options | `settings.md` |
+| Web-based Claude Code | `claude-code-on-the-web.md` |
+| Desktop app | `desktop.md` |
+| Sandboxing/security | `sandboxing.md` |
+| Slack integration | `slack.md` |
 
 ## Documentation Organization
 
@@ -41,49 +45,52 @@ All documentation is stored as individual markdown files in `references/`. Use t
 
 ```
 references/
-├── claude_code_docs_map.md  # Complete hierarchical outline of all docs
 ├── overview.md              # Claude Code introduction
-├── quickstart.md           # Getting started guide
-├── setup.md                # Installation and setup
-├── plugins.md              # Plugin development
-├── plugins-reference.md    # Plugin API reference
-├── plugin-marketplaces.md  # Plugin marketplaces
-├── skills.md               # Skill creation
-├── mcp.md                  # MCP server integration
-├── hooks.md                # Hooks overview
-├── hooks-guide.md          # Hooks implementation guide
-├── slash-commands.md       # Slash command reference
-├── sub-agents.md           # Subagent usage
-├── settings.md             # Configuration reference
-├── cli-reference.md        # CLI command reference
-├── common-workflows.md     # Common usage patterns
-├── interactive-mode.md     # Interactive mode guide
-├── headless.md             # Headless mode guide
-├── output-styles.md        # Output customization
-├── statusline.md           # Status line configuration
-├── memory.md               # Memory and context management
-├── checkpointing.md        # Checkpointing feature
-├── analytics.md            # Usage analytics
-├── costs.md                # Cost tracking
-├── monitoring-usage.md     # Usage monitoring
-├── data-usage.md           # Data usage policies
-├── security.md             # Security features
-├── iam.md                  # IAM integration
-├── network-config.md       # Network configuration
-├── terminal-config.md      # Terminal configuration
-├── model-config.md         # Model configuration
-├── llm-gateway.md          # LLM gateway setup
-├── amazon-bedrock.md       # AWS Bedrock integration
-├── google-vertex-ai.md     # Google Vertex AI integration
-├── vs-code.md              # VS Code integration
-├── jetbrains.md            # JetBrains integration
-├── devcontainer.md         # Dev container support
-├── github-actions.md       # GitHub Actions integration
-├── gitlab-ci-cd.md         # GitLab CI/CD integration
+├── quickstart.md            # Getting started guide
+├── setup.md                 # Installation and setup
+├── common-workflows.md      # Common usage patterns
+├── claude-code-on-the-web.md # Web-based Claude Code
+├── desktop.md               # Desktop application
+├── plugins.md               # Plugin development
+├── plugins-reference.md     # Plugin API reference
+├── plugin-marketplaces.md   # Plugin marketplaces
+├── skills.md                # Skill creation
+├── mcp.md                   # MCP server integration
+├── hooks.md                 # Hooks overview
+├── hooks-guide.md           # Hooks implementation guide
+├── slash-commands.md        # Slash command reference
+├── sub-agents.md            # Subagent usage
+├── settings.md              # Configuration reference
+├── cli-reference.md         # CLI command reference
+├── interactive-mode.md      # Interactive mode guide
+├── headless.md              # Headless mode guide
+├── output-styles.md         # Output customization
+├── statusline.md            # Status line configuration
+├── memory.md                # Memory and context management
+├── checkpointing.md         # Checkpointing feature
+├── sandboxing.md            # Sandboxing and security isolation
+├── analytics.md             # Usage analytics
+├── costs.md                 # Cost tracking
+├── monitoring-usage.md      # Usage monitoring
+├── data-usage.md            # Data usage policies
+├── security.md              # Security features
+├── iam.md                   # IAM integration
+├── network-config.md        # Network configuration
+├── terminal-config.md       # Terminal configuration
+├── model-config.md          # Model configuration
+├── llm-gateway.md           # LLM gateway setup
+├── amazon-bedrock.md        # AWS Bedrock integration
+├── google-vertex-ai.md      # Google Vertex AI integration
+├── microsoft-foundry.md     # Microsoft Azure AI Foundry
+├── vs-code.md               # VS Code integration
+├── jetbrains.md             # JetBrains integration
+├── devcontainer.md          # Dev container support
+├── github-actions.md        # GitHub Actions integration
+├── gitlab-ci-cd.md          # GitLab CI/CD integration
+├── slack.md                 # Slack integration
 ├── third-party-integrations.md  # Other integrations
-├── legal-and-compliance.md # Legal information
-├── troubleshooting.md      # Troubleshooting guide
-└── migration-guide.md      # Migration guide
+├── legal-and-compliance.md  # Legal information
+└── troubleshooting.md       # Troubleshooting guide
 ```
 
 ## Workflow
@@ -134,11 +141,10 @@ node ~/.claude/skills/working-with-claude-code/scripts/update_docs.js
 ```
 
 The script:
-1. Fetches llms.txt from code.claude.com
+1. Fetches llms.txt from code.claude.com/docs/
 2. Extracts all Claude Code documentation URLs
-3. Downloads the documentation map (complete hierarchical outline)
-4. Downloads each page to `references/`
-5. Reports success/failures
+3. Downloads each page to `references/`
+4. Reports success/failures
 
 ## Common Patterns
 
