@@ -69,6 +69,14 @@ After adding a marketplace:
 2. **Browse plugins**: Use `/plugin` to see available plugins from your marketplace
 3. **Test installation**: Try installing a plugin to verify the marketplace works correctly
 
+### Example plugin marketplace
+
+Claude Code maintains a marketplace of [demo plugins](https://github.com/anthropics/claude-code/tree/main/plugins). These plugins are examples of what's possible with the plugin system.
+
+```shell Add the marketplace theme={null}
+/plugin marketplace add anthropics/claude-code
+```
+
 ## Configure team marketplaces
 
 Set up automatic marketplace installation for team projects by specifying required marketplaces in `.claude/settings.json`:
@@ -160,7 +168,9 @@ Create `.claude-plugin/marketplace.json` in your repository root:
 ### Plugin entries
 
 <Note>
-  Plugin entries are based on the *plugin manifest schema* (with all fields made optional) plus marketplace-specific fields (`source`, `category`, `tags`, `strict`), with `name` being required.
+  Plugin entries are based on the *plugin manifest schema* (with all fields made
+  optional) plus marketplace-specific fields (`source`, `category`, `tags`,
+  `strict`), with `name` being required.
 </Note>
 
 **Required fields:**
@@ -181,7 +191,7 @@ Create `.claude-plugin/marketplace.json` in your repository root:
 | `author`      | object  | Plugin author information                                         |
 | `homepage`    | string  | Plugin homepage or documentation URL                              |
 | `repository`  | string  | Source code repository URL                                        |
-| `license`     | string  | SPDX license identifier (e.g., MIT, Apache-2.0)                   |
+| `license`     | string  | SPDX license identifier (for example, MIT, Apache-2.0)            |
 | `keywords`    | array   | Tags for plugin discovery and categorization                      |
 | `category`    | string  | Plugin category for organization                                  |
 | `tags`        | array   | Tags for searchability                                            |
@@ -237,7 +247,7 @@ For plugins in the same repository:
 
 #### Advanced plugin entries
 
-Plugin entries can override default component locations and provide additional metadata. Note that `${CLAUDE_PLUGIN_ROOT}` is an environment variable that resolves to the plugin's installation directory (for details see [Environment variables](/en/docs/claude-code/plugins-reference#environment-variables)):
+Plugin entries can override default component locations and provide additional metadata. Note that `${CLAUDE_PLUGIN_ROOT}` is an environment variable that resolves to the plugin's installation directory (for details see [Environment variables](/en/plugins-reference#environment-variables)):
 
 ```json  theme={null}
 {
@@ -262,15 +272,17 @@ Plugin entries can override default component locations and provide additional m
     "./commands/enterprise/",
     "./commands/experimental/preview.md"
   ],
-  "agents": [
-    "./agents/security-reviewer.md",
-    "./agents/compliance-checker.md"
-  ],
+  "agents": ["./agents/security-reviewer.md", "./agents/compliance-checker.md"],
   "hooks": {
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
-        "hooks": [{"type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate.sh"}]
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/validate.sh"
+          }
+        ]
       }
     ]
   },
@@ -285,7 +297,13 @@ Plugin entries can override default component locations and provide additional m
 ```
 
 <Note>
-  **Schema relationship**: Plugin entries use the plugin manifest schema with all fields made optional, plus marketplace-specific fields (`source`, `strict`, `category`, `tags`). This means any field valid in a `plugin.json` file can also be used in a marketplace entry. When `strict: false`, the marketplace entry serves as the complete plugin manifest if no `plugin.json` exists. When `strict: true` (default), marketplace fields supplement the plugin's own manifest file.
+  **Schema relationship**: Plugin entries use the plugin manifest schema with
+  all fields made optional, plus marketplace-specific fields (`source`,
+  `strict`, `category`, `tags`). This means any field valid in a `plugin.json`
+  file can also be used in a marketplace entry. When `strict: false`, the
+  marketplace entry serves as the complete plugin manifest if no `plugin.json`
+  exists. When `strict: true` (default), marketplace fields supplement the
+  plugin's own manifest file.
 </Note>
 
 ***
@@ -400,7 +418,7 @@ claude plugin validate .
 /plugin install test-plugin@marketplace-name
 ```
 
-For complete plugin testing workflows, see [Test your plugins locally](/en/docs/claude-code/plugins#test-your-plugins-locally). For technical troubleshooting, see [Plugins reference](/en/docs/claude-code/plugins-reference).
+For complete plugin testing workflows, see [Test your plugins locally](/en/plugins#test-your-plugins-locally). For technical troubleshooting, see [Plugins reference](/en/plugins-reference).
 
 ***
 
@@ -427,7 +445,12 @@ For complete plugin testing workflows, see [Test your plugins locally](/en/docs/
 
 ## See also
 
-* [Plugins](/en/docs/claude-code/plugins) - Installing and using plugins
-* [Plugins reference](/en/docs/claude-code/plugins-reference) - Complete technical specifications and schemas
-* [Plugin development](/en/docs/claude-code/plugins#develop-more-complex-plugins) - Creating your own plugins
-* [Settings](/en/docs/claude-code/settings#plugin-configuration) - Plugin configuration options
+* [Plugins](/en/plugins) - Installing and using plugins
+* [Plugins reference](/en/plugins-reference) - Complete technical specifications and schemas
+* [Plugin development](/en/plugins#develop-more-complex-plugins) - Creating your own plugins
+* [Settings](/en/settings#plugin-configuration) - Plugin configuration options
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

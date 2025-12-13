@@ -7,7 +7,7 @@ This guide shows you how to create, use, and manage Agent Skills in Claude Code.
 ## Prerequisites
 
 * Claude Code version 1.0 or later
-* Basic familiarity with [Claude Code](/en/docs/claude-code/quickstart)
+* Basic familiarity with [Claude Code](/en/quickstart)
 
 ## What are Agent Skills?
 
@@ -22,7 +22,7 @@ Agent Skills package expertise into discoverable capabilities. Each Skill consis
 * Reduce repetitive prompting
 * Compose multiple Skills for complex tasks
 
-Learn more in the [Agent Skills overview](/en/docs/agents-and-tools/agent-skills/overview).
+Learn more in the [Agent Skills overview](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview).
 
 <Note>
   For a deep dive into the architecture and real-world applications of Agent Skills, read our engineering blog: [Equipping agents for the real world with Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills).
@@ -64,7 +64,7 @@ Project Skills are checked into git and automatically available to team members.
 
 ### Plugin Skills
 
-Skills can also come from [Claude Code plugins](/en/docs/claude-code/plugins). Plugins may bundle Skills that are automatically available when the plugin is installed. These Skills work the same way as personal and project Skills.
+Skills can also come from [Claude Code plugins](/en/plugins). Plugins may bundle Skills that are automatically available when the plugin is installed. These Skills work the same way as personal and project Skills.
 
 ## Write SKILL.md
 
@@ -72,7 +72,7 @@ Create a `SKILL.md` file with YAML frontmatter and Markdown content:
 
 ```yaml  theme={null}
 ---
-name: Your Skill Name
+name: your-skill-name
 description: Brief description of what this Skill does and when to use it
 ---
 
@@ -85,9 +85,14 @@ Provide clear, step-by-step guidance for Claude.
 Show concrete examples of using this Skill.
 ```
 
+**Field requirements**:
+
+* `name`: Must use lowercase letters, numbers, and hyphens only (max 64 characters)
+* `description`: Brief description of what the Skill does and when to use it (max 1024 characters)
+
 The `description` field is critical for Claude to discover when to use your Skill. It should include both what the Skill does and when Claude should use it.
 
-See the [best practices guide](/en/docs/agents-and-tools/agent-skills/best-practices) for complete authoring guidance.
+See the [best practices guide](https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices) for complete authoring guidance including validation rules.
 
 ## Add supporting files
 
@@ -123,7 +128,7 @@ Use the `allowed-tools` frontmatter field to limit which tools Claude can use wh
 
 ```yaml  theme={null}
 ---
-name: Safe File Reader
+name: safe-file-reader
 description: Read files without making changes. Use when you need read-only file access.
 allowed-tools: Read, Grep, Glob
 ---
@@ -141,10 +146,10 @@ This Skill provides read-only file access.
 When this Skill is active, Claude can only use the specified tools (Read, Grep, Glob) without needing to ask for permission. This is useful for:
 
 * Read-only Skills that shouldn't modify files
-* Skills with limited scope (e.g., only data analysis, no file writing)
+* Skills with limited scope: for example, only data analysis, no file writing
 * Security-sensitive workflows where you want to restrict capabilities
 
-If `allowed-tools` is not specified, Claude will ask for permission to use tools as normal, following the standard permission model.
+If `allowed-tools` isn't specified, Claude will ask for permission to use tools as normal, following the standard permission model.
 
 <Note>
   `allowed-tools` is only supported for Skills in Claude Code.
@@ -256,7 +261,7 @@ claude --debug
 
 ## Share Skills with your team
 
-**Recommended approach**: Distribute Skills through [plugins](/en/docs/claude-code/plugins).
+**Recommended approach**: Distribute Skills through [plugins](/en/plugins).
 
 To share Skills via plugin:
 
@@ -264,7 +269,7 @@ To share Skills via plugin:
 2. Add the plugin to a marketplace
 3. Team members install the plugin
 
-For complete instructions, see [Add Skills to your plugin](/en/docs/claude-code/plugins#add-skills-to-your-plugin).
+For complete instructions, see [Add Skills to your plugin](/en/plugins#add-skills-to-your-plugin).
 
 You can also share Skills directly through project repositories:
 
@@ -481,7 +486,7 @@ commit-helper/
 
 ```yaml  theme={null}
 ---
-name: Generating Commit Messages
+name: generating-commit-messages
 description: Generates clear commit messages from git diffs. Use when writing commit messages or reviewing staged changes.
 ---
 
@@ -510,7 +515,7 @@ code-reviewer/
 
 ```yaml  theme={null}
 ---
-name: Code Reviewer
+name: code-reviewer
 description: Review code for best practices and potential issues. Use when reviewing code, checking PRs, or analyzing code quality.
 allowed-tools: Read, Grep, Glob
 ---
@@ -549,7 +554,7 @@ pdf-processing/
 
 ````yaml  theme={null}
 ---
-name: PDF Processing
+name: pdf-processing
 description: Extract text, fill forms, merge PDFs. Use when working with PDF files, forms, or document extraction. Requires pypdf and pdfplumber packages.
 ---
 
@@ -584,15 +589,24 @@ Claude loads additional files only when needed.
 ## Next steps
 
 <CardGroup cols={2}>
-  <Card title="Authoring best practices" icon="lightbulb" href="/en/docs/agents-and-tools/agent-skills/best-practices">
+  <Card title="Authoring best practices" icon="lightbulb" href="https://docs.claude.com/en/docs/agents-and-tools/agent-skills/best-practices">
     Write Skills that Claude can use effectively
   </Card>
 
-  <Card title="Agent Skills overview" icon="book" href="/en/docs/agents-and-tools/agent-skills/overview">
+  <Card title="Agent Skills overview" icon="book" href="https://docs.claude.com/en/docs/agents-and-tools/agent-skills/overview">
     Learn how Skills work across Claude products
   </Card>
 
-  <Card title="Get started with Agent Skills" icon="rocket" href="/en/docs/agents-and-tools/agent-skills/quickstart">
+  <Card title="Use Skills in the Agent SDK" icon="cube" href="https://docs.claude.com/en/docs/agent-sdk/skills">
+    Use Skills programmatically with TypeScript and Python
+  </Card>
+
+  <Card title="Get started with Agent Skills" icon="rocket" href="https://docs.claude.com/en/docs/agents-and-tools/agent-skills/quickstart">
     Create your first Skill
   </Card>
 </CardGroup>
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

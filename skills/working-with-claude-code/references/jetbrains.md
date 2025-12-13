@@ -20,7 +20,7 @@ The Claude Code plugin works with most JetBrains IDEs, including:
 * **Quick launch**: Use `Cmd+Esc` (Mac) or `Ctrl+Esc` (Windows/Linux) to open Claude Code directly from your editor, or click the Claude Code button in the UI
 * **Diff viewing**: Code changes can be displayed directly in the IDE diff viewer instead of the terminal
 * **Selection context**: The current selection/tab in the IDE is automatically shared with Claude Code
-* **File reference shortcuts**: Use `Cmd+Option+K` (Mac) or `Alt+Ctrl+K` (Linux/Windows) to insert file references (e.g., @File#L1-99)
+* **File reference shortcuts**: Use `Cmd+Option+K` (Mac) or `Alt+Ctrl+K` (Linux/Windows) to insert file references (for example, @File#L1-99)
 * **Diagnostic sharing**: Diagnostic errors (lint, syntax, etc.) from the IDE are automatically shared with Claude as you work
 
 ## Installation
@@ -29,12 +29,10 @@ The Claude Code plugin works with most JetBrains IDEs, including:
 
 Find and install the [Claude Code plugin](https://plugins.jetbrains.com/plugin/27310-claude-code-beta-) from the JetBrains marketplace and restart your IDE.
 
-### Auto-Installation
-
-The plugin may also be auto-installed when you run `claude` in the integrated terminal. The IDE must be restarted completely to take effect.
+If you haven't installed Claude Code yet, see [our quickstart guide](/en/quickstart) for installation instructions.
 
 <Note>
-  After installing the plugin, you must restart your IDE completely for it to take effect. You may need to restart multiple times.
+  After installing the plugin, you may need to restart your IDE completely for it to take effect.
 </Note>
 
 ## Usage
@@ -70,7 +68,7 @@ Configure the Claude Code plugin by going to **Settings → Tools → Claude Cod
 
 #### General Settings
 
-* **Claude command**: Specify a custom command to run Claude (e.g., `claude`, `/usr/local/bin/claude`, or `npx @anthropic/claude`)
+* **Claude command**: Specify a custom command to run Claude (for example, `claude`, `/usr/local/bin/claude`, or `npx @anthropic/claude`)
 * **Suppress notification for Claude command not found**: Skip notifications about not finding the Claude command
 * **Enable using Option+Enter for multi-line prompts** (macOS only): When enabled, Option+Enter inserts new lines in Claude Code prompts. Disable if experiencing issues with the Option key being captured unexpectedly (requires terminal restart)
 * **Enable automatic updates**: Automatically check for and install plugin updates (applied on restart)
@@ -104,7 +102,7 @@ The plugin must be installed on the remote host, not on your local client machin
 ### WSL Configuration
 
 <Warning>
-  WSL users may need additional configuration for IDE detection to work properly. See our [WSL troubleshooting guide](/en/docs/claude-code/troubleshooting#jetbrains-ide-not-detected-on-wsl2) for detailed setup instructions.
+  WSL users may need additional configuration for IDE detection to work properly. See our [WSL troubleshooting guide](/en/troubleshooting#jetbrains-ide-not-detected-on-wsl2) for detailed setup instructions.
 </Warning>
 
 WSL configuration may require:
@@ -127,7 +125,7 @@ WSL configuration may require:
 * Verify the plugin is installed and enabled
 * Restart the IDE completely
 * Check that you're running Claude Code from the integrated terminal
-* For WSL users, see the [WSL troubleshooting guide](/en/docs/claude-code/troubleshooting#jetbrains-ide-not-detected-on-wsl2)
+* For WSL users, see the [WSL troubleshooting guide](/en/troubleshooting#jetbrains-ide-not-detected-on-wsl2)
 
 ### Command Not Found
 
@@ -147,4 +145,9 @@ When running in JetBrains IDEs, consider:
 * Taking extra care to ensure Claude is only used with trusted prompts
 * Being aware of which files Claude Code has access to modify
 
-For additional help, see our [troubleshooting guide](/en/docs/claude-code/troubleshooting).
+For additional help, see our [troubleshooting guide](/en/troubleshooting).
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt
