@@ -33,7 +33,7 @@ Headless mode leverages all the CLI options available in Claude Code. Here are t
 | `--mcp-config`             | Load MCP servers from a JSON file                                                                      | `claude --mcp-config servers.json`                                                                                        |
 | `--permission-prompt-tool` | MCP tool for handling permission prompts (only with `--print`)                                         | `claude --permission-prompt-tool mcp__auth__prompt`                                                                       |
 
-For a complete list of CLI options and features, see the [CLI reference](/en/docs/claude-code/cli-reference) documentation.
+For a complete list of CLI options and features, see the [CLI reference](/en/cli-reference) documentation.
 
 ## Multi-turn conversations
 
@@ -109,7 +109,7 @@ echo "Explain this code" | claude -p
 
 A stream of messages provided via `stdin` where each message represents a user turn. This allows multiple turns of a conversation without re-launching the `claude` binary and allows providing guidance to the model while it is processing a request.
 
-Each message is a JSON 'User message' object, following the same format as the output message schema. Messages are formatted using the [jsonl](https://jsonlines.org/) format where each line of input is a complete JSON object. Streaming JSON input requires `-p` and `--output-format stream-json`.
+Each message is a JSON 'User message' object, following the same format as the output message schema. Messages are formatted using the [`jsonl`](https://jsonlines.org/) format where each line of input is a complete JSON object. Streaming JSON input requires `-p` and `--output-format stream-json`.
 
 ```bash  theme={null}
 echo '{"type":"user","message":{"role":"user","content":[{"type":"text","text":"Explain this code"}]}}' | claude -p --output-format=stream-json --input-format=stream-json --verbose
@@ -200,5 +200,10 @@ claude -p --resume "$session_id" "Generate executive summary of risks"
 
 ## Related Resources
 
-* [CLI usage and controls](/en/docs/claude-code/cli-reference) - Complete CLI documentation
-* [Common workflows](/en/docs/claude-code/common-workflows) - Step-by-step guides for common use cases
+* [CLI usage and controls](/en/cli-reference) - Complete CLI documentation
+* [Common workflows](/en/common-workflows) - Step-by-step guides for common use cases
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt
