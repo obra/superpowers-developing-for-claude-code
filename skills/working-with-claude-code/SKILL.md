@@ -89,7 +89,7 @@ references/
 ├── terminal-config.md       # Claude Code works best when your terminal is properly configured. Follow these guidelines to optimize your experience.
 ├── third-party-integrations.md# Learn how Claude Code can integrate with various third-party services and infrastructure to meet enterprise deployment requirements.
 ├── troubleshooting.md       # Discover solutions to common issues with Claude Code installation and usage.
-└── vs-code.md               # Use Claude Code with Visual Studio Code through the native extension or CLI integration
+└── vs-code.md               # Install and configure the Claude Code extension for VS Code. Get AI coding assistance with inline diffs, @-mentions, plan review, and keyboard shortcuts.
 ```
 <!-- tree-end -->
 
