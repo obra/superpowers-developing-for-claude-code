@@ -46,6 +46,7 @@ references/
 ├── analytics.md             # View detailed usage insights and productivity metrics for your organization's Claude Code deployment.
 ├── azure-ai-foundry.md      # Learn about configuring Claude Code through Azure AI Foundry, including setup, configuration, and troubleshooting.
 ├── checkpointing.md         # Automatically track and rewind Claude's edits to quickly recover from unwanted changes.
+├── chrome.md                # Connect Claude Code to your browser to test web apps, debug with console logs, and automate browser tasks.
 ├── claude-code-on-the-web.md# Run Claude Code tasks asynchronously on secure cloud infrastructure
 ├── cli-reference.md         # Complete reference for Claude Code command-line interface, including commands and flags.
 ├── common-workflows.md      # Learn about common workflows with Claude Code.
