@@ -54,10 +54,11 @@ references/
 ├── data-usage.md            # Learn about Anthropic's data usage policies for Claude
 ├── desktop.md               # Run Claude Code tasks locally or on secure cloud infrastructure with the Claude desktop app
 ├── devcontainer.md          # Learn about the Claude Code development container for teams that need consistent, secure environments.
+├── discover-plugins.md      # Find and install plugins from marketplaces to extend Claude Code with new commands, agents, and capabilities.
 ├── github-actions.md        # Learn about integrating Claude Code into your development workflow with Claude Code GitHub Actions
 ├── gitlab-ci-cd.md          # Learn about integrating Claude Code into your development workflow with GitLab CI/CD
 ├── google-vertex-ai.md      # Learn about configuring Claude Code through Google Vertex AI, including setup, IAM configuration, and troubleshooting.
-├── headless.md              # Run Claude Code programmatically without interactive UI
+├── headless.md              # Use the Agent SDK to run Claude Code programmatically from the CLI, Python, or TypeScript.
 ├── hooks-guide.md           # Learn how to customize and extend Claude Code's behavior by registering shell commands
 ├── hooks.md                 # This page provides reference documentation for implementing hooks in Claude Code.
 ├── iam.md                   # Learn how to configure user authentication, authorization, and access controls for Claude Code in your organization.
@@ -74,9 +75,9 @@ references/
 ├── network-config.md        # Configure Claude Code for enterprise environments with proxy servers, custom Certificate Authorities (CA), and mutual Transport Layer Security (mTLS) authentication.
 ├── output-styles.md         # Adapt Claude Code for uses beyond software engineering
 ├── overview.md              # Learn about Claude Code, Anthropic's agentic coding tool that lives in your terminal and helps you turn ideas into code faster than ever before.
-├── plugin-marketplaces.md   # Create and manage plugin marketplaces to distribute Claude Code extensions across teams and communities.
+├── plugin-marketplaces.md   # Build and host plugin marketplaces to distribute Claude Code extensions across teams and communities.
 ├── plugins-reference.md     # Complete technical reference for Claude Code plugin system, including schemas, CLI commands, and component specifications.
-├── plugins.md               # Extend Claude Code with custom commands, agents, hooks, Skills, and MCP servers through the plugin system.
+├── plugins.md               # Create custom plugins to extend Claude Code with slash commands, agents, hooks, Skills, and MCP servers.
 ├── quickstart.md            # Welcome to Claude Code!
 ├── sandboxing.md            # Learn how Claude Code's sandboxed bash tool provides filesystem and network isolation for safer, more autonomous agent execution.
 ├── security.md              # Learn about Claude Code's security safeguards and best practices for safe usage.
