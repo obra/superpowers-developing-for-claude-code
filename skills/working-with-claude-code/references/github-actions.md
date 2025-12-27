@@ -6,10 +6,14 @@ Claude Code GitHub Actions brings AI-powered automation to your GitHub workflow.
 
 <Note>
   Claude Code GitHub Actions is built on top of the [Claude Code
-  SDK](/en/docs/claude-code/sdk), which enables programmatic integration of
+  SDK](https://docs.claude.com/en/docs/agent-sdk), which enables programmatic integration of
   Claude Code into your applications. You can use the SDK to build custom
   automation workflows beyond GitHub Actions.
 </Note>
+
+<Info>
+  **Claude Opus 4.5 is now available.** Claude Code GitHub Actions default to Sonnet. To use Opus 4.5, configure the [model parameter](#breaking-changes-reference) to use `claude-opus-4-5-20251101`.
+</Info>
 
 ## Why use Claude Code GitHub Actions?
 
@@ -63,8 +67,7 @@ If the `/install-github-app` command fails or you prefer manual setup, please fo
 3. **Copy the workflow file** from [examples/claude.yml](https://github.com/anthropics/claude-code-action/blob/main/examples/claude.yml) into your repository's `.github/workflows/`
 
 <Tip>
-  After completing either the quickstart or manual setup, test the action by
-  tagging `@claude` in an issue or PR comment!
+  After completing either the quickstart or manual setup, test the action by tagging `@claude` in an issue or PR comment.
 </Tip>
 
 ## Upgrading from Beta
@@ -110,7 +113,7 @@ All beta users must make these changes to their workflow files in order to upgra
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
     custom_instructions: "Follow our coding standards"
     max_turns: "10"
-    model: "claude-3-5-sonnet-20241022"
+    model: "claude-sonnet-4-5-20250929"
 ```
 
 **GA version (v1.0):**
@@ -186,7 +189,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: "Generate a summary of yesterday's commits and open issues"
-          claude_args: "--model claude-opus-4-1-20250805"
+          claude_args: "--model claude-opus-4-5-20251101"
 ```
 
 ### Common use cases
@@ -209,7 +212,7 @@ Create a `CLAUDE.md` file in your repository root to define code style guideline
 
 ### Security considerations
 
-<Warning>Never commit API keys directly to your repository!</Warning>
+<Warning>Never commit API keys directly to your repository.</Warning>
 
 For comprehensive security guidance including permissions, authentication, and best practices, see the [Claude Code Action security documentation](https://github.com/anthropics/claude-code-action/blob/main/docs/security.md).
 
@@ -220,7 +223,7 @@ Always use GitHub Secrets for API keys:
 * Limit action permissions to only what's necessary
 * Review Claude's suggestions before merging
 
-Always use GitHub Secrets (e.g., `${{ secrets.ANTHROPIC_API_KEY }}`) rather than hardcoding API keys directly in your workflow files.
+Always use GitHub Secrets (for example, `${{ secrets.ANTHROPIC_API_KEY }}`) rather than hardcoding API keys directly in your workflow files.
 
 ### Optimizing performance
 
@@ -633,7 +636,7 @@ The Claude Code Action v1 uses a simplified configuration:
 \*Prompt is optional - when omitted for issue/PR comments, Claude responds to trigger phrase\
 \*\*Required for direct Claude API, not for Bedrock/Vertex
 
-#### Using claude\_args
+#### Pass CLI arguments
 
 The `claude_args` parameter accepts any Claude Code CLI arguments:
 
@@ -644,7 +647,7 @@ claude_args: "--max-turns 5 --model claude-sonnet-4-5-20250929 --mcp-config /pat
 Common arguments:
 
 * `--max-turns`: Maximum conversation turns (default: 10)
-* `--model`: Model to use (e.g., `claude-sonnet-4-5-20250929`)
+* `--model`: Model to use (for example, `claude-sonnet-4-5-20250929`)
 * `--mcp-config`: Path to MCP configuration
 * `--allowed-tools`: Comma-separated list of allowed tools
 * `--debug`: Enable debug output
@@ -663,7 +666,12 @@ See the [Claude Code Action documentation](https://github.com/anthropics/claude-
 
 You can configure Claude's behavior in two ways:
 
-1. **CLAUDE.md**: Define coding standards, review criteria, and project-specific rules in a `CLAUDE.md` file at the root of your repository. Claude will follow these guidelines when creating PRs and responding to requests. Check out our [Memory documentation](/en/docs/claude-code/memory) for more details.
+1. **CLAUDE.md**: Define coding standards, review criteria, and project-specific rules in a `CLAUDE.md` file at the root of your repository. Claude will follow these guidelines when creating PRs and responding to requests. Check out our [Memory documentation](/en/memory) for more details.
 2. **Custom prompts**: Use the `prompt` parameter in the workflow file to provide workflow-specific instructions. This allows you to customize Claude's behavior for different workflows or tasks.
 
 Claude will follow these guidelines when creating PRs and responding to requests.
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

@@ -1,0 +1,68 @@
+name: Update Claude Code Documentation
+
+on:
+  # Run every 24 hours at 2:00 AM UTC
+  schedule:
+    - cron: '0 2 * * *'
+
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Use the default GITHUB_TOKEN for authentication
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run documentation updater
+        run: |
+          cd skills/working-with-claude-code
+          node scripts/update_docs.js
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status -s) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in documentation files"
+            # Capture changed files BEFORE commit
+            git diff --name-only skills/working-with-claude-code/references/ > /tmp/changed_files.txt
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected"
+          fi
+
+      - name: Update SKILL.md file tree
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          cd skills/working-with-claude-code
+          node scripts/update_skill_tree.js
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add skills/working-with-claude-code/references/ skills/working-with-claude-code/SKILL.md
+
+          # Build commit message with list of changed files
+          CHANGED_FILES=$(cat /tmp/changed_files.txt | sed 's|skills/working-with-claude-code/references/|- |' || echo "- None")
+
+          git commit -m "Update Claude Code documentation (automated)
+
+          Documentation updated by scheduled workflow on $(date -u +'%Y-%m-%d %H:%M:%S UTC')
+
+          Updated files:
+          $CHANGED_FILES
+          "
+          git push

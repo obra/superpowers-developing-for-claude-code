@@ -14,43 +14,43 @@ Make sure you have:
 
 ## Step 1: Install Claude Code
 
-### NPM Install
+To install Claude Code, use one of the following methods:
 
-If you have [Node.js 18 or newer installed](https://nodejs.org/en/download/):
+<Tabs>
+  <Tab title="Native Install (Recommended)">
+    **macOS, Linux, WSL:**
 
-```sh  theme={null}
-npm install -g @anthropic-ai/claude-code
-```
+    ```bash  theme={null}
+    curl -fsSL https://claude.ai/install.sh | bash
+    ```
 
-### Native Install
+    **Windows PowerShell:**
 
-<Tip>
-  Alternatively, try our new native install, now in beta.
-</Tip>
+    ```powershell  theme={null}
+    irm https://claude.ai/install.ps1 | iex
+    ```
 
-**Homebrew (macOS, Linux):**
+    **Windows CMD:**
 
-```sh  theme={null}
-brew install --cask claude-code
-```
+    ```batch  theme={null}
+    curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
+    ```
+  </Tab>
 
-**macOS, Linux, WSL:**
+  <Tab title="Homebrew">
+    ```sh  theme={null}
+    brew install --cask claude-code
+    ```
+  </Tab>
 
-```bash  theme={null}
-curl -fsSL https://claude.ai/install.sh | bash
-```
+  <Tab title="NPM">
+    If you have [Node.js 18 or newer installed](https://nodejs.org/en/download/):
 
-**Windows PowerShell:**
-
-```powershell  theme={null}
-irm https://claude.ai/install.ps1 | iex
-```
-
-**Windows CMD:**
-
-```batch  theme={null}
-curl -fsSL https://claude.ai/install.cmd -o install.cmd && install.cmd && del install.cmd
-```
+    ```sh  theme={null}
+    npm install -g @anthropic-ai/claude-code
+    ```
+  </Tab>
+</Tabs>
 
 ## Step 2: Log in to your account
 
@@ -93,7 +93,7 @@ claude
 You'll see the Claude Code welcome screen with your session information, recent conversations, and latest updates. Type `/help` for available commands or `/resume` to continue a previous conversation.
 
 <Tip>
-  After logging in (Step 2), your credentials are stored on your system. Learn more in [Credential Management](/en/docs/claude-code/iam#credential-management).
+  After logging in (Step 2), your credentials are stored on your system. Learn more in [Credential Management](/en/iam#credential-management).
 </Tip>
 
 ## Step 4: Ask your first question
@@ -252,7 +252,7 @@ Here are the most important commands for daily use:
 | `/help`             | Show available commands           | `> /help`                           |
 | `exit` or Ctrl+C    | Exit Claude Code                  | `> exit`                            |
 
-See the [CLI reference](/en/docs/claude-code/cli-reference) for a complete list of commands.
+See the [CLI reference](/en/cli-reference) for a complete list of commands.
 
 ## Pro tips for beginners
 
@@ -304,16 +304,24 @@ See the [CLI reference](/en/docs/claude-code/cli-reference) for a complete list 
 Now that you've learned the basics, explore more advanced features:
 
 <CardGroup cols={3}>
-  <Card title="Common workflows" icon="graduation-cap" href="/en/docs/claude-code/common-workflows">
+  <Card title="Common workflows" icon="graduation-cap" href="/en/common-workflows">
     Step-by-step guides for common tasks
   </Card>
 
-  <Card title="CLI reference" icon="terminal" href="/en/docs/claude-code/cli-reference">
+  <Card title="CLI reference" icon="terminal" href="/en/cli-reference">
     Master all commands and options
   </Card>
 
-  <Card title="Configuration" icon="gear" href="/en/docs/claude-code/settings">
+  <Card title="Configuration" icon="gear" href="/en/settings">
     Customize Claude Code for your workflow
+  </Card>
+
+  <Card title="Claude Code on the web" icon="cloud" href="/en/claude-code-on-the-web">
+    Run tasks asynchronously in the cloud
+  </Card>
+
+  <Card title="About Claude Code" icon="sparkles" href="https://claude.com/product/claude-code">
+    Learn more on claude.com
   </Card>
 </CardGroup>
 
@@ -322,3 +330,8 @@ Now that you've learned the basics, explore more advanced features:
 * **In Claude Code**: Type `/help` or ask "how do I..."
 * **Documentation**: You're here! Browse other guides
 * **Community**: Join our [Discord](https://www.anthropic.com/discord) for tips and support
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

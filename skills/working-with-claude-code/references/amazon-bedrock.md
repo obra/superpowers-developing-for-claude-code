@@ -7,20 +7,20 @@
 Before configuring Claude Code with Bedrock, ensure you have:
 
 * An AWS account with Bedrock access enabled
-* Access to desired Claude models (e.g., Claude Sonnet 4.5) in Bedrock
+* Access to desired Claude models (for example, Claude Sonnet 4.5) in Bedrock
 * AWS CLI installed and configured (optional - only needed if you don't have another mechanism for getting credentials)
 * Appropriate IAM permissions
 
 ## Setup
 
-### 1. Enable model access
+### 1. Submit use case details
 
-First, ensure you have access to the required Claude models in your AWS account:
+First-time users of Anthropic models are required to submit use case details before invoking a model. This is done once per account.
 
-1. Navigate to the [Amazon Bedrock console](https://console.aws.amazon.com/bedrock/)
-2. Go to **Model access** in the left navigation
-3. Request access to desired Claude models (e.g., Claude Sonnet 4.5)
-4. Wait for approval (usually instant for most regions)
+1. Ensure you have the right IAM permissions (see more on that below)
+2. Navigate to the [Amazon Bedrock console](https://console.aws.amazon.com/bedrock/)
+3. Select **Chat/Text playground**
+4. Choose any Anthropic model and you will be prompted to fill out the use case form
 
 ### 2. Configure AWS credentials
 
@@ -48,7 +48,15 @@ aws sso login --profile=<your-profile-name>
 export AWS_PROFILE=your-profile-name
 ```
 
-**Option D: Bedrock API keys**
+**Option D: AWS Management Console credentials**
+
+```bash  theme={null}
+aws login
+```
+
+[Learn more](https://docs.aws.amazon.com/signin/latest/userguide/command-line-sign-in.html) about `aws login`.
+
+**Option E: Bedrock API keys**
 
 ```bash  theme={null}
 export AWS_BEARER_TOKEN_BEDROCK=your-bedrock-api-key
@@ -58,7 +66,7 @@ Bedrock API keys provide a simpler authentication method without needing full AW
 
 #### Advanced credential configuration
 
-Claude Code supports automatic credential refresh for AWS SSO and corporate identity providers. Add these settings to your Claude Code settings file (see [Settings](/en/docs/claude-code/settings) for file locations).
+Claude Code supports automatic credential refresh for AWS SSO and corporate identity providers. Add these settings to your Claude Code settings file (see [Settings](/en/settings) for file locations).
 
 When Claude Code detects that your AWS credentials are expired (either locally based on their timestamp or when Bedrock returns a credential error), it will automatically run your configured `awsAuthRefresh` and/or `awsCredentialExport` commands to obtain new credentials before retrying the request.
 
@@ -75,9 +83,9 @@ When Claude Code detects that your AWS credentials are expired (either locally b
 
 ##### Configuration settings explained
 
-**`awsAuthRefresh`**: Use this for commands that modify the `.aws` directory (e.g., updating credentials, SSO cache, or config files). Output is shown to the user (but user input is not supported), making it suitable for browser-based authentication flows where the CLI displays a code to enter in the browser.
+**`awsAuthRefresh`**: Use this for commands that modify the `.aws` directory, such as updating credentials, SSO cache, or config files. The command's output is displayed to the user, but interactive input isn't supported. This works well for browser-based SSO flows where the CLI displays a URL or code and you complete authentication in the browser.
 
-**`awsCredentialExport`**: Only use this if you cannot modify `.aws` and must directly return credentials. Output is captured silently (not shown to the user). The command must output JSON in this format:
+**`awsCredentialExport`**: Only use this if you can't modify `.aws` and must directly return credentials. Output is captured silently and not shown to the user. The command must output JSON in this format:
 
 ```json  theme={null}
 {
@@ -106,7 +114,7 @@ When enabling Bedrock for Claude Code, keep the following in mind:
 
 * `AWS_REGION` is a required environment variable. Claude Code does not read from the `.aws` config file for this setting.
 * When using Bedrock, the `/login` and `/logout` commands are disabled since authentication is handled through AWS credentials.
-* You can use settings files for environment variables like `AWS_PROFILE` that you don't want to leak to other processes. See [Settings](/en/docs/claude-code/settings) for more information.
+* You can use settings files for environment variables like `AWS_PROFILE` that you don't want to leak to other processes. See [Settings](/en/settings) for more information.
 
 ### 4. Model configuration
 
@@ -118,7 +126,7 @@ Claude Code uses these default models for Bedrock:
 | Small/fast model | `us.anthropic.claude-haiku-4-5-20251001-v1:0`      |
 
 <Note>
-  For Bedrock users, Claude Code will not automatically upgrade from Haiku 3.5 to Haiku 4.5. To manually switch to a newer Haiku model, set the `ANTHROPIC_DEFAULT_HAIKU_MODEL` environment variable to the full model name (e.g., `us.anthropic.claude-haiku-4-5-20251001-v1:0`).
+  For Bedrock users, Claude Code won't automatically upgrade from Haiku 3.5 to Haiku 4.5. To manually switch to a newer Haiku model, set the `ANTHROPIC_DEFAULT_HAIKU_MODEL` environment variable to the full model name (for example, `us.anthropic.claude-haiku-4-5-20251001-v1:0`).
 </Note>
 
 To customize models, use one of these methods:
@@ -135,13 +143,11 @@ export ANTHROPIC_MODEL='arn:aws:bedrock:us-east-2:your-account-id:application-in
 export DISABLE_PROMPT_CACHING=1
 ```
 
-<Note>
-  [Prompt caching](/en/docs/build-with-claude/prompt-caching) may not be available in all regions
-</Note>
+<Note>[Prompt caching](https://docs.claude.com/en/docs/build-with-claude/prompt-caching) may not be available in all regions.</Note>
 
 ### 5. Output token configuration
 
-When using Claude Code with Amazon Bedrock, we recommend the following token settings:
+These are the recommended token settings for Claude Code with Amazon Bedrock:
 
 ```bash  theme={null}
 # Recommended output token settings for Bedrock
@@ -151,7 +157,7 @@ export MAX_THINKING_TOKENS=1024
 
 **Why these values:**
 
-* **`CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096`**: Bedrock's burndown throttling logic sets a minimum of 4096 tokens as the max\_token penalty. Setting this lower won't reduce costs but may cut off long tool uses, causing the Claude Code agent loop to fail persistently. Claude Code typically uses less than 4096 output tokens without extended thinking, but may need this headroom for tasks involving significant file creation or Write tool usage.
+* **`CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096`**: Bedrock's burndown throttling logic sets a minimum of 4096 tokens as the `max_token` penalty. Setting this lower won't reduce costs but may cut off long tool uses, causing the Claude Code agent loop to fail persistently. Claude Code typically uses less than 4096 output tokens without extended thinking, but may need this headroom for tasks involving significant file creation or Write tool usage.
 
 * **`MAX_THINKING_TOKENS=1024`**: This provides space for extended thinking without cutting off tool use responses, while still maintaining focused reasoning chains. This balance helps prevent trajectory changes that aren't always helpful for coding tasks specifically.
 
@@ -164,6 +170,7 @@ Create an IAM policy with the required permissions for Claude Code:
   "Version": "2012-10-17",
   "Statement": [
     {
+      "Sid": "AllowModelAndInferenceProfileAccess",
       "Effect": "Allow",
       "Action": [
         "bedrock:InvokeModel",
@@ -172,8 +179,23 @@ Create an IAM policy with the required permissions for Claude Code:
       ],
       "Resource": [
         "arn:aws:bedrock:*:*:inference-profile/*",
-        "arn:aws:bedrock:*:*:application-inference-profile/*"
+        "arn:aws:bedrock:*:*:application-inference-profile/*",
+        "arn:aws:bedrock:*:*:foundation-model/*"
       ]
+    },
+    {
+      "Sid": "AllowMarketplaceSubscription",
+      "Effect": "Allow",
+      "Action": [
+        "aws-marketplace:ViewSubscriptions",
+        "aws-marketplace:Subscribe"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:CalledViaLast": "bedrock.amazonaws.com"
+        }
+      }
     }
   ]
 }
@@ -207,3 +229,8 @@ Claude Code uses the Bedrock [Invoke API](https://docs.aws.amazon.com/bedrock/la
 * [Bedrock pricing](https://aws.amazon.com/bedrock/pricing/)
 * [Bedrock inference profiles](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html)
 * [Claude Code on Amazon Bedrock: Quick Setup Guide](https://community.aws/content/2tXkZKrZzlrlu0KfH8gST5Dkppq/claude-code-on-amazon-bedrock-quick-setup-guide)- [Claude Code Monitoring Implementation (Bedrock)](https://github.com/aws-solutions-library-samples/guidance-for-claude-code-with-amazon-bedrock/blob/main/assets/docs/MONITORING.md)
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

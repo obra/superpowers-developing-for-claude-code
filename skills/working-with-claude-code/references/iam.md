@@ -4,10 +4,11 @@
 
 ## Authentication methods
 
-Setting up Claude Code requires access to Anthropic models. For teams, you can set up Claude Code access in one of three ways:
+Setting up Claude Code requires access to Anthropic models. For teams, you can set up Claude Code access in one of four ways:
 
 * Claude API via the Claude Console
 * Amazon Bedrock
+* Microsoft Foundry
 * Google Vertex AI
 
 ### Claude API authentication
@@ -23,17 +24,17 @@ Setting up Claude Code requires access to Anthropic models. For teams, you can s
    * "Developer" role means users can create any kind of API key
 4. Each invited user needs to complete these steps:
    * Accept the Console invite
-   * [Check system requirements](/en/docs/claude-code/setup#system-requirements)
-   * [Install Claude Code](/en/docs/claude-code/setup#installation)
+   * [Check system requirements](/en/setup#system-requirements)
+   * [Install Claude Code](/en/setup#installation)
    * Login with Console account credentials
 
 ### Cloud provider authentication
 
-**To set up Claude Code access for your team via Bedrock or Vertex:**
+**To set up Claude Code access for your team via Bedrock, Vertex, or Azure:**
 
-1. Follow the [Bedrock docs](/en/docs/claude-code/amazon-bedrock) or [Vertex docs](/en/docs/claude-code/google-vertex-ai)
-2. Distribute the environment variables and instructions for generating cloud credentials to your users. Read more about how to [manage configuration here](/en/docs/claude-code/settings).
-3. Users can [install Claude Code](/en/docs/claude-code/setup#installation)
+1. Follow the [Bedrock docs](/en/amazon-bedrock), [Vertex docs](/en/google-vertex-ai), or [Microsoft Foundry docs](/en/microsoft-foundry)
+2. Distribute the environment variables and instructions for generating cloud credentials to your users. Read more about how to [manage configuration here](/en/settings).
+3. Users can [install Claude Code](/en/setup#installation)
 
 ## Access control and permissions
 
@@ -65,7 +66,7 @@ A rule that is just the tool name matches any use of that tool. For example, add
 
 #### Permission modes
 
-Claude Code supports several permission modes that can be set as the `defaultMode` in [settings files](/en/docs/claude-code/settings#settings-files):
+Claude Code supports several permission modes that can be set as the `defaultMode` in [settings files](/en/settings#settings-files):
 
 | Mode                | Description                                                                  |
 | :------------------ | :--------------------------------------------------------------------------- |
@@ -80,7 +81,7 @@ By default, Claude has access to files in the directory where it was launched. Y
 
 * **During startup**: Use `--add-dir <path>` CLI argument
 * **During session**: Use `/add-dir` slash command
-* **Persistent configuration**: Add to `additionalDirectories` in [settings files](/en/docs/claude-code/settings#settings-files)
+* **Persistent configuration**: Add to `additionalDirectories` in [settings files](/en/settings#settings-files)
 
 Files in additional directories follow the same permission rules as the original working directory - they become readable without prompts, and file editing permissions follow the current permission mode.
 
@@ -146,47 +147,29 @@ Read & Edit rules both follow the [gitignore](https://git-scm.com/docs/gitignore
 **MCP**
 
 * `mcp__puppeteer` Matches any tool provided by the `puppeteer` server (name configured in Claude Code)
+* `mcp__puppeteer__*` Wildcard syntax that also matches all tools from the `puppeteer` server
 * `mcp__puppeteer__puppeteer_navigate` Matches the `puppeteer_navigate` tool provided by the `puppeteer` server
-
-<Warning>
-  Unlike other permission types, MCP permissions do NOT support wildcards (`*`).
-
-  To approve all tools from an MCP server:
-
-  * ✅ Use: `mcp__github` (approves ALL GitHub tools)
-  * ❌ Don't use: `mcp__github__*` (wildcards are not supported)
-
-  To approve specific tools only, list each one:
-
-  * ✅ Use: `mcp__github__get_issue`
-  * ✅ Use: `mcp__github__list_issues`
-</Warning>
 
 ### Additional permission control with hooks
 
-[Claude Code hooks](/en/docs/claude-code/hooks-guide) provide a way to register custom shell commands to perform permission evaluation at runtime. When Claude Code makes a tool call, PreToolUse hooks run before the permission system runs, and the hook output can determine whether to approve or deny the tool call in place of the permission system.
+[Claude Code hooks](/en/hooks-guide) provide a way to register custom shell commands to perform permission evaluation at runtime. When Claude Code makes a tool call, PreToolUse hooks run before the permission system runs, and the hook output can determine whether to approve or deny the tool call in place of the permission system.
 
-### Enterprise managed policy settings
+### Enterprise managed settings
 
-For enterprise deployments of Claude Code, we support enterprise managed policy settings that take precedence over user and project settings. This allows system administrators to enforce security policies that users cannot override.
+For enterprise deployments of Claude Code, administrators can configure and distribute settings to their organization through the [Claude.ai admin console](https://claude.ai/admin-settings/claude-code). These settings are fetched automatically when users authenticate and cannot be overridden locally. This feature is available to Claude for Enterprise customers. If you don't see this option in your admin console, contact your Anthropic account team to have the feature enabled.
 
-System administrators can deploy policies to:
-
-* macOS: `/Library/Application Support/ClaudeCode/managed-settings.json`
-* Linux and WSL: `/etc/claude-code/managed-settings.json`
-* Windows: `C:\ProgramData\ClaudeCode\managed-settings.json`
-
-These policy files follow the same format as regular [settings files](/en/docs/claude-code/settings#settings-files) but cannot be overridden by user or project settings. This ensures consistent security policies across your organization.
+For organizations that prefer file-based policy distribution, Claude Code also supports `managed-settings.json` files that can be deployed to [system directories](/en/settings#settings-files). These policy files follow the same format as regular settings files and cannot be overridden by user or project settings.
 
 ### Settings precedence
 
 When multiple settings sources exist, they are applied in the following order (highest to lowest precedence):
 
-1. Enterprise policies
-2. Command line arguments
-3. Local project settings (`.claude/settings.local.json`)
-4. Shared project settings (`.claude/settings.json`)
-5. User settings (`~/.claude/settings.json`)
+1. Managed settings (via Claude.ai admin console)
+2. File-based managed settings (`managed-settings.json`)
+3. Command line arguments
+4. Local project settings (`.claude/settings.local.json`)
+5. Shared project settings (`.claude/settings.json`)
+6. User settings (`~/.claude/settings.json`)
 
 This hierarchy ensures that organizational policies are always enforced while still allowing flexibility at the project and user levels where appropriate.
 
@@ -195,6 +178,11 @@ This hierarchy ensures that organizational policies are always enforced while st
 Claude Code securely manages your authentication credentials:
 
 * **Storage location**: On macOS, API keys, OAuth tokens, and other credentials are stored in the encrypted macOS Keychain.
-* **Supported authentication types**: Claude.ai credentials, Claude API credentials, Bedrock Auth, and Vertex Auth.
-* **Custom credential scripts**: The [`apiKeyHelper`](/en/docs/claude-code/settings#available-settings) setting can be configured to run a shell script that returns an API key.
+* **Supported authentication types**: Claude.ai credentials, Claude API credentials, Azure Auth, Bedrock Auth, and Vertex Auth.
+* **Custom credential scripts**: The [`apiKeyHelper`](/en/settings#available-settings) setting can be configured to run a shell script that returns an API key.
 * **Refresh intervals**: By default, `apiKeyHelper` is called after 5 minutes or on HTTP 401 response. Set `CLAUDE_CODE_API_KEY_HELPER_TTL_MS` environment variable for custom refresh intervals.
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

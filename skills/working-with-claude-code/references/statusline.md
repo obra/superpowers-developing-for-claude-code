@@ -25,7 +25,7 @@ You can either:
 ## How it Works
 
 * The status line is updated when the conversation messages update
-* Updates run at most every 300ms
+* Updates run at most every 300 ms
 * The first line of stdout from your command becomes the status line text
 * ANSI color codes are supported for styling your status line
 * Claude Code passes contextual information about the current session (model, directories, etc.) as JSON to your script via stdin
@@ -58,6 +58,17 @@ Your status line command receives structured data via stdin in JSON format:
     "total_api_duration_ms": 2300,
     "total_lines_added": 156,
     "total_lines_removed": 23
+  },
+  "context_window": {
+    "total_input_tokens": 15234,
+    "total_output_tokens": 4521,
+    "context_window_size": 200000,
+    "current_usage": {
+      "input_tokens": 8500,
+      "output_tokens": 1200,
+      "cache_creation_input_tokens": 5000,
+      "cache_read_input_tokens": 2000
+    }
   }
 }
 ```
@@ -181,11 +192,45 @@ get_cost() { echo "$input" | jq -r '.cost.total_cost_usd'; }
 get_duration() { echo "$input" | jq -r '.cost.total_duration_ms'; }
 get_lines_added() { echo "$input" | jq -r '.cost.total_lines_added'; }
 get_lines_removed() { echo "$input" | jq -r '.cost.total_lines_removed'; }
+get_input_tokens() { echo "$input" | jq -r '.context_window.total_input_tokens'; }
+get_output_tokens() { echo "$input" | jq -r '.context_window.total_output_tokens'; }
+get_context_window_size() { echo "$input" | jq -r '.context_window.context_window_size'; }
 
 # Use the helpers
 MODEL=$(get_model_name)
 DIR=$(get_current_dir)
 echo "[$MODEL] 📁 ${DIR##*/}"
+```
+
+### Context Window Usage
+
+Display the percentage of context window consumed. The `context_window` object contains:
+
+* `total_input_tokens` / `total_output_tokens`: Cumulative totals across the entire session
+* `current_usage`: Current context window usage from the last API call (may be `null` if no messages yet)
+  * `input_tokens`: Input tokens in current context
+  * `output_tokens`: Output tokens generated
+  * `cache_creation_input_tokens`: Tokens written to cache
+  * `cache_read_input_tokens`: Tokens read from cache
+
+For accurate context percentage, use `current_usage` which reflects the actual context window state:
+
+```bash  theme={null}
+#!/bin/bash
+input=$(cat)
+
+MODEL=$(echo "$input" | jq -r '.model.display_name')
+CONTEXT_SIZE=$(echo "$input" | jq -r '.context_window.context_window_size')
+USAGE=$(echo "$input" | jq '.context_window.current_usage')
+
+if [ "$USAGE" != "null" ]; then
+    # Calculate current context from current_usage fields
+    CURRENT_TOKENS=$(echo "$USAGE" | jq '.input_tokens + .cache_creation_input_tokens + .cache_read_input_tokens')
+    PERCENT_USED=$((CURRENT_TOKENS * 100 / CONTEXT_SIZE))
+    echo "[$MODEL] Context: ${PERCENT_USED}%"
+else
+    echo "[$MODEL] Context: 0%"
+fi
 ```
 
 ## Tips
@@ -200,3 +245,8 @@ echo "[$MODEL] 📁 ${DIR##*/}"
 
 * If your status line doesn't appear, check that your script is executable (`chmod +x`)
 * Ensure your script outputs to stdout (not stderr)
+
+
+---
+
+> To find navigation and other pages in this documentation, fetch the llms.txt file at: https://code.claude.com/docs/llms.txt

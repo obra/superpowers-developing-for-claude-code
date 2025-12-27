@@ -13,8 +13,8 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const LLMS_TXT_URL = 'https://code.claude.com/docs/llms.txt';
-const CLAUDE_CODE_PATTERN = /https:\/\/code\.claude\.com\/docs\/en\/[^\s)]+\.md/g;
+const LLMS_TXT_URL = 'https://docs.claude.com/llms.txt';
+const CLAUDE_CODE_PATTERN = /https:\/\/docs\.claude\.com\/en\/docs\/claude-code\/[^\s)]+\.md/g;
 const REFERENCES_DIR = path.join(__dirname, '..', 'references');
 
 /**
@@ -23,8 +23,6 @@ const REFERENCES_DIR = path.join(__dirname, '..', 'references');
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
-      // Set encoding to utf8 to properly handle special characters
-      res.setEncoding('utf8');
       let data = '';
       res.on('data', (chunk) => data += chunk);
       res.on('end', () => {
